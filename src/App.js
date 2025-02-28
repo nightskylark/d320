@@ -1,5 +1,8 @@
 import Upload from "./components/Upload";
 import Auth from "./components/Auth";
+import AddEnemy from "./components/AddEnemy";
+import EnemyList from "./components/EnemyList";
+
 
 function App() {
   return (
@@ -9,6 +12,8 @@ function App() {
 
       <h1>Catalog</h1>
       <Upload />
+      <AddEnemy />
+      <EnemyList />
     </div>
   );
 }

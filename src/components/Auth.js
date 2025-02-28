@@ -1,14 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { auth, provider } from "../firebase";
-import { signInWithPopup, signOut } from "firebase/auth";
+import { signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
 
 function Auth() {
   const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe(); // Отписываемся при размонтировании
+  }, []);
+
   const login = async () => {
     try {
-      const result = await signInWithPopup(auth, provider);
-      setUser(result.user);
+      await signInWithPopup(auth, provider);
     } catch (error) {
       console.error("Ошибка входа:", error);
     }
@@ -16,14 +22,13 @@ function Auth() {
 
   const logout = async () => {
     await signOut(auth);
-    setUser(null);
   };
 
   return (
     <div>
       {user ? (
         <>
-          <p>Вы вошли как {user.displayName}</p>
+          <p>Вы вошли как {user.displayName || user.email}</p>
           <button onClick={logout}>Выйти</button>
         </>
       ) : (
