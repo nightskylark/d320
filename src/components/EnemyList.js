@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { getDocs, doc, deleteDoc } from "firebase/firestore";
-import { enemiesCollection, db, auth } from "../firebase";
+import { onSnapshot, doc, deleteDoc } from "firebase/firestore";
+import { db, auth, enemiesCollection } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import ReactMarkdown from "react-markdown";
 import EditEnemy from "./EditEnemy";
-import AddEnemy from "./AddEnemy";
 
 function EnemyList() {
   const [enemies, setEnemies] = useState([]);
@@ -12,36 +11,31 @@ function EnemyList() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const fetchEnemies = async () => {
-      const querySnapshot = await getDocs(enemiesCollection);
-      const enemyData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const unsubscribe = onSnapshot(enemiesCollection, (snapshot) => {
+      const enemyData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setEnemies(enemyData);
-    };
-    fetchEnemies();
+    });
 
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const authUnsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+      authUnsubscribe();
+    };
   }, []);
-
-  const handleEnemyAdded = (newEnemy) => {
-    setEnemies((prevEnemies) => [...prevEnemies, newEnemy]);
-  };
 
   const handleDelete = async (id) => {
     if (!user) return;
     if (window.confirm("Are you sure you want to delete this enemy?")) {
       await deleteDoc(doc(db, "eotv-enemies", id));
     }
-  };  
+  };
 
   return (
     <div>
       <h2>Enemy List</h2>
-
-      {user && <AddEnemy onEnemyAdded={handleEnemyAdded} />}
 
       {enemies.map((enemy) => (
         <div key={enemy.id}>
@@ -64,11 +58,6 @@ function EnemyList() {
         <EditEnemy
           enemy={editingEnemy}
           onClose={() => setEditingEnemy(null)}
-          onUpdate={(updatedEnemy) => {
-            setEnemies((prevEnemies) =>
-              prevEnemies.map((e) => (e.id === updatedEnemy.id ? updatedEnemy : e))
-            );
-          }}
         />
       )}
     </div>

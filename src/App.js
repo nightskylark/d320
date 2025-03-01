@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { onSnapshot } from "firebase/firestore";
-import { enemiesCollection } from "./firebase";
+import { enemiesCollection, auth } from "./firebase";
+import { onAuthStateChanged } from "firebase/auth";
 import Auth from "./components/Auth";
 import AddEnemy from "./components/AddEnemy";
 import EnemyList from "./components/EnemyList";
 
 function App() {
   const [enemies, setEnemies] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(enemiesCollection, (snapshot) => {
@@ -14,7 +16,14 @@ function App() {
       setEnemies(enemyData);
     });
 
-    return () => unsubscribe();
+    const authUnsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => {
+      unsubscribe();
+      authUnsubscribe();
+    };
   }, []);
 
   return (
@@ -22,7 +31,10 @@ function App() {
       <h1>d320</h1>
       <Auth />
       <h1>Catalog</h1>
-      <AddEnemy />
+      
+      {/* Показываем форму только если пользователь авторизован */}
+      {user && <AddEnemy />}
+
       <EnemyList enemies={enemies} />
     </div>
   );
