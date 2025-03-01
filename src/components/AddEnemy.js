@@ -52,7 +52,7 @@ function AddEnemy({ onEnemyAdded }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name || !user) return;
-
+  
     const newEnemy = {
       name,
       customDescription,
@@ -62,13 +62,13 @@ function AddEnemy({ onEnemyAdded }) {
       imageURL2,
       authorUid: user.uid,
     };
-
+  
     const docRef = await addDoc(enemiesCollection, newEnemy);
-
+  
     if (onEnemyAdded) {
       onEnemyAdded({ id: docRef.id, ...newEnemy });
     }
-
+  
     setName("");
     setCustomDescription("");
     setSelectedTags([]);
@@ -79,7 +79,7 @@ function AddEnemy({ onEnemyAdded }) {
     setImageURL2("");
     setUploadProgress(0);
     setUploadProgress2(0);
-  };
+  };  
 
   return (
     <form onSubmit={handleSubmit}>
