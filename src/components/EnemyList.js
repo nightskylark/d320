@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { getDocs, doc, deleteDoc } from "firebase/firestore";
-import { enemiesCollection } from "../firebase";
+import { enemiesCollection, db, auth } from "../firebase";
+import { onAuthStateChanged } from "firebase/auth";
 import ReactMarkdown from "react-markdown";
-import { db } from "../firebase";
 import EditEnemy from "./EditEnemy";
 
 function EnemyList() {
   const [enemies, setEnemies] = useState([]);
-  const [editingEnemy, setEditingEnemy] = useState(null); // Противник, которого редактируем
+  const [editingEnemy, setEditingEnemy] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetchEnemies = async () => {
@@ -15,8 +16,14 @@ function EnemyList() {
       setEnemies(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
     };
     fetchEnemies();
+
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => unsubscribe();
   }, []);
-  
+
   const handleUpdateEnemy = (updatedEnemy) => {
     setEnemies((prevEnemies) =>
       prevEnemies.map((enemy) =>
@@ -26,26 +33,31 @@ function EnemyList() {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Вы уверены, что хотите удалить этого противника?")) {
+    if (!user) return;
+    if (window.confirm("Are you sure you want to delete this enemy?")) {
       await deleteDoc(doc(db, "eotv-enemies", id));
-      setEnemies(enemies.filter(enemy => enemy.id !== id));
+      setEnemies((prev) => prev.filter((enemy) => enemy.id !== id));
     }
   };
 
   return (
     <div>
-      <h2>Список противников</h2>
+      <h2>Enemy List</h2>
       {enemies.map((enemy) => (
         <div key={enemy.id}>
           <h3>{enemy.name}</h3>
-          <ReactMarkdown style={{ whiteSpace: "pre-wrap" }}>{enemy.customDescription}</ReactMarkdown>
+          <ReactMarkdown>{enemy.customDescription}</ReactMarkdown>
           {enemy.imageURL && <img src={enemy.imageURL} alt={enemy.name} width={100} />}
-          {enemy.imageURL2 && <img src={enemy.imageURL2} alt={`${enemy.name} доп`} width={100} />}
-          <p>Теги: {enemy.tags?.join(", ")}</p>
-          <p>Свои теги: {enemy.customTags?.join(", ")}</p>
-        
-          <button onClick={() => setEditingEnemy(enemy)}>Редактировать</button>
-          <button onClick={() => handleDelete(enemy.id)}>Удалить</button>
+          {enemy.imageURL2 && <img src={enemy.imageURL2} alt={`${enemy.name} extra`} width={100} />}
+          <p>Tags: {enemy.tags?.join(", ")}</p>
+          <p>Custom Tags: {enemy.customTags?.join(", ")}</p>
+
+          {user && user.uid === enemy.authorUid && (
+            <>
+              <button onClick={() => setEditingEnemy(enemy)}>Edit</button>
+              <button onClick={() => handleDelete(enemy.id)}>Delete</button>
+            </>
+          )}
         </div>
       ))}
 
