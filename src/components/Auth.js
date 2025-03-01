@@ -15,7 +15,7 @@ function Auth() {
       if (currentUser) {
         const userRef = doc(usersCollection, currentUser.uid);
         await setDoc(userRef, {
-          name: currentUser.name || "Unknown",
+          displayName: currentUser.displayName || "Unknown",
           photoURL: currentUser.photoURL || "",
         }, { merge: true });
       }
@@ -37,7 +37,7 @@ function Auth() {
     <div>
       {user ? (
         <>
-          <p>Вы вошли как {user.name}</p>
+          <p>Вы вошли как {user.displayName}</p>
           <button onClick={logout}>Выйти</button>
         </>
       ) : (
