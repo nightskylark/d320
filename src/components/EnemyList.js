@@ -55,7 +55,7 @@ function EnemyList() {
             {users[enemy.authorUid]?.photoURL && (
               <img src={users[enemy.authorUid].photoURL} alt="User avatar" width={40} style={{ borderRadius: "50%" }} />
             )}
-            <p>{users[enemy.authorUid]?.displayName || "Unknown"}</p>
+            <p>{users[enemy.authorUid]?.name || "Unknown"}</p>
           </div>
 
           <h3>{enemy.name}</h3>
