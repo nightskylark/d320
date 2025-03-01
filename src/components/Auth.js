@@ -1,23 +1,32 @@
-import { useState, useEffect } from "react";
-import { auth, provider } from "../firebase";
-import { signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
+import { auth, db } from "../firebase";
+import { GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
+import { collection, doc, setDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
+
+const usersCollection = collection(db, "users");
 
 function Auth() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
+
+      if (currentUser) {
+        const userRef = doc(usersCollection, currentUser.uid);
+        await setDoc(userRef, {
+          name: currentUser.displayName || "Unknown",
+          photoURL: currentUser.photoURL || "",
+        }, { merge: true });
+      }
     });
-    return () => unsubscribe(); // Отписываемся при размонтировании
+
+    return () => unsubscribe();
   }, []);
 
   const login = async () => {
-    try {
-      await signInWithPopup(auth, provider);
-    } catch (error) {
-      console.error("Ошибка входа:", error);
-    }
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
   };
 
   const logout = async () => {
@@ -28,7 +37,7 @@ function Auth() {
     <div>
       {user ? (
         <>
-          <p>Вы вошли как {user.displayName || user.email}</p>
+          <p>Вы вошли как {user.displayName}</p>
           <button onClick={logout}>Выйти</button>
         </>
       ) : (

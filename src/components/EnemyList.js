@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { onSnapshot, doc, deleteDoc } from "firebase/firestore";
+import { onSnapshot, doc, deleteDoc, getDoc } from "firebase/firestore";
 import { db, auth, enemiesCollection } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import ReactMarkdown from "react-markdown";
@@ -7,13 +7,25 @@ import EditEnemy from "./EditEnemy";
 
 function EnemyList() {
   const [enemies, setEnemies] = useState([]);
+  const [users, setUsers] = useState({});
   const [editingEnemy, setEditingEnemy] = useState(null);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(enemiesCollection, (snapshot) => {
+    const unsubscribe = onSnapshot(enemiesCollection, async (snapshot) => {
       const enemyData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setEnemies(enemyData);
+
+      const userIds = [...new Set(enemyData.map(enemy => enemy.authorUid))];
+      const userProfiles = {};
+      for (const userId of userIds) {
+        const userRef = doc(db, "users", userId);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+          userProfiles[userId] = userSnap.data();
+        }
+      }
+      setUsers(userProfiles);
     });
 
     const authUnsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -39,6 +51,13 @@ function EnemyList() {
 
       {enemies.map((enemy) => (
         <div key={enemy.id}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            {users[enemy.authorUid]?.photoURL && (
+              <img src={users[enemy.authorUid].photoURL} alt="User avatar" width={40} style={{ borderRadius: "50%" }} />
+            )}
+            <p>{users[enemy.authorUid]?.displayName || "Unknown"}</p>
+          </div>
+
           <h3>{enemy.name}</h3>
           <ReactMarkdown>{enemy.customDescription}</ReactMarkdown>
 

@@ -75,7 +75,7 @@ function AddEnemy() {
     setImageURL2("");
     setUploadProgress(0);
     setUploadProgress2(0);
-  };  
+  }
 
   return (
     <form onSubmit={handleSubmit}>
