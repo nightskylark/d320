@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { addDoc } from "firebase/firestore";
-import { eotvEnemiesCollection, auth, storage } from "../firebase";
+import { enemiesCollection, auth, storage } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import TagSelector from "./TagSelector";
@@ -63,7 +63,7 @@ function AddEnemy({ onEnemyAdded }) {
       authorUid: user.uid,
     };
 
-    const docRef = await addDoc(eotvEnemiesCollection, newEnemy);
+    const docRef = await addDoc(enemiesCollection, newEnemy);
 
     if (onEnemyAdded) {
       onEnemyAdded({ id: docRef.id, ...newEnemy });
