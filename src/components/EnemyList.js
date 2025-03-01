@@ -35,7 +35,7 @@ function EnemyList() {
 
   return (
     <div>
-      <h3>Enemy List</h3>
+      <h3>Список протвиников</h3>
 
       {enemies.map((enemy) => (
         <div key={enemy.id}>
