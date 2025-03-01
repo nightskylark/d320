@@ -20,7 +20,7 @@ function EnemyList() {
       {enemies.map((enemy) => (
         <div key={enemy.id}>
           <h3>{enemy.name}</h3>
-          <p><ReactMarkdown style={{ whiteSpace: "pre-wrap" }}>{enemy.customDescription}</ReactMarkdown></p>
+          <ReactMarkdown style={{ whiteSpace: "pre-wrap" }}>{enemy.customDescription}</ReactMarkdown>
           {enemy.imageURL && <img src={enemy.imageURL} alt={enemy.name} width={100} />}
           {enemy.imageURL2 && <img src={enemy.imageURL2} alt={`${enemy.name} доп`} width={100} />}
           <p>Теги: {enemy.tags?.join(", ")}</p>
