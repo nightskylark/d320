@@ -5,6 +5,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import Auth from "./components/Auth";
 import AddEnemy from "./components/AddEnemy";
 import EnemyList from "./components/EnemyList";
+import Header from "./components/Header";
 
 function App() {
   const [enemies, setEnemies] = useState([]);
@@ -27,14 +28,14 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <h1>d320</h1>
-      <Auth />
-      <h2>Каталог протвиников для игры Грань Вселенной</h2>
-      
-      {user && <AddEnemy />}
-
-      <EnemyList enemies={enemies} />
+    <div className="bg-darkBg text-white min-h-screen">
+      <Header />
+      <main className="p-6">
+        <h2 className="text-3xl font-bold text-center">Каталог протвиников для игры Грань Вселенной</h2>
+        <p className="text-center text-gray-400">Используйте, что найдете и делитесь своими!</p>
+        {user && <AddEnemy />}
+        <EnemyList enemies={enemies} />
+      </main>
     </div>
   );
 }
