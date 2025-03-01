@@ -30,9 +30,8 @@ function App() {
     <div>
       <h1>d320</h1>
       <Auth />
-      <h1>Catalog</h1>
+      <h2>Каталог протвиников для игры Грань Вселенной</h2>
       
-      {/* Показываем форму только если пользователь авторизован */}
       {user && <AddEnemy />}
 
       <EnemyList enemies={enemies} />

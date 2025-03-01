@@ -79,6 +79,8 @@ function AddEnemy() {
 
   return (
     <form onSubmit={handleSubmit}>
+      <h3>Добавить противника</h3>
+
       <input type="text" placeholder="Имя противника" value={name} onChange={(e) => setName(e.target.value)} required disabled={loading} />
       <textarea placeholder="Описание" value={customDescription} onChange={(e) => setCustomDescription(e.target.value)} disabled={loading} />
       <TagSelector selectedTags={selectedTags} setSelectedTags={setSelectedTags} customTags={customTags} setCustomTags={setCustomTags} />
