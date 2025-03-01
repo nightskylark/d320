@@ -15,22 +15,19 @@ function AddEnemy() {
   const [imageURL, setImageURL] = useState("");
   const [imageURL2, setImageURL2] = useState("");
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      setLoading(false);
     });
     return () => unsubscribe();
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name) return;
-
-    if (!user) {
-      console.error("Ошибка: пользователь не авторизован!");
-      return;
-    }
+    if (!name || !user) return;
 
     await addDoc(eotvEnemiesCollection, {
       name,
@@ -39,7 +36,7 @@ function AddEnemy() {
       customTags,
       imageURL,
       imageURL2,
-      authorUid: user.uid
+      authorUid: user.uid,
     });
 
     setName("");
@@ -58,11 +55,13 @@ function AddEnemy() {
         value={name}
         onChange={(e) => setName(e.target.value)}
         required
+        disabled={loading}
       />
       <textarea
         placeholder="Описание"
         value={customDescription}
         onChange={(e) => setCustomDescription(e.target.value)}
+        disabled={loading}
       />
 
       <TagSelector
@@ -77,15 +76,17 @@ function AddEnemy() {
         placeholder="URL основного изображения"
         value={imageURL}
         onChange={(e) => setImageURL(e.target.value)}
+        disabled={loading}
       />
       <input
         type="text"
         placeholder="URL дополнительного изображения"
         value={imageURL2}
         onChange={(e) => setImageURL2(e.target.value)}
+        disabled={loading}
       />
 
-      <button type="submit" disabled={!user}>Добавить</button>
+      <button type="submit" disabled={!user || loading}>Добавить</button>
     </form>
   );
 }
