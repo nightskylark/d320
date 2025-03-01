@@ -5,7 +5,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import TagSelector from "./TagSelector";
 
-function AddEnemy({ onEnemyAdded }) {
+function AddEnemy() {
   const [name, setName] = useState("");
   const [customDescription, setCustomDescription] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
@@ -63,11 +63,7 @@ function AddEnemy({ onEnemyAdded }) {
       authorUid: user.uid,
     };
   
-    const docRef = await addDoc(enemiesCollection, newEnemy);
-  
-    if (onEnemyAdded) {
-      onEnemyAdded({ id: docRef.id, ...newEnemy });
-    }
+    await addDoc(enemiesCollection, newEnemy);
   
     setName("");
     setCustomDescription("");

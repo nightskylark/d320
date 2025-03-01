@@ -3,7 +3,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { storage, db } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-function EditEnemy({ enemy, onClose, onUpdate }) {
+function EditEnemy({ enemy, onClose }) {
   const [name, setName] = useState(enemy.name);
   const [customDescription, setCustomDescription] = useState(enemy.customDescription);
   const [image, setImage] = useState(null);
@@ -47,10 +47,6 @@ function EditEnemy({ enemy, onClose, onUpdate }) {
 
     const enemyDocRef = doc(db, "eotv-enemies", enemy.id);
     await updateDoc(enemyDocRef, updatedEnemy);
-
-    if (onUpdate) {
-      onUpdate({ id: enemy.id, ...updatedEnemy });
-    }
 
     onClose();
   };

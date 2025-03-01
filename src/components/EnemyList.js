@@ -34,9 +34,8 @@ function EnemyList() {
     if (!user) return;
     if (window.confirm("Are you sure you want to delete this enemy?")) {
       await deleteDoc(doc(db, "eotv-enemies", id));
-      setEnemies((prev) => prev.filter((enemy) => enemy.id !== id));
     }
-  };
+  };  
 
   return (
     <div>
