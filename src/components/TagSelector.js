@@ -1,61 +1,45 @@
-import { useEffect, useState } from "react";
-import { getDocs } from "firebase/firestore";
-import { tagsCollection } from "../firebase";
+import { useEffect, useState, useCallback } from "react";
+import { getDocs, collection } from "firebase/firestore";
+import { db } from "../firebase";
+
+const tagsCollection = collection(db, "eotv-enemy-tags");
 
 function TagSelector({ selectedTags, setSelectedTags, customTags, setCustomTags }) {
-  const [tags, setTags] = useState([]);
-  const [newTag, setNewTag] = useState("");
+  const [availableTags, setAvailableTags] = useState([]);
 
   useEffect(() => {
     const fetchTags = async () => {
       const querySnapshot = await getDocs(tagsCollection);
-      setTags(querySnapshot.docs.map(doc => doc.data()));
+      setAvailableTags(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
     };
     fetchTags();
   }, []);
 
-  const handleTagClick = (slug) => {
-    if (selectedTags.includes(slug)) {
-      setSelectedTags(selectedTags.filter(tag => tag !== slug));
-    } else {
-      setSelectedTags([...selectedTags, slug]);
+  const handleTagChange = useCallback((e) => {
+    const selectedValue = e.target.value;
+    if (selectedValue && !selectedTags.includes(selectedValue)) {
+      setSelectedTags(prev => [...prev, selectedValue]);
     }
-  };
+  }, [selectedTags, setSelectedTags]);
 
-  const handleAddCustomTag = () => {
-    if (newTag.trim() && !customTags.includes(newTag.trim())) {
-      setCustomTags([...customTags, newTag.trim()]);
-      setNewTag("");
-    }
-  };
+  const handleCustomTagChange = useCallback((e) => {
+    setCustomTags(e.target.value.split(",").map(tag => tag.trim()));
+  }, [setCustomTags]);
 
   return (
     <div>
-      <h4>Выберите теги:</h4>
-      <div>
-        {tags.map(tag => (
-          <button
-            key={tag.slug}
-            onClick={() => handleTagClick(tag.slug)}
-            style={{ background: selectedTags.includes(tag.slug) ? "lightblue" : "white" }}
-          >
-            {tag.name}
-          </button>
+      <label>Выберите теги:</label>
+      <select onChange={handleTagChange}>
+        <option value="">-- Выбрать --</option>
+        {availableTags.map(tag => (
+          <option key={tag.id} value={tag.slug}>{tag.name}</option>
         ))}
-      </div>
+      </select>
 
-      <h4>Добавить свой тег:</h4>
-      <input
-        type="text"
-        placeholder="Введите свой тег"
-        value={newTag}
-        onChange={(e) => setNewTag(e.target.value)}
-      />
-      <button onClick={handleAddCustomTag}>Добавить</button>
-
-      <h4>Выбранные теги:</h4>
-      <p>Стандартные: {selectedTags.join(", ")}</p>
-      <p>Свои: {customTags.join(", ")}</p>
+      <label>Пользовательские теги (через запятую):</label>
+      <input type="text" value={customTags.join(", ")} onChange={handleCustomTagChange} />
+      
+      <p>Выбранные теги: {selectedTags.join(", ")}</p>
     </div>
   );
 }
