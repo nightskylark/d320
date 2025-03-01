@@ -34,10 +34,15 @@ function Auth() {
   };
 
   return (
-    <div>
+    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
       {user ? (
         <>
-          <p>Вы вошли как {user.displayName}</p>
+          <img
+            src={user.photoURL || "https://firebasestorage.googleapis.com/v0/b/d320-971d2.firebasestorage.app/o/images%2Fphoto-placeholder.webp?alt=media&token=e80d935b-9ded-4684-b359-38434c0f6d26"}
+            alt="Avatar"
+            style={{ width: 40, height: 40, borderRadius: "50%" }}
+          />
+          <span>{user.displayName}</span>
           <button onClick={logout}>Выйти</button>
         </>
       ) : (
