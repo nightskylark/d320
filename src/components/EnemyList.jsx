@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { onSnapshot, doc, deleteDoc, getDoc } from "firebase/firestore";
 import { db, auth, enemiesCollection } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import ReactMarkdown from "react-markdown";
-import EditEnemy from "./EditEnemy";
+import AddEnemy from "./AddEnemy";
+import EnemyCard from "./EnemyCard";
 
 function EnemyList() {
   const [enemies, setEnemies] = useState([]);
   const [users, setUsers] = useState({});
-  const [editingEnemy, setEditingEnemy] = useState(null);
   const [user, setUser] = useState(null);
+  const [selectedEnemyIndex, setSelectedEnemyIndex] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(enemiesCollection, async (snapshot) => {
@@ -40,45 +40,46 @@ function EnemyList() {
 
   const handleDelete = async (id) => {
     if (!user) return;
-    if (window.confirm("Are you sure you want to delete this enemy?")) {
+    if (window.confirm("Удалить этого противника?")) {
       await deleteDoc(doc(db, "eotv-enemies", id));
     }
   };
 
+  const handleNext = () => {
+    setSelectedEnemyIndex((prevIndex) => (prevIndex === enemies.length - 1 ? 0 : prevIndex + 1));
+  };
+  
+  const handlePrev = () => {
+    setSelectedEnemyIndex((prevIndex) => (prevIndex === 0 ? enemies.length - 1 : prevIndex - 1));
+  };
+
+  const handleActiveChange = (index) => {
+    return (state) => setSelectedEnemyIndex(state ? index : undefined);
+  };
+
+  const close = () => {
+    setSelectedEnemyIndex(null);
+  };
+
   return (
-    <div>
-      <h3>Список протвиников</h3>
+    <div className="flex flex-wrap gap-4 justify-center relative">
+      {/* Add card */}
+      {user && <AddEnemy />}
 
-      {enemies.map((enemy) => (
-        <div key={enemy.id}>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            {users[enemy.authorUid]?.photoURL && (
-              <img src={users[enemy.authorUid].photoURL} alt="User avatar" width={40} style={{ borderRadius: "50%" }} />
-            )}
-            <p>{users[enemy.authorUid]?.displayName || "Unknown"}</p>
-          </div>
-
-          <h3>{enemy.name}</h3>
-          <ReactMarkdown>{enemy.customDescription}</ReactMarkdown>
-
-          {enemy.imageURL && <img src={enemy.imageURL} alt={enemy.name} width={100} />}
-          {enemy.imageURL2 && <img src={enemy.imageURL2} alt={`${enemy.name} extra`} width={100} />}
-
-          {user && user.uid === enemy.authorUid && (
-            <>
-              <button onClick={() => setEditingEnemy(enemy)}>Edit</button>
-              <button onClick={() => handleDelete(enemy.id)}>Delete</button>
-            </>
-          )}
-        </div>
+      {enemies.map((enemy, index) => (
+          <EnemyCard
+            index={index}
+            isSelected={selectedEnemyIndex === index}
+            enemy={enemy}
+            author={users[enemy.authorUid]}
+            onClick={setSelectedEnemyIndex}
+            onPrev={handlePrev}
+            onNext={handleNext}
+            close={close}
+            onDelete={() => handleDelete(enemy.id)}
+            key={enemy.id}
+          />
       ))}
-
-      {editingEnemy && (
-        <EditEnemy
-          enemy={editingEnemy}
-          onClose={() => setEditingEnemy(null)}
-        />
-      )}
     </div>
   );
 }

@@ -80,7 +80,7 @@ function AddEnemy() {
     setUploadProgress2(0);
   };
 
-  // Закрытие формы при клике вне
+  // Close form when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (formRef.current && !formRef.current.contains(event.target)) {
