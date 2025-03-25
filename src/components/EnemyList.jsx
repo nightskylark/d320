@@ -4,12 +4,13 @@ import { db, auth, enemiesCollection } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import AddEnemy from "./AddEnemy";
 import EnemyCard from "./EnemyCard";
+import EnemyDetail from "./EnemyDetail";
 
 function EnemyList() {
   const [enemies, setEnemies] = useState([]);
   const [users, setUsers] = useState({});
   const [user, setUser] = useState(null);
-  const [selectedEnemyIndex, setSelectedEnemyIndex] = useState(null);
+  const [selectedEnemyIndex, setSelectedEnemyIndex] = useState(-1);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(enemiesCollection, async (snapshot) => {
@@ -58,28 +59,37 @@ function EnemyList() {
   };
 
   const close = () => {
-    setSelectedEnemyIndex(null);
+    setSelectedEnemyIndex(-1);
   };
+  
+  const selectedEnemy = selectedEnemyIndex >-1 && enemies[selectedEnemyIndex];
 
   return (
     <div className="flex flex-wrap gap-4 justify-center relative">
       {/* Add card */}
       {user && <AddEnemy />}
 
+      {/* All cards */}
       {enemies.map((enemy, index) => (
           <EnemyCard
             index={index}
-            isSelected={selectedEnemyIndex === index}
             enemy={enemy}
             author={users[enemy.authorUid]}
             onClick={setSelectedEnemyIndex}
-            onPrev={handlePrev}
-            onNext={handleNext}
-            close={close}
-            onDelete={() => handleDelete(enemy.id)}
             key={enemy.id}
           />
       ))}
+
+      {/* Selected card detail */}
+      {selectedEnemy && <EnemyDetail
+          enemy={selectedEnemy}
+          author={users[selectedEnemy.authorUid]}
+          onPrev={handlePrev}
+          onNext={handleNext}
+          close={close}
+          onDelete={() => handleDelete(selectedEnemy.id)}
+        />
+      }
     </div>
   );
 }
