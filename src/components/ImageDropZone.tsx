@@ -35,7 +35,7 @@ const ImageDropZone: React.FC<Props> = ({ imageURL, setImageURL, ownerUid, class
         onChange={(e) => handleFile(e.target.files && e.target.files[0])}
         className="absolute inset-0 opacity-0 cursor-pointer"
       />
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-gray-300 bg-black/40 opacity-0 group-hover:opacity-100 pointer-events-none transition z-10">
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-gray-300 bg-black/40 opacity-100 pointer-events-none z-10">
         <ArrowUpTrayIcon className="w-8 h-8" />
         <span className="text-xs">Нажмите или перетащите файл</span>
       </div>

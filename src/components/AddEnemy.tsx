@@ -2,8 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { addDoc } from "firebase/firestore";
 import { enemiesCollection, auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import TagBox from "./TagBox";
 import ImageDropZone from "./ImageDropZone";
+import EnemyFields from "./EnemyFields";
+import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import type { Enemy } from "../types";
 
 const AddEnemy: React.FC = () => {
@@ -79,37 +80,35 @@ const AddEnemy: React.FC = () => {
         className="relative bg-gray-900 rounded-2xl w-full max-w-7xl flex shadow-lg overflow-hidden"
       >
         <ImageDropZone imageURL={imageURL} setImageURL={setImageURL} ownerUid={user?.uid || ""} />
-        <div className="w-4/7 flex flex-col px-6 h-full overflow-y-auto">
-          <h3 className="text-xl font-bold text-center mt-4">Добавить противника</h3>
-          <input
-            type="text"
-            placeholder="Имя противника"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full p-2 mt-4 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-neonBlue"
-            required
-          />
-          <textarea
-            placeholder="Описание"
-            value={customDescription}
-            onChange={(e) => setCustomDescription(e.target.value)}
-            className="w-full p-2 mt-4 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-neonBlue flex-1 resize-none"
-          />
-          <TagBox
-            selectedTags={selectedTags}
-            setSelectedTags={setSelectedTags}
-            customTags={customTags}
-            setCustomTags={setCustomTags}
-          />
+        <EnemyFields
+          name={name}
+          setName={setName}
+          customDescription={customDescription}
+          setCustomDescription={setCustomDescription}
+          selectedTags={selectedTags}
+          setSelectedTags={setSelectedTags}
+          customTags={customTags}
+          setCustomTags={setCustomTags}
+        >
           <div className="flex gap-4 py-4">
-            <button type="submit" className="w-full px-4 py-2 bg-green-500 text-white rounded" disabled={!user}>
+            <button
+              type="submit"
+              className="w-full flex items-center justify-center gap-1 px-4 py-2 bg-neonBlue text-darkBg font-semibold rounded hover:bg-opacity-80 transition"
+              disabled={!user}
+            >
+              <PlusIcon className="w-5 h-5" />
               Добавить
             </button>
-            <button type="button" onClick={() => setIsOpen(false)} className="w-full px-4 py-2 bg-red-500 text-white rounded">
+            <button
+              type="button"
+              onClick={() => setIsOpen(false)}
+              className="w-full flex items-center justify-center gap-1 px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition"
+            >
+              <XMarkIcon className="w-5 h-5" />
               Отмена
             </button>
           </div>
-        </div>
+        </EnemyFields>
         <ImageDropZone imageURL={imageURL2} setImageURL={setImageURL2} ownerUid={user?.uid || ""} />
       </form>
     </div>

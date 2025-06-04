@@ -3,7 +3,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import ImageDropZone from "./ImageDropZone";
-import TagBox from "./TagBox";
+import EnemyFields from "./EnemyFields";
 import type { Enemy } from "../types";
 
 interface Props {
@@ -50,25 +50,16 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
   return (
     <div className="relative bg-gray-900 rounded-2xl w-full flex shadow-lg h-full max-w-7xl overflow-hidden">
       <ImageDropZone imageURL={imageURL} setImageURL={setImageURL} ownerUid={enemy.authorUid} />
-      <div className="w-4/7 flex flex-col px-6 h-full overflow-y-auto">
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="w-full p-2 mt-4 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-neonBlue"
-        />
-        <textarea
-          value={customDescription}
-          onChange={(e) => setCustomDescription(e.target.value)}
-          className="w-full p-2 mt-4 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-neonBlue flex-1 resize-none"
-        />
-        <TagBox
-          selectedTags={selectedTags}
-          setSelectedTags={setSelectedTags}
-          customTags={customTags}
-          setCustomTags={setCustomTags}
-        />
-      </div>
+      <EnemyFields
+        name={name}
+        setName={setName}
+        customDescription={customDescription}
+        setCustomDescription={setCustomDescription}
+        selectedTags={selectedTags}
+        setSelectedTags={setSelectedTags}
+        customTags={customTags}
+        setCustomTags={setCustomTags}
+      />
       <ImageDropZone imageURL={imageURL2} setImageURL={setImageURL2} ownerUid={enemy.authorUid} />
 
       <button
