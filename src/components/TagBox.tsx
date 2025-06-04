@@ -49,7 +49,7 @@ const TagBox: React.FC<Props> = ({ selectedTags, setSelectedTags, customTags, se
   }, [selectedTags, setSelectedTags]);
 
   return (
-    <div className="mt-auto">
+    <div className="mt-auto py-4">
       <label className="block text-sm mb-1">Теги</label>
       <div className="flex flex-wrap gap-1 bg-gray-700 p-2 rounded">
         {selectedTags.map(tag => (
