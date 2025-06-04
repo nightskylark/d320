@@ -57,10 +57,13 @@ const AddEnemy: React.FC = () => {
   if (!isOpen) {
     return (
       <div
-        className="relative flex flex-col items-center justify-center bg-gray-800 text-white p-4 rounded-xl shadow-lg cursor-pointer w-40 h-56 aspect-[2/3] hover:scale-110 transition-all duration-300 ease-in-out"
+        role="button"
+        tabIndex={0}
+        className="group relative flex flex-col items-center justify-center bg-gray-800 text-white p-4 rounded-xl shadow-lg cursor-pointer w-40 h-56 aspect-[2/3] hover:scale-110 transition-all duration-300 ease-in-out"
         onClick={() => setIsOpen(true)}
+        onKeyDown={(e) => e.key === 'Enter' && setIsOpen(true)}
       >
-        <div className="w-16 h-16 flex items-center justify-center bg-neonBlue rounded-full transform transition-transform duration-300 hover:rotate-90">
+        <div className="w-16 h-16 flex items-center justify-center bg-neonBlue rounded-full transform transition-transform duration-300 group-hover:rotate-90">
           <span className="text-3xl font-bold text-darkBg">+</span>
         </div>
         <p className="mt-2 text-lg">Добавить</p>
@@ -70,15 +73,18 @@ const AddEnemy: React.FC = () => {
 
   return (
     <div
+      role="button"
+      tabIndex={-1}
       className="fixed inset-0 z-50 p-5 bg-black flex items-center justify-center"
       onClick={() => setIsOpen(false)}
     >
-      <form
-        ref={formRef}
-        onSubmit={handleSubmit}
-        onClick={(e) => e.stopPropagation()}
-        className="relative bg-gray-900 rounded-2xl w-full max-w-7xl flex shadow-lg overflow-hidden"
-      >
+        {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
+        <div
+          role="dialog"
+          onClick={(e) => e.stopPropagation()}
+          className="relative bg-gray-900 rounded-2xl w-full max-w-7xl flex shadow-lg overflow-hidden h-full"
+        >
+        <form ref={formRef} onSubmit={handleSubmit} className="flex w-full h-full">
         <ImageDropZone imageURL={imageURL} setImageURL={setImageURL} ownerUid={user?.uid || ""} />
         <EnemyFields
           name={name}
@@ -93,7 +99,7 @@ const AddEnemy: React.FC = () => {
           <div className="flex gap-4 py-4">
             <button
               type="submit"
-              className="w-full flex items-center justify-center gap-1 px-4 py-2 bg-neonBlue text-darkBg font-semibold rounded hover:bg-opacity-80 transition"
+              className="w-full flex items-center justify-center gap-1 px-4 py-2 bg-neonBlue text-darkBg font-semibold rounded hover:bg-opacity-80 transition cursor-pointer"
               disabled={!user}
             >
               <PlusIcon className="w-5 h-5" />
@@ -102,7 +108,7 @@ const AddEnemy: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="w-full flex items-center justify-center gap-1 px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition"
+              className="w-full flex items-center justify-center gap-1 px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition cursor-pointer"
             >
               <XMarkIcon className="w-5 h-5" />
               Отмена
@@ -110,7 +116,8 @@ const AddEnemy: React.FC = () => {
           </div>
         </EnemyFields>
         <ImageDropZone imageURL={imageURL2} setImageURL={setImageURL2} ownerUid={user?.uid || ""} />
-      </form>
+        </form>
+      </div>
     </div>
   );
 };
