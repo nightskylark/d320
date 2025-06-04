@@ -5,12 +5,13 @@ import { onAuthStateChanged } from "firebase/auth";
 import AddEnemy from "./AddEnemy";
 import EnemyCard from "./EnemyCard";
 import EnemyDetail from "./EnemyDetail";
+import type { Enemy, UserProfile } from "../types";
 
-function EnemyList() {
-  const [enemies, setEnemies] = useState([]);
-  const [users, setUsers] = useState({});
-  const [user, setUser] = useState(null);
-  const [selectedEnemyIndex, setSelectedEnemyIndex] = useState(-1);
+const EnemyList: React.FC = () => {
+  const [enemies, setEnemies] = useState<Enemy[]>([]);
+  const [users, setUsers] = useState<Record<string, UserProfile>>({});
+  const [user, setUser] = useState<{ uid: string } | null>(null);
+  const [selectedEnemyIndex, setSelectedEnemyIndex] = useState<number>(-1);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(enemiesCollection, async (snapshot) => {
@@ -39,7 +40,7 @@ function EnemyList() {
     };
   }, []);
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: string) => {
     if (!user) return;
     if (window.confirm("Удалить этого противника?")) {
       await deleteDoc(doc(db, "eotv-enemies", id));
@@ -54,8 +55,8 @@ function EnemyList() {
     setSelectedEnemyIndex((prevIndex) => (prevIndex === 0 ? enemies.length - 1 : prevIndex - 1));
   };
 
-  const handleActiveChange = (index) => {
-    return (state) => setSelectedEnemyIndex(state ? index : undefined);
+  const handleActiveChange = (index: number) => {
+    return (state: boolean) => setSelectedEnemyIndex(state ? index : undefined);
   };
 
   const close = () => {
@@ -92,6 +93,6 @@ function EnemyList() {
       }
     </div>
   );
-}
+};
 
 export default EnemyList;

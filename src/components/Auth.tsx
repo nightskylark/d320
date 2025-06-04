@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 
 const usersCollection = collection(db, "users");
 
-function Auth() {
-  const [user, setUser] = useState(null);
+const Auth: React.FC = () => {
+  const [user, setUser] = useState<null | { uid: string; photoURL?: string }>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -59,6 +59,6 @@ function Auth() {
       )}
     </div>
   );
-}
+};
 
 export default Auth;

@@ -1,7 +1,14 @@
 import { useRef } from "react";
+import type { Enemy, UserProfile } from "../types";
 
-function EnemyCard({ index, enemy, author, onClick }) {
-    const cardRef = useRef(null);
+interface Props {
+  index: number;
+  enemy: Enemy;
+  author?: UserProfile;
+  onClick: (idx: number) => void;
+}
+const EnemyCard: React.FC<Props> = ({ index, enemy, author, onClick }) => {
+    const cardRef = useRef<HTMLDivElement | null>(null);
 
     return (
     <div
@@ -37,6 +44,6 @@ function EnemyCard({ index, enemy, author, onClick }) {
         {enemy.imageURL2 && <img src={enemy.imageURL2} alt="Extra" className="hidden" />}
     </div>
   );
-}
+};
 
 export default EnemyCard;

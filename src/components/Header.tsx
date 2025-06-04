@@ -1,6 +1,6 @@
 import Auth from "./Auth";
 
-function Header() {
+const Header: React.FC = () => {
   return (
     <header className="text-sky-300">
       <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
@@ -17,6 +17,6 @@ function Header() {
       </div>
     </header>
   );
-}
+};
 
 export default Header;

@@ -4,22 +4,23 @@ import { enemiesCollection, auth, storage } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import TagSelector from "./TagSelector";
+import type { Enemy } from "../types";
 
-function AddEnemy() {
+const AddEnemy: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [name, setName] = useState("");
-  const [customDescription, setCustomDescription] = useState("");
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [customTags, setCustomTags] = useState([]);
-  const [image, setImage] = useState(null);
-  const [image2, setImage2] = useState(null);
-  const [imageURL, setImageURL] = useState("");
-  const [imageURL2, setImageURL2] = useState("");
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [uploadProgress2, setUploadProgress2] = useState(0);
-  const [user, setUser] = useState(null);
+  const [name, setName] = useState<string>("");
+  const [customDescription, setCustomDescription] = useState<string>("");
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [customTags, setCustomTags] = useState<string[]>([]);
+  const [image, setImage] = useState<File | null>(null);
+  const [image2, setImage2] = useState<File | null>(null);
+  const [imageURL, setImageURL] = useState<string>("");
+  const [imageURL2, setImageURL2] = useState<string>("");
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [uploadProgress2, setUploadProgress2] = useState<number>(0);
+  const [user, setUser] = useState<null | { uid: string }>(null);
   const [loading, setLoading] = useState(true);
-  const formRef = useRef(null);
+  const formRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -29,7 +30,11 @@ function AddEnemy() {
     return () => unsubscribe();
   }, []);
 
-  const handleImageUpload = async (image, setImageURL, setProgress) => {
+  const handleImageUpload = async (
+    image: File | null,
+    setImageURL: (url: string) => void,
+    setProgress: (p: number) => void
+  ) => {
     if (!image) return;
 
     const storageRef = ref(storage, `enemies/${user.uid}/${image.name}`);
@@ -51,11 +56,11 @@ function AddEnemy() {
     );
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !user) return;
   
-    const newEnemy = {
+    const newEnemy: Enemy = {
       name,
       customDescription,
       tags: selectedTags,
@@ -82,8 +87,8 @@ function AddEnemy() {
 
   // Close form when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (formRef.current && !formRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (formRef.current && !formRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };

@@ -4,10 +4,11 @@ import { enemiesCollection, auth } from "./firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import EnemyList from "./components/EnemyList";
 import Header from "./components/Header";
+import type { Enemy } from "./types";
 
-function App() {
-  const [enemies, setEnemies] = useState([]);
-  const [user, setUser] = useState(null);
+const App: React.FC = () => {
+  const [enemies, setEnemies] = useState<Enemy[]>([]);
+  const [user, setUser] = useState<{ uid: string } | null>(null);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(enemiesCollection, (snapshot) => {
@@ -35,6 +36,6 @@ function App() {
       </main>
     </div>
   );
-}
+};
 
 export default App;

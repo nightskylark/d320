@@ -2,10 +2,17 @@ import { useEffect, useState, useCallback } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import { db } from "../firebase";
 
+interface Props {
+  selectedTags: string[];
+  setSelectedTags: (tags: string[]) => void;
+  customTags: string[];
+  setCustomTags: (tags: string[]) => void;
+}
+
 const tagsCollection = collection(db, "eotv-enemy-tags");
 
-function TagSelector({ selectedTags, setSelectedTags, customTags, setCustomTags }) {
-  const [availableTags, setAvailableTags] = useState([]);
+const TagSelector: React.FC<Props> = ({ selectedTags, setSelectedTags, customTags, setCustomTags }) => {
+  const [availableTags, setAvailableTags] = useState<{ id: string; slug: string; name: string }[]>([]);
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -15,14 +22,14 @@ function TagSelector({ selectedTags, setSelectedTags, customTags, setCustomTags 
     fetchTags();
   }, []);
 
-  const handleTagChange = useCallback((e) => {
+  const handleTagChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
     if (selectedValue && !selectedTags.includes(selectedValue)) {
       setSelectedTags(prev => [...prev, selectedValue]);
     }
   }, [selectedTags, setSelectedTags]);
 
-  const handleCustomTagChange = useCallback((e) => {
+  const handleCustomTagChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setCustomTags(e.target.value.split(",").map(tag => tag.trim()));
   }, [setCustomTags]);
 
@@ -42,6 +49,6 @@ function TagSelector({ selectedTags, setSelectedTags, customTags, setCustomTags 
       <p>Выбранные теги: {selectedTags.join(", ")}</p>
     </div>
   );
-}
+};
 
 export default TagSelector;
