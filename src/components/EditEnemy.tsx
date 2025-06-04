@@ -92,7 +92,7 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
     side: "left" | "right"
   ) => (
     <div
-      className="w-3/14 flex items-center justify-center bg-gray-800 relative overflow-hidden"
+      className="w-3/14 flex items-center justify-center bg-gray-800 relative overflow-hidden group"
       onDrop={(e) => {
         e.preventDefault();
         onSelect(e.dataTransfer.files[0]);
@@ -108,7 +108,7 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
         onChange={(e) => onSelect(e.target.files && e.target.files[0])}
         className="absolute inset-0 opacity-0 cursor-pointer"
       />
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-gray-300 bg-black/40 opacity-0 hover:opacity-100 pointer-events-none transition">
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-gray-300 bg-black/40 opacity-0 group-hover:opacity-100 pointer-events-none transition z-10">
         <ArrowUpTrayIcon className="w-8 h-8" />
         <span className="text-xs">Нажмите или перетащите файл</span>
       </div>
