@@ -2,18 +2,28 @@ import { useState } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import { storage, db } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import type { Enemy } from "../types";
 
-function EditEnemy({ enemy, onClose }) {
-  const [name, setName] = useState(enemy.name);
-  const [customDescription, setCustomDescription] = useState(enemy.customDescription);
-  const [image, setImage] = useState(null);
-  const [image2, setImage2] = useState(null);
-  const [imageURL, setImageURL] = useState(enemy.imageURL || "");
-  const [imageURL2, setImageURL2] = useState(enemy.imageURL2 || "");
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [uploadProgress2, setUploadProgress2] = useState(0);
+interface Props {
+  enemy: Enemy;
+  onClose: () => void;
+}
 
-  const handleImageUpload = async (image, setImageURL, setProgress) => {
+const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
+  const [name, setName] = useState<string>(enemy.name);
+  const [customDescription, setCustomDescription] = useState<string>(enemy.customDescription);
+  const [image, setImage] = useState<File | null>(null);
+  const [image2, setImage2] = useState<File | null>(null);
+  const [imageURL, setImageURL] = useState<string>(enemy.imageURL || "");
+  const [imageURL2, setImageURL2] = useState<string>(enemy.imageURL2 || "");
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [uploadProgress2, setUploadProgress2] = useState<number>(0);
+
+  const handleImageUpload = async (
+    image: File | null,
+    setImageURL: (url: string) => void,
+    setProgress: (p: number) => void
+  ) => {
     if (!image) return;
 
     const storageRef = ref(storage, `enemies/${enemy.authorUid}/${image.name}`);
@@ -35,10 +45,10 @@ function EditEnemy({ enemy, onClose }) {
     );
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const updatedEnemy = {
+    const updatedEnemy: Partial<Enemy> = {
       name,
       customDescription,
       imageURL,

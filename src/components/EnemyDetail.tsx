@@ -1,16 +1,25 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { auth } from "../firebase";
 import ReactMarkdown from "react-markdown";
 import { XMarkIcon, PencilSquareIcon, TrashIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import EditEnemy from "./EditEnemy";
+import type { Enemy, UserProfile } from "../types";
 
-function EnemyDetail({ enemy, author, onPrev, onNext, close, onDelete }) {
+interface Props {
+  enemy: Enemy;
+  author?: UserProfile;
+  onPrev: () => void;
+  onNext: () => void;
+  close: () => void;
+  onDelete: () => void;
+}
+const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, onDelete }) => {
     const user = auth.currentUser;
-    const cardRef = useRef(null);
+    const cardRef = useRef<HTMLDivElement | null>(null);
     const [isEditing, setIsEditing] = useState(false);
 
     // Close card when clicking outside
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
         if (cardRef.current === event.target) {
             close();
             setIsEditing(false);
@@ -94,6 +103,6 @@ function EnemyDetail({ enemy, author, onPrev, onNext, close, onDelete }) {
         )}
     </div>
   );
-}
+};
 
 export default EnemyDetail;
