@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import { storage, db } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon, ArrowUpTrayIcon } from "@heroicons/react/24/outline";
 import TagBox from "./TagBox";
 import type { Enemy } from "../types";
 
@@ -92,22 +92,30 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
     side: "left" | "right"
   ) => (
     <div
-      className="w-3/14 flex items-center justify-center bg-gray-800 relative"
+      className="w-3/14 flex items-center justify-center bg-gray-800 relative overflow-hidden"
       onDrop={(e) => {
         e.preventDefault();
         onSelect(e.dataTransfer.files[0]);
       }}
       onDragOver={(e) => e.preventDefault()}
     >
-      {currentUrl && <img src={currentUrl} className="object-cover w-full h-full" alt="" />}
+      {currentUrl && (
+        <img src={currentUrl} className="object-cover w-full h-full" alt="" />
+      )}
       <input
         type="file"
         accept="image/*"
         onChange={(e) => onSelect(e.target.files && e.target.files[0])}
         className="absolute inset-0 opacity-0 cursor-pointer"
       />
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-gray-300 bg-black/40 opacity-0 hover:opacity-100 pointer-events-none transition">
+        <ArrowUpTrayIcon className="w-8 h-8" />
+        <span className="text-xs">Нажмите или перетащите файл</span>
+      </div>
       {progress > 0 && progress < 100 && (
-        <span className="absolute bottom-2 left-2 text-xs">{progress.toFixed(0)}%</span>
+        <span className="absolute bottom-2 left-2 text-xs bg-black/60 px-1 rounded">
+          {progress.toFixed(0)}%
+        </span>
       )}
     </div>
   );
