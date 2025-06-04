@@ -3,7 +3,7 @@ import { addDoc } from "firebase/firestore";
 import { enemiesCollection, auth, storage } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import TagSelector from "./TagSelector";
+import TagBox from "./TagBox";
 import type { Enemy } from "../types";
 
 const AddEnemy: React.FC = () => {
@@ -123,7 +123,7 @@ const AddEnemy: React.FC = () => {
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <input type="text" placeholder="Имя противника" value={name} onChange={(e) => setName(e.target.value)} required disabled={loading} className="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-neonBlue" />
             <textarea placeholder="Описание" value={customDescription} onChange={(e) => setCustomDescription(e.target.value)} disabled={loading} className="w-full p-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-neonBlue" />
-            <TagSelector selectedTags={selectedTags} setSelectedTags={setSelectedTags} customTags={customTags} setCustomTags={setCustomTags} />
+            <TagBox selectedTags={selectedTags} setSelectedTags={setSelectedTags} customTags={customTags} setCustomTags={setCustomTags} />
 
             <input type="file" onChange={(e) => setImage(e.target.files[0])} disabled={loading} className="text-sm text-gray-400" />
             <button type="button" onClick={() => handleImageUpload(image, setImageURL, setUploadProgress)} disabled={!image || loading} className="w-full px-4 py-2 bg-neonBlue text-darkBg font-semibold rounded">

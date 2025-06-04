@@ -3,7 +3,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { storage, db } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import TagSelector from "./TagSelector";
+import TagBox from "./TagBox";
 import type { Enemy } from "../types";
 
 interface Props {
@@ -115,7 +115,7 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
   return (
     <div className="relative bg-gray-900 rounded-2xl w-full flex shadow-lg h-full max-w-7xl overflow-hidden">
       {renderDropZone(imageURL, uploadProgress, (f) => onFileSelect(f, "left"), "left")}
-      <div className="w-4/7 flex flex-col px-6 overflow-y-auto">
+      <div className="w-4/7 flex flex-col px-6 h-full overflow-y-auto">
         <input
           type="text"
           value={name}
@@ -125,9 +125,9 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
         <textarea
           value={customDescription}
           onChange={(e) => setCustomDescription(e.target.value)}
-          className="w-full p-2 mt-4 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-neonBlue h-40"
+          className="w-full p-2 mt-4 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-neonBlue flex-1 resize-none"
         />
-        <TagSelector
+        <TagBox
           selectedTags={selectedTags}
           setSelectedTags={setSelectedTags}
           customTags={customTags}
