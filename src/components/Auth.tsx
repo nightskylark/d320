@@ -1,28 +1,22 @@
 import { auth, db } from "../firebase";
-import { GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { collection, doc, setDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
 const usersCollection = collection(db, "users");
 
 const Auth: React.FC = () => {
-  const [user, setUser] = useState<null | { uid: string; photoURL?: string }>(null);
+  const user = useAuth();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser);
-
-      if (currentUser) {
-        const userRef = doc(usersCollection, currentUser.uid);
-        await setDoc(userRef, {
-          displayName: currentUser.displayName || "Unknown",
-          photoURL: currentUser.photoURL || "",
-        }, { merge: true });
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
+    if (!user) return;
+    const userRef = doc(usersCollection, user.uid);
+    setDoc(userRef, {
+      displayName: user.displayName || "Unknown",
+      photoURL: user.photoURL || "",
+    }, { merge: true });
+  }, [user]);
 
   const login = async () => {
     const provider = new GoogleAuthProvider();

@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { auth } from "../firebase";
+import { useAuth } from "../contexts/AuthContext";
 import ReactMarkdown from "react-markdown";
 import { XMarkIcon, PencilSquareIcon, TrashIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import EditEnemy from "./EditEnemy";
@@ -14,7 +14,7 @@ interface Props {
   onDelete: () => void;
 }
 const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, onDelete }) => {
-    const user = auth.currentUser;
+    const user = useAuth();
     const cardRef = useRef<HTMLDivElement | null>(null);
     const [isEditing, setIsEditing] = useState(false);
 
