@@ -50,7 +50,7 @@ const EnemyCard: React.FC<Props> = ({ index, enemy, author, onClick }) => {
         onClick={() => onClick(index)}
     >
         {/* 1st image */}
-        <img src={enemy.imageURL} alt={enemy.name} className="w-full h-40 sm:h-32 object-cover" />
+        <img src={enemy.imageURL} alt={enemy.name} className="w-full h-1/2 sm:h-32 object-cover" />
 
         <button
             onClick={toggleLike}
