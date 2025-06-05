@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import type { Enemy, UserProfile } from "../types";
+import useFixedTags from "../utils/useFixedTags";
 
 interface Props {
   index: number;
@@ -9,6 +10,8 @@ interface Props {
 }
 const EnemyCard: React.FC<Props> = ({ index, enemy, author, onClick }) => {
     const cardRef = useRef<HTMLDivElement | null>(null);
+    const fixedTags = useFixedTags();
+    const displayedTags = fixedTags.length ? enemy.tags.filter(t => fixedTags.includes(t)) : enemy.tags;
 
     return (
     <div
@@ -27,7 +30,7 @@ const EnemyCard: React.FC<Props> = ({ index, enemy, author, onClick }) => {
             {/* Tags */}
             <div className="absolute bottom-4 left-4 flex flex-col items-end gap-2">
                 <div className="flex flex-wrap gap-1">
-                {enemy.tags.map((tag, index) => (
+                {displayedTags.map((tag, index) => (
                     <span key={index} className="bg-gray-700 px-2 py-1 rounded text-xs drop-shadow-2xl">{tag}</span>
                 ))}
                 </div>

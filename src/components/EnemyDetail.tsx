@@ -4,6 +4,7 @@ import ReactMarkdown from "react-markdown";
 import { XMarkIcon, PencilSquareIcon, TrashIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import EditEnemy from "./EditEnemy";
 import type { Enemy, UserProfile } from "../types";
+import useFixedTags from "../utils/useFixedTags";
 
 interface Props {
   enemy: Enemy;
@@ -17,6 +18,8 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
     const user = useAuth();
     const cardRef = useRef<HTMLDivElement | null>(null);
     const [isEditing, setIsEditing] = useState(false);
+    const fixedTags = useFixedTags();
+    const displayedTags = fixedTags.length ? enemy.tags.filter(t => fixedTags.includes(t)) : enemy.tags;
 
     useEffect(() => {
         const handleKey = (e: KeyboardEvent) => {
@@ -81,7 +84,7 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
                     {/* Tags */}
                     <div className="absolute bottom-4 left-4 flex flex-col items-end gap-2">
                         <div className="flex flex-wrap gap-1">
-                        {enemy.tags.map((tag, index) => (
+                        {displayedTags.map((tag, index) => (
                             <span key={index} className="bg-gray-700 px-2 py-1 rounded text-xs drop-shadow-2xl">{tag}</span>
                         ))}
                         </div>
