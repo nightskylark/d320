@@ -57,7 +57,7 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
         type="button"
         title="Избранное"
         onClick={() => setLiked(!liked)}
-        className="text-blue-300 hover:scale-110 transition flex items-center gap-1 h-10 px-2 cursor-pointer"
+        className="text-blue-700 dark:text-sky-300 hover:text-blue-500 dark:hover:text-sky-200 transition flex items-center gap-1 h-10 px-2 cursor-pointer"
       >
         {liked ? <StarSolid className="w-5 h-5" /> : <StarOutline className="w-5 h-5" />}
         <span className="text-sm">Избранное</span>
@@ -120,12 +120,12 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
           setAuthor('');
           setSort('name');
         }}
-        className="flex items-center gap-1 p-2 rounded bg-blue-500 text-white hover:bg-blue-400 transition h-10 cursor-pointer"
+        className="flex items-center gap-1 p-2 rounded border text-blue-700 dark:text-sky-300 hover:text-blue-500 dark:hover:text-sky-200 border-blue-700 dark:border-sky-300 hover:border-blue-500 dark:hover:border-sky-200 transition h-10 cursor-pointer"
       >
         <XMarkIcon className="w-5 h-5" />
         Сбросить фильтры
       </button>
-      <span className="text-sm text-gray-300">Сортировка:</span>
+      <span className="text-sm">Сортировка:</span>
       <select
         value={sort}
         onChange={e => setSort(e.target.value)}

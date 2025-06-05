@@ -111,7 +111,7 @@ const AddEnemy: React.FC = () => {
     <div
       role="button"
       tabIndex={-1}
-      className="fixed inset-0 z-50 p-5 bg-black flex items-center justify-center"
+      className="fixed inset-0 z-50 p-5  bg-gray-500 dark:bg-black flex items-center justify-center"
       onClick={() => setIsOpen(false)}
     >
         {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}

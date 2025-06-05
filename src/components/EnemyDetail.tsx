@@ -88,7 +88,7 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
         key={enemy.id}
         ref={cardRef}
         onClick={handleClickOutside}
-        className={`text-white shadow-lg cursor-pointer  overflow-hidden fixed z-40 inset-0 p-5 bg-black flex justify-center items-center`}
+        className={`text-gray-900 dark:text-white shadow-lg cursor-pointer  overflow-hidden fixed z-40 inset-0 p-5  bg-gray-500 dark:bg-black flex justify-center items-center`}
     >
        {(isEditing 
             ? <EditEnemy enemy={enemy} onClose={() => setIsEditing(false)} />
@@ -102,10 +102,10 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
                         <h2 className="text-2xl font-bold text-center p-6 pt-10">{enemy.name}</h2>
                         <ReactMarkdown
                         components={{
-                            p: ({ node, ...props }) => <p className="text-gray-300 text-sm mt-2" {...props} />,
-                            strong: ({ node, ...props }) => <strong className="text-white font-bold" {...props} />,
-                            em: ({ node, ...props }) => <em className="italic text-gray-400" {...props} />,
-                            ul: ({ node, ...props }) => <ul className="list-disc list-inside text-gray-300 mt-2" {...props} />,
+                            p: ({ node, ...props }) => <p className="text-sm mt-2" {...props} />,
+                            strong: ({ node, ...props }) => <strong className="font-bold" {...props} />,
+                            em: ({ node, ...props }) => <em className="italic" {...props} />,
+                            ul: ({ node, ...props }) => <ul className="list-disc list-inside mt-2" {...props} />,
                             li: ({ node, ...props }) => <li className="ml-4" {...props} />
                         }}
                         >
@@ -171,10 +171,10 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
 
                     {/* Navigation between cards */}
                     <button className="absolute left-2 top-1/2 -translate-y-1/2 bg-gray-200 dark:bg-gray-700 p-2 rounded-full cursor-pointer hover:scale-110 transition-all duration-300 ease-in-out" onClick={onPrev}>
-                        <ChevronLeftIcon className="w-5 h-5 text-white" />
+                        <ChevronLeftIcon className="w-5 h-5 text-gray-900 dark:text-white" />
                     </button>
                     <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-200 dark:bg-gray-700 p-2 rounded-full cursor-pointer hover:scale-110 transition-all duration-300 ease-in-out" onClick={onNext}>
-                        <ChevronRightIcon className="w-5 h-5 text-white" />
+                        <ChevronRightIcon className="w-5 h-5 text-gray-900 dark:text-white" />
                     </button>
                 </div>
             </> 
