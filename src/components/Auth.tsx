@@ -61,7 +61,7 @@ const Auth: React.FC = () => {
         <>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="flex items-center gap-2 focus:outline-none"
+            className="flex items-center gap-2 focus:outline-none hover:bg-gray-700 rounded px-2 py-1 cursor-pointer"
           >
             <img
               src={
@@ -76,18 +76,18 @@ const Auth: React.FC = () => {
           {menuOpen && (
             <div
               ref={menuRef}
-              className="absolute right-0 mt-2 w-40 bg-gray-800 rounded shadow-lg text-sm"
+              className="absolute right-0 top-full mt-2 w-40 bg-gray-800 rounded shadow-lg text-sm"
             >
               <button
                 onClick={openProfile}
-                className="w-full flex items-center gap-2 px-4 py-2 hover:bg-gray-700"
+                className="w-full flex items-center gap-2 px-4 py-2 hover:bg-gray-700 cursor-pointer"
               >
                 <Cog6ToothIcon className="w-5 h-5" />
                 Настройки
               </button>
               <button
                 onClick={logout}
-                className="w-full flex items-center gap-2 px-4 py-2 hover:bg-gray-700 text-red-400"
+                className="w-full flex items-center gap-2 px-4 py-2 hover:bg-gray-700 text-red-400 cursor-pointer"
               >
                 <ArrowLeftOnRectangleIcon className="w-5 h-5" />
                 Выход
@@ -99,7 +99,7 @@ const Auth: React.FC = () => {
       ) : (
         <button
           onClick={login}
-          className="px-4 py-2 bg-neonBlue text-darkBg font-semibold rounded hover:bg-opacity-80 transition"
+          className="px-4 py-2 bg-neonBlue text-darkBg font-semibold rounded hover:bg-opacity-80 transition cursor-pointer"
         >
           Войти через Google
         </button>
