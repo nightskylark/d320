@@ -9,6 +9,7 @@ const ThemeSwitch: React.FC = () => {
   return (
     <button
       aria-label="Toggle theme"
+      aria-pressed={theme === 'dark'}
       onClick={toggleTheme}
       className="relative w-12 h-6 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center transition-colors"
     >
