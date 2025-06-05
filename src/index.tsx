@@ -5,15 +5,18 @@ import App from './App';
 import { AuthProvider } from './contexts/AuthContext';
 import { TagProvider } from './contexts/TagContext';
 import reportWebVitals from './reportWebVitals';
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
-    <AuthProvider>
-      <TagProvider>
-        <App />
-      </TagProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <TagProvider>
+          <App />
+        </TagProvider>
+      </AuthProvider>
+    </ThemeProvider>
   </React.StrictMode>
 );
 

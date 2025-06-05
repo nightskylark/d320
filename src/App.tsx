@@ -126,7 +126,7 @@ const App: React.FC = () => {
   }, [selectedEnemy]);
 
   return (
-    <div className="bg-slate-900 text-sky-200 min-h-screen">
+    <div className="bg-slate-100 text-slate-900 dark:bg-slate-900 dark:text-sky-200 min-h-screen">
       <Header />
       <main className="p-6 max-w-screen-xl mx-auto">
         <h2 className="text-3xl font-bold text-center">Каталог противников для игры Грань Вселенной</h2>
