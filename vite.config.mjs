@@ -14,7 +14,7 @@ export default defineConfig({
   define: {
     global: 'globalThis',
   },
-  base: '/d320/',
+  base: '/',
 });
 
 

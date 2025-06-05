@@ -1,31 +1,32 @@
+<img width="807" alt="Image" src="https://github.com/user-attachments/assets/788e95a2-9a14-475c-beb1-7acaa5ac0ac9" />
+
 # d320
 
-d320 is an enemy catalog for the tabletop RPG "Edge of the Verse." The site is available at [https://nightskylark.github.io/d320/](https://nightskylark.github.io/d320/).
+**d320** — это каталог противников для настольной ролевой игры **«Грань Вселенной»**. Сайт доступен по адресу: [https://d320.world/](https://d320.world/).
 
-# Getting Started with Vite
+# Начало работы с Vite
 
-This project was bootstrapped with [Vite](https://vitejs.dev/).
+Этот проект был создан с помощью [Vite](https://vitejs.dev/).
 
-## Available Scripts
+## Доступные команды
 
-In the project directory, you can run:
+В директории проекта вы можете выполнять следующие команды:
 
 ### `npm run dev`
 
-Runs the app in development mode.
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-The page will reload when you make changes.
+Запускает приложение в режиме разработки.  
+Откройте [http://localhost:5173](http://localhost:5173) в вашем браузере, чтобы увидеть сайт.  
+Страница будет автоматически перезагружаться при внесении изменений.
 
 ### `npm run build`
 
-Builds the app for production to the `dist` folder.
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Собирает приложение для продакшена в папку `dist`.  
+React будет упакован в режиме продакшена, а сборка будет оптимизирована для максимальной производительности.
 
 ### `npm run serve`
 
-Serves the production build locally using Vite preview.
+Локальный запуск продакшн-сборки с использованием Vite Preview.
 
-## Learn More
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
+## Дополнительные ресурсы
+- [Документация React](https://reactjs.org/)
+- [Документация Tailwind](https://tailwindcss.com/)
