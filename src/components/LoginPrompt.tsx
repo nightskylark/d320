@@ -23,14 +23,14 @@ const LoginPrompt: React.FC<Props> = ({ open, message = "Для продолже
     <div
       role="button"
       tabIndex={-1}
-      className="fixed inset-0 z-[60] p-5 bg-black flex items-center justify-center"
+      className="fixed inset-0 z-[60] p-5  bg-gray-500 dark:bg-black flex items-center justify-center"
       onClick={onClose}
     >
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
       <div
         role="dialog"
         onClick={(e) => e.stopPropagation()}
-        className="relative bg-gray-900 rounded-2xl w-full max-w-sm p-6 flex flex-col items-center gap-4"
+        className="relative bg-white dark:bg-gray-900 rounded-2xl w-full max-w-sm p-6 flex flex-col items-center gap-4"
       >
         <button
           onClick={onClose}

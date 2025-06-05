@@ -51,7 +51,7 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
 
 
   return (
-    <div className="relative bg-gray-900 rounded-2xl w-full flex flex-col sm:flex-row shadow-lg h-full max-w-7xl overflow-hidden">
+    <div className="relative bg-white dark:bg-gray-900 rounded-2xl w-full flex flex-col sm:flex-row shadow-lg h-full max-w-7xl overflow-hidden">
       <ImageDropZone imageURL={imageURL} setImageURL={setImageURL} ownerUid={enemy.authorUid} />
       <EnemyFields
         name={name}

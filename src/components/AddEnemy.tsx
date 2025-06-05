@@ -82,7 +82,7 @@ const AddEnemy: React.FC = () => {
       <div
         role="button"
         tabIndex={0}
-        className="group relative flex flex-col items-center justify-center bg-gray-800 text-white p-4 rounded-xl shadow-lg cursor-pointer w-full sm:w-40 sm:h-56 aspect-[2/3] hover:scale-110 transition-all duration-300 ease-in-out"
+        className="group relative flex flex-col items-center justify-center bg-white text-gray-900 dark:bg-gray-800 dark:text-white p-4 rounded-xl shadow-lg cursor-pointer w-full sm:w-40 sm:h-56 aspect-[2/3] hover:scale-110 transition-all duration-300 ease-in-out"
         onClick={() => {
           if (user) {
             setIsOpen(true);
@@ -111,14 +111,14 @@ const AddEnemy: React.FC = () => {
     <div
       role="button"
       tabIndex={-1}
-      className="fixed inset-0 z-50 p-5 bg-black flex items-center justify-center"
+      className="fixed inset-0 z-50 p-5  bg-gray-500 dark:bg-black flex items-center justify-center"
       onClick={() => setIsOpen(false)}
     >
         {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
         <div
           role="dialog"
           onClick={(e) => e.stopPropagation()}
-          className="relative bg-gray-900 rounded-2xl w-full max-w-7xl flex flex-col sm:flex-row shadow-lg overflow-hidden h-full"
+          className="relative bg-white dark:bg-gray-900 rounded-2xl w-full max-w-7xl flex flex-col sm:flex-row shadow-lg overflow-hidden h-full"
         >
         <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col sm:flex-row w-full h-full overflow-y-auto">
         <ImageDropZone imageURL={imageURL} setImageURL={setImageURL} ownerUid={user?.uid || ""} />
@@ -136,7 +136,7 @@ const AddEnemy: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="flex-1 flex items-center justify-center gap-1 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-500 transition cursor-pointer"
+              className="flex-1 flex items-center justify-center gap-1 px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-white rounded hover:bg-gray-200 dark:hover:bg-gray-500 transition cursor-pointer"
             >
               <XMarkIcon className="w-5 h-5" />
               Отмена

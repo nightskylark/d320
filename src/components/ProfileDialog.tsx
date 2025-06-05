@@ -51,7 +51,7 @@ const ProfileDialog: React.FC<Props> = ({ onClose }) => {
     <div
       role="button"
       tabIndex={-1}
-      className="fixed inset-0 z-50 p-5 bg-black flex items-center justify-center"
+      className="fixed inset-0 z-50 p-5 bg-gray-500 dark:bg-black flex items-center justify-center"
       onClick={onClose}
     >
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
@@ -59,7 +59,7 @@ const ProfileDialog: React.FC<Props> = ({ onClose }) => {
         ref={formRef}
         role="dialog"
         onClick={(e) => e.stopPropagation()}
-        className="relative bg-gray-900 rounded-2xl w-full max-w-md flex flex-col shadow-lg overflow-hidden p-6 items-center"
+        className="relative bg-white dark:bg-gray-900 rounded-2xl w-full max-w-md flex flex-col shadow-lg overflow-hidden p-6 items-center"
       >
         <AvatarDropZone
           avatarURL={photoURL}
@@ -71,13 +71,13 @@ const ProfileDialog: React.FC<Props> = ({ onClose }) => {
           type="text"
           value={displayName}
           onChange={(e) => setDisplayName(e.target.value)}
-          className="w-full p-2 mt-4 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-neonBlue"
+          className="w-full p-2 mt-4 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-neonBlue"
         />
         <div className="flex gap-4 mt-6 w-full">
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 flex items-center justify-center gap-1 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-500 transition cursor-pointer"
+            className="flex-1 flex items-center justify-center gap-1 px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-white rounded hover:bg-gray-200 dark:hover:bg-gray-500 transition cursor-pointer"
           >
             <XMarkIcon className="w-5 h-5" />
             Отмена

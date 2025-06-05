@@ -24,7 +24,7 @@ const AvatarDropZone: React.FC<Props> = ({ avatarURL, setAvatarURL, ownerUid, cl
 
   return (
     <div
-      className={`flex items-center justify-center bg-gray-800 relative overflow-hidden group ${className || ''}`}
+      className={`flex items-center justify-center bg-gray-200 dark:bg-gray-800 relative overflow-hidden group ${className || ''}`}
       onDrop={onDrop}
       onDragOver={(e) => e.preventDefault()}
     >
@@ -40,7 +40,7 @@ const AvatarDropZone: React.FC<Props> = ({ avatarURL, setAvatarURL, ownerUid, cl
         <span className="text-xs">Нажмите или перетащите файл</span>
       </div>
       {progress > 0 && progress < 100 && (
-        <span className="absolute bottom-2 left-2 text-xs bg-black/60 px-1 rounded">
+        <span className="absolute bottom-2 left-10 text-xs bg-black/60 px-1 rounded">
           {progress.toFixed(0)}%
         </span>
       )}

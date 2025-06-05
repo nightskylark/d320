@@ -46,7 +46,7 @@ const EnemyCard: React.FC<Props> = ({ index, enemy, author, onClick }) => {
     <div
         key={enemy.id}
         ref={cardRef}
-        className={`bg-gray-800 text-white shadow-lg cursor-pointer  overflow-hidden relative w-full sm:w-40 sm:h-56 aspect-[2/3] hover:scale-110 flex flex-col rounded-xl transition-all duration-300 ease-in-out`}
+        className={`bg-white text-gray-900 dark:bg-gray-800 dark:text-white shadow-lg cursor-pointer  overflow-hidden relative w-full sm:w-40 sm:h-56 aspect-[2/3] hover:scale-110 flex flex-col rounded-xl transition-all duration-300 ease-in-out`}
         onClick={() => onClick(index)}
     >
         {/* 1st image */}
@@ -68,7 +68,7 @@ const EnemyCard: React.FC<Props> = ({ index, enemy, author, onClick }) => {
             <div className="absolute bottom-4 left-4 flex flex-col items-end gap-2">
                 <div className="flex flex-wrap gap-1">
                 {enemy.tags.filter(tag => fixedTags.includes(tag)).map((tag, index) => (
-                    <span key={index} className="bg-gray-700 px-2 py-1 rounded text-xs drop-shadow-2xl">{tag}</span>
+                    <span key={index} className="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-xs drop-shadow-2xl">{tag}</span>
                 ))}
                 </div>
             </div>
