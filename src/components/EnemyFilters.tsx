@@ -16,9 +16,10 @@ interface Props {
   sort: string;
   setSort: (v: string) => void;
   authors: Record<string, UserProfile>;
+  onPrint: () => void;
 }
 
-const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, setLiked, author, setAuthor, sort, setSort, authors }) => {
+const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, setLiked, author, setAuthor, sort, setSort, authors, onPrint }) => {
   const fixedTags = useFixedTags();
   const [authorOpen, setAuthorOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement | null>(null);
@@ -134,6 +135,13 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
         <option value="name">Имя</option>
         <option value="date">Дата</option>
       </select>
+      <button
+        type="button"
+        onClick={onPrint}
+        className="ml-auto flex items-center gap-1 p-2 rounded border text-blue-700 dark:text-sky-300 hover:text-blue-500 dark:hover:text-sky-200 border-blue-700 dark:border-sky-300 hover:border-blue-500 dark:hover:border-sky-200 transition h-10 cursor-pointer"
+      >
+        Напечатать
+      </button>
     </div>
   );
 };

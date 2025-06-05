@@ -9,6 +9,7 @@ import EnemyFilters from "./components/EnemyFilters";
 import type { Enemy, UserProfile } from "./types";
 import { useAuth } from "./contexts/AuthContext";
 import { fetchUserProfiles } from "./utils/fetchUserProfiles";
+import { printEnemies } from "./utils/printEnemies";
 
 const App: React.FC = () => {
   const [enemies, setEnemies] = useState<Enemy[]>([]);
@@ -47,6 +48,10 @@ const App: React.FC = () => {
       await deleteDoc(doc(db, "eotv-enemies", id));
       setSelectedIndex(null);
     }
+  };
+
+  const handlePrintAll = () => {
+    printEnemies(filtered, profiles);
   };
 
   const normalizedSearch = search.toLowerCase();
@@ -143,6 +148,7 @@ const App: React.FC = () => {
           sort={sort}
           setSort={setSort}
           authors={profiles}
+          onPrint={handlePrintAll}
         />
         <EnemyList enemies={filtered} users={profiles} onSelect={setSelectedIndex} />
       </main>
