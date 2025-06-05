@@ -31,7 +31,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const uniqueUids = [...new Set(enemies.map(e => e.authorUid))];
     fetchUserProfiles(uniqueUids).then(setProfiles);
-  }, [enemies]);
+  }, [enemies, user]);
 
   const handleDelete = async (id: string) => {
     if (!user) return;

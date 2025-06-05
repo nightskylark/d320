@@ -123,7 +123,7 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
         className="flex items-center gap-1 p-2 rounded bg-blue-500 text-white hover:bg-blue-400 transition h-10 cursor-pointer"
       >
         <XMarkIcon className="w-5 h-5" />
-        Очистить
+        Сбросить фильтры
       </button>
       <span className="text-sm text-gray-300">Сортировка:</span>
       <select

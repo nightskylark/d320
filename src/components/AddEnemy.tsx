@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { addDoc } from "firebase/firestore";
-import { enemiesCollection } from "../firebase";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth, enemiesCollection } from "../firebase";
 import { useAuth } from "../contexts/AuthContext";
 import ImageDropZone from "./ImageDropZone";
 import EnemyFields from "./EnemyFields";
@@ -9,6 +10,7 @@ import type { Enemy } from "../types";
 
 const AddEnemy: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [loginPrompt, setLoginPrompt] = useState(false);
   const [name, setName] = useState("");
   const [customDescription, setCustomDescription] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -17,6 +19,13 @@ const AddEnemy: React.FC = () => {
   const [imageURL2, setImageURL2] = useState("");
   const user = useAuth();
   const formRef = useRef<HTMLFormElement | null>(null);
+
+  const login = async () => {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+    setLoginPrompt(false);
+    setIsOpen(true);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,19 +72,58 @@ const AddEnemy: React.FC = () => {
     };
   }, [isOpen]);
 
+  if (loginPrompt) {
+    return (
+      <div
+        role="button"
+        tabIndex={-1}
+        className="fixed inset-0 z-50 p-5 bg-black flex items-center justify-center"
+        onClick={() => setLoginPrompt(false)}
+      >
+        {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
+        <div
+          role="dialog"
+          onClick={(e) => e.stopPropagation()}
+          className="bg-gray-900 rounded-2xl w-full max-w-sm p-6 flex flex-col items-center gap-4"
+        >
+          <p>Для добавления врага необходима авторизация</p>
+          <button
+            onClick={login}
+            className="px-4 py-2 bg-neonBlue text-darkBg font-semibold rounded hover:bg-opacity-80 transition cursor-pointer"
+          >
+            Войти через Google
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (!isOpen) {
     return (
       <div
         role="button"
         tabIndex={0}
         className="group relative flex flex-col items-center justify-center bg-gray-800 text-white p-4 rounded-xl shadow-lg cursor-pointer w-40 h-56 aspect-[2/3] hover:scale-110 transition-all duration-300 ease-in-out"
-        onClick={() => setIsOpen(true)}
-        onKeyDown={(e) => e.key === 'Enter' && setIsOpen(true)}
+        onClick={() => {
+          if (user) {
+            setIsOpen(true);
+          } else {
+            setLoginPrompt(true);
+          }
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            if (user) setIsOpen(true); else setLoginPrompt(true);
+          }
+        }}
       >
         <div className="w-16 h-16 flex items-center justify-center bg-neonBlue rounded-full transform transition-transform duration-300 group-hover:rotate-90">
           <span className="text-3xl font-bold text-darkBg">+</span>
         </div>
         <p className="mt-2 text-lg">Добавить</p>
+        {!user && (
+          <span className="text-xs text-gray-400">Требует авторизации</span>
+        )}
       </div>
     );
   }
