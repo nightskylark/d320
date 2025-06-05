@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { addDoc } from "firebase/firestore";
-import { enemiesCollection, auth } from "../firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import { enemiesCollection } from "../firebase";
+import { useAuth } from "../contexts/AuthContext";
 import ImageDropZone from "./ImageDropZone";
 import EnemyFields from "./EnemyFields";
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -15,10 +15,8 @@ const AddEnemy: React.FC = () => {
   const [customTags, setCustomTags] = useState<string[]>([]);
   const [imageURL, setImageURL] = useState("");
   const [imageURL2, setImageURL2] = useState("");
-  const [user, setUser] = useState<{ uid: string } | null>(null);
+  const user = useAuth();
   const formRef = useRef<HTMLFormElement | null>(null);
-
-  useEffect(() => onAuthStateChanged(auth, setUser), []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
