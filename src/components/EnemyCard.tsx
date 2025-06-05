@@ -1,4 +1,9 @@
 import { useRef } from "react";
+import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+import { StarIcon as StarSolid } from "@heroicons/react/24/solid";
+import { StarIcon as StarOutline } from "@heroicons/react/24/outline";
+import { db } from "../firebase";
+import { useAuth } from "../contexts/AuthContext";
 import type { Enemy, UserProfile } from "../types";
 
 interface Props {
@@ -9,6 +14,18 @@ interface Props {
 }
 const EnemyCard: React.FC<Props> = ({ index, enemy, author, onClick }) => {
     const cardRef = useRef<HTMLDivElement | null>(null);
+    const user = useAuth();
+
+    const liked = !!user && enemy.likedBy?.includes(user.uid);
+
+    const toggleLike = async (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (!user || !enemy.id) return;
+        const ref = doc(db, "eotv-enemies", enemy.id);
+        await updateDoc(ref, {
+            likedBy: liked ? arrayRemove(user.uid) : arrayUnion(user.uid)
+        });
+    };
 
     return (
     <div
@@ -19,6 +36,14 @@ const EnemyCard: React.FC<Props> = ({ index, enemy, author, onClick }) => {
     >
         {/* 1st image */}
         <img src={enemy.imageURL} alt={enemy.name} className="w-full h-32 object-cover" />
+
+        <button
+            onClick={toggleLike}
+            title={liked ? 'Сохранено' : 'Сохранить'}
+            className="absolute top-2 right-2 text-yellow-400 hover:scale-110 transition"
+        >
+            {liked ? <StarSolid className="w-5 h-5" /> : <StarOutline className="w-5 h-5" />}
+        </button>
 
         <div className="p-2 flex flex-col">
             {/* Name */}

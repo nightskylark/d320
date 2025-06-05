@@ -7,6 +7,7 @@ export interface Enemy {
   imageURL: string;
   imageURL2?: string;
   authorUid: string;
+  likedBy?: string[];
 }
 
 export interface UserProfile {
