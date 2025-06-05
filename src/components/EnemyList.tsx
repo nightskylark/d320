@@ -10,7 +10,7 @@ interface Props {
 
 const EnemyList: React.FC<Props> = ({ enemies, users, onSelect }) => {
   return (
-    <div className="flex flex-wrap gap-4 justify-center relative">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 justify-center relative">
       <AddEnemy />
       {enemies.map((enemy, index) => (
         <EnemyCard

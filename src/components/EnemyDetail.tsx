@@ -81,11 +81,11 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
             ? <EditEnemy enemy={enemy} onClose={() => setIsEditing(false)} />
             : <>
                 {/* Expanded view */}
-                <div className="relative bg-gray-900 rounded-2xl w-full flex shadow-lg h-full max-w-7xl overflow-hidden">
+                <div className="relative bg-gray-900 rounded-2xl w-full flex flex-col sm:flex-row shadow-lg h-full max-w-7xl overflow-hidden">
                     {/* Left column - image 1 */}
-                    <img src={enemy.imageURL} alt={enemy.name} className="w-3/14 object-cover" />
+                    <img src={enemy.imageURL} alt={enemy.name} className="w-full sm:w-3/14 h-40 sm:h-auto object-cover" />
                     {/* Center - title + description */}
-                    <div className="w-4/7 flex flex-col px-6 overflow-y-auto">
+                    <div className="sm:w-4/7 w-full flex flex-col px-6 overflow-y-auto">
                         <h2 className="text-2xl font-bold text-center p-6 pt-10">{enemy.name}</h2>
                         <ReactMarkdown
                         components={{
@@ -101,7 +101,7 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
 
                     </div>
                     {/* Right column - image 2 */}
-                    {enemy.imageURL2 && <img src={enemy.imageURL2} alt="Extra" className="w-3/14 object-cover" />}
+                    {enemy.imageURL2 && <img src={enemy.imageURL2} alt="Extra" className="w-full sm:w-3/14 h-40 sm:h-auto object-cover" />}
 
                     {/* Tags */}
                     <div className="absolute bottom-4 left-4 flex flex-col items-end gap-2">

@@ -24,7 +24,7 @@ const ImageDropZone: React.FC<Props> = ({ imageURL, setImageURL, ownerUid, class
 
   return (
     <div
-      className={`w-3/14 flex items-center justify-center bg-gray-800 relative overflow-hidden group ${className || ""}`}
+      className={`w-full sm:w-3/14 flex items-center justify-center bg-gray-800 relative overflow-hidden group ${className || ""}`}
       onDrop={onDrop}
       onDragOver={(e) => e.preventDefault()}
     >

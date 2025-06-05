@@ -82,7 +82,7 @@ const AddEnemy: React.FC = () => {
       <div
         role="button"
         tabIndex={0}
-        className="group relative flex flex-col items-center justify-center bg-gray-800 text-white p-4 rounded-xl shadow-lg cursor-pointer w-40 h-56 aspect-[2/3] hover:scale-110 transition-all duration-300 ease-in-out"
+        className="group relative flex flex-col items-center justify-center bg-gray-800 text-white p-4 rounded-xl shadow-lg cursor-pointer w-full sm:w-40 h-56 aspect-[2/3] hover:scale-110 transition-all duration-300 ease-in-out"
         onClick={() => {
           if (user) {
             setIsOpen(true);
@@ -118,9 +118,9 @@ const AddEnemy: React.FC = () => {
         <div
           role="dialog"
           onClick={(e) => e.stopPropagation()}
-          className="relative bg-gray-900 rounded-2xl w-full max-w-7xl flex shadow-lg overflow-hidden h-full"
+          className="relative bg-gray-900 rounded-2xl w-full max-w-7xl flex flex-col sm:flex-row shadow-lg overflow-hidden h-full"
         >
-        <form ref={formRef} onSubmit={handleSubmit} className="flex w-full h-full">
+        <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col sm:flex-row w-full h-full overflow-y-auto">
         <ImageDropZone imageURL={imageURL} setImageURL={setImageURL} ownerUid={user?.uid || ""} />
         <EnemyFields
           name={name}
