@@ -47,6 +47,21 @@ const App: React.FC = () => {
 
   const selectedEnemy = selectedIndex !== null ? enemies[selectedIndex] : null;
 
+  useEffect(() => {
+    if (selectedEnemy === null) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        handlePrev();
+      } else if (e.key === 'ArrowRight') {
+        handleNext();
+      } else if (e.key === 'Escape') {
+        setSelectedIndex(null);
+      }
+    };
+    document.addEventListener('keydown', handleKey);
+    return () => document.removeEventListener('keydown', handleKey);
+  }, [selectedEnemy, handlePrev, handleNext]);
+
   return (
     <div className="bg-slate-900 text-sky-200 min-h-screen">
       <Header />
