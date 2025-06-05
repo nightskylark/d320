@@ -3,6 +3,7 @@ import { onSnapshot, doc, deleteDoc } from "firebase/firestore";
 import { enemiesCollection, db } from "./firebase";
 import EnemyList from "./components/EnemyList";
 import EnemyDetail from "./components/EnemyDetail";
+import Footer from "./components/Footer";
 import Header from "./components/Header";
 import EnemyFilters from "./components/EnemyFilters";
 import type { Enemy, UserProfile } from "./types";
@@ -101,7 +102,7 @@ const App: React.FC = () => {
       <Header />
       <main className="p-6 max-w-screen-xl mx-auto">
         <h2 className="text-3xl font-bold text-center">Каталог противников для игры Грань Вселенной</h2>
-        <p className="text-center text-gray-400 p-4">Официальный сайт игры: <a className="link" href="http://eotvrpg.ru/" target="_blank">http://eotvrpg.ru/</a></p>
+        <p className="text-center text-gray-400 p-4">Официальный сайт игры: <a className="link" href="http://eotvrpg.ru/" target="_blank"><img src="./eotv-logo.png" alt="EOTV" className="w-5 h-5 inline-block" />eotvrpg.ru</a></p>
         <EnemyFilters
           search={search}
           setSearch={setSearch}
@@ -127,6 +128,7 @@ const App: React.FC = () => {
           onDelete={() => handleDelete(selectedEnemy.id!)}
         />
       )}
+      <Footer />
     </div>
   );
 };
