@@ -1,6 +1,5 @@
-import { useEffect, useState, useCallback } from "react";
-import { getDocs } from "firebase/firestore";
-import { tagsCollection } from "../firebase";
+import { useState, useCallback } from "react";
+import { useFixedTags } from "../contexts/TagContext";
 
 interface Props {
   selectedTags: string[];
@@ -9,21 +8,14 @@ interface Props {
   setCustomTags: (tags: string[]) => void;
 }
 
-interface TagDoc { id: string; slug: string; name: string }
-
 const TagBox: React.FC<Props> = ({ selectedTags, setSelectedTags, customTags, setCustomTags }) => {
-  const [availableTags, setAvailableTags] = useState<TagDoc[]>([]);
+  const availableTags = useFixedTags().map(name => ({ name }));
   const [input, setInput] = useState("");
 
-  useEffect(() => {
-    const fetchTags = async () => {
-      const qs = await getDocs(tagsCollection);
-      setAvailableTags(qs.docs.map(doc => ({ id: doc.id, ...(doc.data() as Omit<TagDoc, "id">) })));
-    };
-    fetchTags();
-  }, []);
-
-  const allSuggestions = Array.from(new Set([...availableTags.map(t => t.slug), ...customTags]));
+  const allSuggestions = Array.from(new Set([...availableTags.map(t => t.name), ...customTags]));
+  const filteredSuggestions = allSuggestions.filter(tag =>
+    tag.toLowerCase().includes(input.toLowerCase()) && !selectedTags.includes(tag)
+  );
 
   const addTag = useCallback((tag: string) => {
     const trimmed = tag.trim();
@@ -31,7 +23,7 @@ const TagBox: React.FC<Props> = ({ selectedTags, setSelectedTags, customTags, se
     if (!selectedTags.includes(trimmed)) {
       setSelectedTags([...selectedTags, trimmed]);
     }
-    if (!availableTags.some(t => t.slug === trimmed) && !customTags.includes(trimmed)) {
+    if (!availableTags.some(t => t.name === trimmed) && !customTags.includes(trimmed)) {
       setCustomTags([...customTags, trimmed]);
     }
   }, [selectedTags, setSelectedTags, availableTags, customTags, setCustomTags]);
@@ -67,7 +59,7 @@ const TagBox: React.FC<Props> = ({ selectedTags, setSelectedTags, customTags, se
           className="bg-transparent outline-none flex-1 text-sm text-white"
         />
         <datalist id="tag-suggestions">
-          {allSuggestions.map(tag => (
+          {filteredSuggestions.map(tag => (
             <option key={tag} value={tag} />
           ))}
         </datalist>
