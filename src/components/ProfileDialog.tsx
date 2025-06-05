@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { doc, setDoc } from "firebase/firestore";
-import { db } from "../firebase";
-import { useAuth } from "../contexts/AuthContext";
+import { updateProfile } from "firebase/auth";
+import { db, auth } from "../firebase";
+import { useAuth, useSetAuthUser } from "../contexts/AuthContext";
 import AvatarDropZone from "./AvatarDropZone";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
@@ -11,6 +12,7 @@ interface Props {
 
 const ProfileDialog: React.FC<Props> = ({ onClose }) => {
   const user = useAuth();
+  const setAuthUser = useSetAuthUser();
   const [displayName, setDisplayName] = useState(user?.displayName || "");
   const [photoURL, setPhotoURL] = useState(user?.photoURL || "");
   const formRef = useRef<HTMLDivElement | null>(null);
@@ -34,6 +36,9 @@ const ProfileDialog: React.FC<Props> = ({ onClose }) => {
 
   const saveProfile = async () => {
     if (!user) return;
+    await updateProfile(user, { displayName, photoURL });
+    await user.reload();
+    setAuthUser(auth.currentUser);
     await setDoc(doc(db, "users", user.uid), { displayName, photoURL }, { merge: true });
     onClose();
   };
