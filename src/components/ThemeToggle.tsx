@@ -2,28 +2,22 @@ import { useEffect, useState } from "react";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
 
 const ThemeToggle: React.FC = () => {
-  const [dark, setDark] = useState(true);
+  const [dark, setDark] = useState(() => {
+    return localStorage.getItem('theme') !== 'light';
+  });
 
   useEffect(() => {
-    const saved = localStorage.getItem('theme');
-    if (saved === 'light') {
-      document.documentElement.classList.remove('dark');
-      setDark(false);
-    } else {
-      document.documentElement.classList.add('dark');
-      setDark(true);
-    }
-  }, []);
-
-  const toggle = () => {
     if (dark) {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    } else {
       document.documentElement.classList.add('dark');
       localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
     }
-    setDark(!dark);
+  }, [dark]);
+
+  const toggle = () => {
+    setDark(prev => !prev);
   };
 
   return (
