@@ -110,7 +110,7 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
                         <button
                             onClick={toggleLike}
                             title={liked ? 'Сохранено' : 'Сохранить'}
-                            className="text-yellow-400 hover:scale-110 transition"
+                            className="text-gray-300 hover:scale-110 transition"
                         >
                             {liked ? <StarSolid className="w-6 h-6" /> : <StarOutline className="w-6 h-6" />}
                         </button>

@@ -40,7 +40,7 @@ const EnemyCard: React.FC<Props> = ({ index, enemy, author, onClick }) => {
         <button
             onClick={toggleLike}
             title={liked ? 'Сохранено' : 'Сохранить'}
-            className="absolute top-2 right-2 text-yellow-400 hover:scale-110 transition"
+            className="absolute top-2 right-2 text-blue-300 hover:scale-110 transition"
         >
             {liked ? <StarSolid className="w-5 h-5" /> : <StarOutline className="w-5 h-5" />}
         </button>
