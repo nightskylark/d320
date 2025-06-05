@@ -43,9 +43,9 @@ const TagBox: React.FC<Props> = ({ selectedTags, setSelectedTags, customTags, se
   return (
     <div className="mt-auto py-4">
       <label className="block text-sm mb-1">Теги</label>
-      <div className="flex flex-wrap gap-1 bg-gray-700 p-2 rounded">
+      <div className="flex flex-wrap gap-1 bg-gray-200 dark:bg-gray-700 p-2 rounded">
         {selectedTags.map(tag => (
-          <span key={tag} className="bg-gray-600 px-2 py-1 rounded text-xs flex items-center gap-1">
+          <span key={tag} className="bg-gray-300 dark:bg-gray-600 px-2 py-1 rounded text-xs flex items-center gap-1">
             {tag}
             <button type="button" onClick={() => removeTag(tag)} className="text-red-400 hover:text-white">×</button>
           </span>
@@ -56,7 +56,7 @@ const TagBox: React.FC<Props> = ({ selectedTags, setSelectedTags, customTags, se
           list="tag-suggestions"
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="bg-transparent outline-none flex-1 text-sm text-white"
+          className="bg-transparent outline-none flex-1 text-sm text-gray-900 dark:text-white"
         />
         <datalist id="tag-suggestions">
           {filteredSuggestions.map(tag => (

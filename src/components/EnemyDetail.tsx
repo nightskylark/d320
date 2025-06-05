@@ -94,7 +94,7 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
             ? <EditEnemy enemy={enemy} onClose={() => setIsEditing(false)} />
             : <>
                 {/* Expanded view */}
-                <div className="relative bg-gray-900 rounded-2xl w-full flex flex-col sm:flex-row shadow-lg h-full max-w-7xl overflow-hidden">
+                <div className="relative bg-white dark:bg-gray-900 rounded-2xl w-full flex flex-col sm:flex-row shadow-lg h-full max-w-7xl overflow-hidden">
                     {/* Left column - image 1 */}
                     <img src={enemy.imageURL} alt={enemy.name} className="w-full sm:w-3/14 h-40 sm:h-auto object-cover" />
                     {/* Center - title + description */}
@@ -120,7 +120,7 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
                     <div className="absolute bottom-4 left-4 flex flex-col items-end gap-2">
                         <div className="flex flex-wrap gap-1">
                         {enemy.tags.map((tag, index) => (
-                            <span key={index} className="bg-gray-700 px-2 py-1 rounded text-xs drop-shadow-2xl">{tag}</span>
+                            <span key={index} className="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-xs drop-shadow-2xl">{tag}</span>
                         ))}
                         </div>
                     </div>
@@ -159,7 +159,7 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
                         )}
                     </div>
                     {linkCopied && (
-                        <div className="absolute top-10 right-10 bg-gray-800 text-white text-xs px-2 py-1 rounded-md shadow">
+                        <div className="absolute top-10 right-10 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white text-xs px-2 py-1 rounded-md shadow">
                             Ссылка скопирована
                         </div>
                     )}
@@ -170,10 +170,10 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
                     </button>
 
                     {/* Navigation between cards */}
-                    <button className="absolute left-2 top-1/2 -translate-y-1/2 bg-gray-700 p-2 rounded-full cursor-pointer hover:scale-110 transition-all duration-300 ease-in-out" onClick={onPrev}>
+                    <button className="absolute left-2 top-1/2 -translate-y-1/2 bg-gray-200 dark:bg-gray-700 p-2 rounded-full cursor-pointer hover:scale-110 transition-all duration-300 ease-in-out" onClick={onPrev}>
                         <ChevronLeftIcon className="w-5 h-5 text-white" />
                     </button>
-                    <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-700 p-2 rounded-full cursor-pointer hover:scale-110 transition-all duration-300 ease-in-out" onClick={onNext}>
+                    <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-200 dark:bg-gray-700 p-2 rounded-full cursor-pointer hover:scale-110 transition-all duration-300 ease-in-out" onClick={onNext}>
                         <ChevronRightIcon className="w-5 h-5 text-white" />
                     </button>
                 </div>
