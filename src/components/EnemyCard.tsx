@@ -4,6 +4,7 @@ import { StarIcon as StarSolid } from "@heroicons/react/24/solid";
 import { StarIcon as StarOutline } from "@heroicons/react/24/outline";
 import { db } from "../firebase";
 import { useAuth } from "../contexts/AuthContext";
+import { useFixedTags } from "../contexts/TagContext";
 import type { Enemy, UserProfile } from "../types";
 
 interface Props {
@@ -15,6 +16,7 @@ interface Props {
 const EnemyCard: React.FC<Props> = ({ index, enemy, author, onClick }) => {
     const cardRef = useRef<HTMLDivElement | null>(null);
     const user = useAuth();
+    const fixedTags = useFixedTags();
 
     const liked = !!user && enemy.likedBy?.includes(user.uid);
 
@@ -52,7 +54,7 @@ const EnemyCard: React.FC<Props> = ({ index, enemy, author, onClick }) => {
             {/* Tags */}
             <div className="absolute bottom-4 left-4 flex flex-col items-end gap-2">
                 <div className="flex flex-wrap gap-1">
-                {enemy.tags.map((tag, index) => (
+                {enemy.tags.filter(tag => fixedTags.includes(tag)).map((tag, index) => (
                     <span key={index} className="bg-gray-700 px-2 py-1 rounded text-xs drop-shadow-2xl">{tag}</span>
                 ))}
                 </div>
