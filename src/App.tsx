@@ -41,18 +41,6 @@ const App: React.FC = () => {
     }
   };
 
-  const handleNext = () => {
-    if (!enemies.length || selectedIndex === null) return;
-    setSelectedIndex((selectedIndex + 1) % enemies.length);
-  };
-
-  const handlePrev = () => {
-    if (!enemies.length || selectedIndex === null) return;
-    setSelectedIndex((selectedIndex - 1 + enemies.length) % enemies.length);
-  };
-
-  const selectedEnemy = selectedIndex !== null ? enemies[selectedIndex] : null;
-
   const normalizedSearch = search.toLowerCase();
   let filtered = enemies.filter(e =>
     e.name.toLowerCase().includes(normalizedSearch) ||
@@ -79,6 +67,19 @@ const App: React.FC = () => {
       return bd - ad;
     });
   }
+
+  const handleNext = () => {
+    if (!filtered.length || selectedIndex === null) return;
+    setSelectedIndex((selectedIndex + 1) % filtered.length);
+  };
+
+  const handlePrev = () => {
+    if (!filtered.length || selectedIndex === null) return;
+    setSelectedIndex((selectedIndex - 1 + filtered.length) % filtered.length);
+  };
+
+  const selectedEnemy =
+    selectedIndex !== null ? filtered[selectedIndex] : null;
 
   useEffect(() => {
     if (selectedEnemy === null) return;
