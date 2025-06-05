@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import { StarIcon as StarSolid } from "@heroicons/react/24/solid";
 import { StarIcon as StarOutline } from "@heroicons/react/24/outline";
@@ -6,6 +6,7 @@ import { db } from "../firebase";
 import { useAuth } from "../contexts/AuthContext";
 import { useFixedTags } from "../contexts/TagContext";
 import type { Enemy, UserProfile } from "../types";
+import LoginPrompt from "./LoginPrompt";
 
 interface Props {
   index: number;
@@ -17,12 +18,16 @@ const EnemyCard: React.FC<Props> = ({ index, enemy, author, onClick }) => {
     const cardRef = useRef<HTMLDivElement | null>(null);
     const user = useAuth();
     const fixedTags = useFixedTags();
+    const [loginPrompt, setLoginPrompt] = useState(false);
 
     const liked = !!user && enemy.likedBy?.includes(user.uid);
 
     const toggleLike = async (e: React.MouseEvent) => {
         e.stopPropagation();
-        if (!user || !enemy.id) return;
+        if (!user || !enemy.id) {
+            setLoginPrompt(true);
+            return;
+        }
         const ref = doc(db, "eotv-enemies", enemy.id);
         await updateDoc(ref, {
             likedBy: liked ? arrayRemove(user.uid) : arrayUnion(user.uid)
@@ -30,6 +35,14 @@ const EnemyCard: React.FC<Props> = ({ index, enemy, author, onClick }) => {
     };
 
     return (
+    <>
+    {loginPrompt && (
+        <LoginPrompt
+            open={loginPrompt}
+            onClose={() => setLoginPrompt(false)}
+            message="Для сохранения требуется авторизация"
+        />
+    )}
     <div
         key={enemy.id}
         ref={cardRef}
@@ -70,6 +83,7 @@ const EnemyCard: React.FC<Props> = ({ index, enemy, author, onClick }) => {
         {/* 2nd image preload */}
         {enemy.imageURL2 && <img src={enemy.imageURL2} alt="Extra" className="hidden" />}
     </div>
+    </>
   );
 };
 
