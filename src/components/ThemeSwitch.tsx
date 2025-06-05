@@ -15,7 +15,7 @@ const ThemeSwitch: React.FC = () => {
       <SunIcon className="absolute left-1 w-4 h-4 text-yellow-500" />
       <MoonIcon className="absolute right-1 w-4 h-4 text-yellow-300" />
       <span
-        className={`absolute bg-white w-4 h-4 rounded-full transition-transform ${knobPosition}`}
+        className={`absolute bg-white w-4 h-4 rounded-full transition-transform transform ${knobPosition}`}
       />
     </button>
   );
