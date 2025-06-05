@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import ReactMarkdown from "react-markdown";
-import { XMarkIcon, PencilSquareIcon, TrashIcon, ChevronLeftIcon, ChevronRightIcon, StarIcon as StarOutline } from "@heroicons/react/24/outline";
+import { XMarkIcon, PencilSquareIcon, TrashIcon, ChevronLeftIcon, ChevronRightIcon, StarIcon as StarOutline, LinkIcon } from "@heroicons/react/24/outline";
 import { StarIcon as StarSolid } from "@heroicons/react/24/solid";
 import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import { db } from "../firebase";
@@ -22,6 +22,7 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
     const cardRef = useRef<HTMLDivElement | null>(null);
     const [isEditing, setIsEditing] = useState(false);
     const [loginPrompt, setLoginPrompt] = useState(false);
+    const [linkCopied, setLinkCopied] = useState(false);
     const liked = !!user && enemy.likedBy?.includes(user.uid);
 
     const toggleLike = async () => {
@@ -33,6 +34,18 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
         await updateDoc(ref, {
             likedBy: liked ? arrayRemove(user.uid) : arrayUnion(user.uid)
         });
+    };
+
+    const handleShare = async () => {
+        if (!enemy.id) return;
+        const url = `${window.location.origin}${window.location.pathname}?enemy=${enemy.id}`;
+        try {
+            await navigator.clipboard.writeText(url);
+            setLinkCopied(true);
+            setTimeout(() => setLinkCopied(false), 2000);
+        } catch (e) {
+            console.error('Failed to copy link', e);
+        }
     };
 
     useEffect(() => {
@@ -127,6 +140,13 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
                         >
                             {liked ? <StarSolid className="w-6 h-6" /> : <StarOutline className="w-6 h-6" />}
                         </button>
+                        <button
+                            onClick={handleShare}
+                            title="Поделиться"
+                            className="text-gray-300 hover:scale-110 transition"
+                        >
+                            <LinkIcon className="w-6 h-6" />
+                        </button>
                         {user && user.uid === enemy.authorUid && (
                             <>
                                 <button onClick={() => setIsEditing(true)} className="text-gray-300 hover:text-white cursor-pointer drop-shadow-md">
@@ -138,6 +158,11 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
                             </>
                         )}
                     </div>
+                    {linkCopied && (
+                        <div className="absolute top-10 right-10 bg-gray-800 text-white text-xs px-2 py-1 rounded-md shadow">
+                            Ссылка скопирована
+                        </div>
+                    )}
 
                     {/* Close button */}
                     <button onClick={close} className="absolute top-2 right-2 text-gray-300 hover:text-white cursor-pointer drop-shadow-xl">
