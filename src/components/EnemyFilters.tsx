@@ -53,6 +53,15 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
         onChange={e => setSearch(e.target.value)}
         className="p-2 rounded bg-gray-700 text-white flex-1 h-10"
       />
+      <button
+        type="button"
+        title="Избранное"
+        onClick={() => setLiked(!liked)}
+        className="text-blue-300 hover:scale-110 transition flex items-center gap-1 h-10 px-2 cursor-pointer"
+      >
+        {liked ? <StarSolid className="w-5 h-5" /> : <StarOutline className="w-5 h-5" />}
+        <span className="text-sm">Избранное</span>
+      </button>
       <select
         value={tag}
         onChange={e => setTag(e.target.value)}
@@ -63,15 +72,6 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
           <option key={t} value={t}>{t}</option>
         ))}
       </select>
-      <button
-        type="button"
-        title="Избранное"
-        onClick={() => setLiked(!liked)}
-        className="text-blue-300 hover:scale-110 transition flex items-center gap-1 h-10 px-2 cursor-pointer"
-      >
-        {liked ? <StarSolid className="w-5 h-5" /> : <StarOutline className="w-5 h-5" />}
-        <span className="text-sm">Избранное</span>
-      </button>
       <div className="relative">
         <button
           type="button"
@@ -111,14 +111,6 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
           </div>
         )}
       </div>
-      <select
-        value={sort}
-        onChange={e => setSort(e.target.value)}
-        className="p-2 rounded bg-gray-700 text-white h-10 hover:bg-gray-500 transition cursor-pointer"
-      >
-        <option value="name">По имени</option>
-        <option value="date">По дате</option>
-      </select>
       <button
         type="button"
         onClick={() => {
@@ -128,11 +120,20 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
           setAuthor('');
           setSort('name');
         }}
-        className="flex items-center gap-1 p-2 rounded bg-gray-600 text-white hover:bg-gray-500 transition h-10 cursor-pointer"
+        className="flex items-center gap-1 p-2 rounded bg-blue-500 text-white hover:bg-blue-400 transition h-10 cursor-pointer"
       >
         <XMarkIcon className="w-5 h-5" />
         Очистить
       </button>
+      <span className="text-sm text-gray-300">Сортировка:</span>
+      <select
+        value={sort}
+        onChange={e => setSort(e.target.value)}
+        className="p-2 rounded bg-gray-700 text-white h-10 hover:bg-gray-500 transition cursor-pointer"
+      >
+        <option value="name">Имя</option>
+        <option value="date">Дата</option>
+      </select>
     </div>
   );
 };
