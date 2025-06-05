@@ -1,7 +1,6 @@
 import AddEnemy from "./AddEnemy";
 import EnemyCard from "./EnemyCard";
 import type { Enemy, UserProfile } from "../types";
-import { useAuth } from "../contexts/AuthContext";
 
 interface Props {
   enemies: Enemy[];
@@ -10,11 +9,9 @@ interface Props {
 }
 
 const EnemyList: React.FC<Props> = ({ enemies, users, onSelect }) => {
-  const user = useAuth();
-
   return (
     <div className="flex flex-wrap gap-4 justify-center relative">
-      {user && <AddEnemy />}
+      <AddEnemy />
       {enemies.map((enemy, index) => (
         <EnemyCard
           index={index}

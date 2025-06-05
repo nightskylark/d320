@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { addDoc } from "firebase/firestore";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth, enemiesCollection } from "../firebase";
+import { enemiesCollection } from "../firebase";
 import { useAuth } from "../contexts/AuthContext";
 import ImageDropZone from "./ImageDropZone";
 import EnemyFields from "./EnemyFields";
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import LoginPrompt from "./LoginPrompt";
 import type { Enemy } from "../types";
 
 const AddEnemy: React.FC = () => {
@@ -20,12 +20,6 @@ const AddEnemy: React.FC = () => {
   const user = useAuth();
   const formRef = useRef<HTMLFormElement | null>(null);
 
-  const login = async () => {
-    const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
-    setLoginPrompt(false);
-    setIsOpen(true);
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,27 +68,12 @@ const AddEnemy: React.FC = () => {
 
   if (loginPrompt) {
     return (
-      <div
-        role="button"
-        tabIndex={-1}
-        className="fixed inset-0 z-50 p-5 bg-black flex items-center justify-center"
-        onClick={() => setLoginPrompt(false)}
-      >
-        {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
-        <div
-          role="dialog"
-          onClick={(e) => e.stopPropagation()}
-          className="bg-gray-900 rounded-2xl w-full max-w-sm p-6 flex flex-col items-center gap-4"
-        >
-          <p>Для добавления врага необходима авторизация</p>
-          <button
-            onClick={login}
-            className="px-4 py-2 bg-neonBlue text-darkBg font-semibold rounded hover:bg-opacity-80 transition cursor-pointer"
-          >
-            Войти через Google
-          </button>
-        </div>
-      </div>
+      <LoginPrompt
+        open={loginPrompt}
+        onClose={() => setLoginPrompt(false)}
+        onSuccess={() => setIsOpen(true)}
+        message="Для добавления врага необходима авторизация"
+      />
     );
   }
 

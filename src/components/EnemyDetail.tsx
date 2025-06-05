@@ -7,6 +7,7 @@ import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import { db } from "../firebase";
 import EditEnemy from "./EditEnemy";
 import type { Enemy, UserProfile } from "../types";
+import LoginPrompt from "./LoginPrompt";
 
 interface Props {
   enemy: Enemy;
@@ -20,10 +21,14 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
     const user = useAuth();
     const cardRef = useRef<HTMLDivElement | null>(null);
     const [isEditing, setIsEditing] = useState(false);
+    const [loginPrompt, setLoginPrompt] = useState(false);
     const liked = !!user && enemy.likedBy?.includes(user.uid);
 
     const toggleLike = async () => {
-        if (!user || !enemy.id) return;
+        if (!user || !enemy.id) {
+            setLoginPrompt(true);
+            return;
+        }
         const ref = doc(db, "eotv-enemies", enemy.id);
         await updateDoc(ref, {
             likedBy: liked ? arrayRemove(user.uid) : arrayUnion(user.uid)
@@ -58,6 +63,14 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
     };
   
     return (
+    <>
+    {loginPrompt && (
+        <LoginPrompt
+            open={loginPrompt}
+            onClose={() => setLoginPrompt(false)}
+            message="Для сохранения требуется авторизация"
+        />
+    )}
     <div
         key={enemy.id}
         ref={cardRef}
@@ -142,6 +155,7 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
             </> 
         )}
     </div>
+    </>
   );
 };
 

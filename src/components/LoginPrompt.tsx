@@ -1,0 +1,46 @@
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../firebase";
+
+interface Props {
+  open: boolean;
+  message?: string;
+  onClose: () => void;
+  onSuccess?: () => void;
+}
+
+const LoginPrompt: React.FC<Props> = ({ open, message = "Для продолжения необходима авторизация", onClose, onSuccess }) => {
+  if (!open) return null;
+
+  const login = async () => {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+    onClose();
+    if (onSuccess) onSuccess();
+  };
+
+  return (
+    <div
+      role="button"
+      tabIndex={-1}
+      className="fixed inset-0 z-50 p-5 bg-black flex items-center justify-center"
+      onClick={onClose}
+    >
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
+      <div
+        role="dialog"
+        onClick={(e) => e.stopPropagation()}
+        className="bg-gray-900 rounded-2xl w-full max-w-sm p-6 flex flex-col items-center gap-4"
+      >
+        <p>{message}</p>
+        <button
+          onClick={login}
+          className="px-4 py-2 bg-neonBlue text-darkBg font-semibold rounded hover:bg-opacity-80 transition cursor-pointer"
+        >
+          Войти через Google
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default LoginPrompt;
