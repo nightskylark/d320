@@ -1,7 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import ReactMarkdown from "react-markdown";
-import { XMarkIcon, PencilSquareIcon, TrashIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon, PencilSquareIcon, TrashIcon, ChevronLeftIcon, ChevronRightIcon, StarIcon as StarOutline } from "@heroicons/react/24/outline";
+import { StarIcon as StarSolid } from "@heroicons/react/24/solid";
+import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+import { db } from "../firebase";
 import EditEnemy from "./EditEnemy";
 import type { Enemy, UserProfile } from "../types";
 
@@ -17,6 +20,15 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
     const user = useAuth();
     const cardRef = useRef<HTMLDivElement | null>(null);
     const [isEditing, setIsEditing] = useState(false);
+    const liked = !!user && enemy.likedBy?.includes(user.uid);
+
+    const toggleLike = async () => {
+        if (!user || !enemy.id) return;
+        const ref = doc(db, "eotv-enemies", enemy.id);
+        await updateDoc(ref, {
+            likedBy: liked ? arrayRemove(user.uid) : arrayUnion(user.uid)
+        });
+    };
 
     useEffect(() => {
         const handleKey = (e: KeyboardEvent) => {
@@ -93,22 +105,31 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
                         <img src={author?.photoURL} alt="Avatar" className="w-8 h-8 rounded-full border border-gray-500" />
                     </div>
 
+                    {/* Action buttons */}
+                    <div className="absolute top-2 right-10 flex gap-2">
+                        <button
+                            onClick={toggleLike}
+                            title={liked ? 'Сохранено' : 'Сохранить'}
+                            className="text-gray-300 hover:scale-110 transition"
+                        >
+                            {liked ? <StarSolid className="w-6 h-6" /> : <StarOutline className="w-6 h-6" />}
+                        </button>
+                        {user && user.uid === enemy.authorUid && (
+                            <>
+                                <button onClick={() => setIsEditing(true)} className="text-gray-300 hover:text-white cursor-pointer drop-shadow-md">
+                                    <PencilSquareIcon className="w-6 h-6" />
+                                </button>
+                                <button onClick={onDelete} className="text-gray-300 hover:text-white cursor-pointer drop-shadow-md">
+                                    <TrashIcon className="w-6 h-6" />
+                                </button>
+                            </>
+                        )}
+                    </div>
+
                     {/* Close button */}
                     <button onClick={close} className="absolute top-2 right-2 text-gray-300 hover:text-white cursor-pointer drop-shadow-xl">
                         <XMarkIcon className="w-6 h-6" />
                     </button>
-
-                    {/* Edit and Delete buttons */}
-                    {user && user.uid === enemy.authorUid && (
-                        <div className="absolute top-2 right-10 flex gap-2">
-                            <button onClick={() => setIsEditing(true)} className="text-gray-300 hover:text-white cursor-pointer drop-shadow-md">
-                                <PencilSquareIcon className="w-6 h-6" />
-                            </button>
-                            <button onClick={onDelete} className="text-gray-300 hover:text-white cursor-pointer drop-shadow-md">
-                                <TrashIcon className="w-6 h-6" />
-                            </button>
-                        </div>
-                    )}
 
                     {/* Navigation between cards */}
                     <button className="absolute left-2 top-1/2 -translate-y-1/2 bg-gray-700 p-2 rounded-full cursor-pointer hover:scale-110 transition-all duration-300 ease-in-out" onClick={onPrev}>
