@@ -99,7 +99,7 @@ const AddEnemy: React.FC = () => {
           <div className="flex gap-4 py-4">
             <button
               type="submit"
-              className="w-full flex items-center justify-center gap-1 px-4 py-2 bg-neonBlue text-darkBg font-semibold rounded hover:bg-opacity-80 transition cursor-pointer"
+              className="flex-1 flex items-center justify-center gap-1 px-4 py-2 bg-neonBlue text-darkBg font-semibold rounded shadow hover:bg-opacity-90 transition"
               disabled={!user}
             >
               <PlusIcon className="w-5 h-5" />
@@ -108,7 +108,7 @@ const AddEnemy: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="w-full flex items-center justify-center gap-1 px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition cursor-pointer"
+              className="flex-1 flex items-center justify-center gap-1 px-4 py-2 border border-gray-600 text-gray-300 rounded hover:bg-gray-700 transition"
             >
               <XMarkIcon className="w-5 h-5" />
               Отмена
