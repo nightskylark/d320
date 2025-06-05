@@ -5,13 +5,16 @@ export const printEnemies = (
   authors: Record<string, UserProfile>
 ) => {
   const styles = `
-    body { font-family: sans-serif; padding: 20px; }
-    .page { page-break-after: always; }
+    @page { size: A4 landscape; margin: 1cm; }
+    body { font-family: sans-serif; padding: 0; }
+    .page { display: flex; align-items: flex-start; page-break-after: always; height: calc(100vh - 2cm); }
     .page:last-child { page-break-after: auto; }
-    h1 { text-align: center; margin-bottom: 20px; }
-    .images { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; }
-    .desc { white-space: pre-wrap; margin-bottom: 20px; }
-    .tags { margin-bottom: 20px; }
+    .side { width: 20%; }
+    .side img { width: 100%; height: auto; }
+    .content { width: 60%; padding: 0 10px; box-sizing: border-box; }
+    h1 { text-align: center; margin: 0 0 10px; }
+    .desc { white-space: pre-wrap; margin-bottom: 10px; }
+    .tags { margin-bottom: 10px; }
     .tags span { background: #eee; padding: 2px 4px; margin-right: 4px; border-radius: 3px; }
     .author { text-align: right; }
   `;
@@ -27,14 +30,14 @@ export const printEnemies = (
         .replace(/\n/g, "<br/>");
       return `
         <div class="page">
-          <h1>${enemy.name}</h1>
-          <div class="images">
-            <img src="${enemy.imageURL}" />
-            ${enemy.imageURL2 ? `<img src="${enemy.imageURL2}" />` : ""}
+          <div class="side">${enemy.imageURL ? `<img src="${enemy.imageURL}" />` : ''}</div>
+          <div class="content">
+            <h1>${enemy.name}</h1>
+            <div class="desc">${desc}</div>
+            <div class="tags">${tags}</div>
+            <div class="author">${author ? author.displayName : ''}</div>
           </div>
-          <div class="desc">${desc}</div>
-          <div class="tags">${tags}</div>
-          <div class="author">${author ? author.displayName : ""}</div>
+          <div class="side">${enemy.imageURL2 ? `<img src="${enemy.imageURL2}" />` : ''}</div>
         </div>`;
     })
     .join("");
