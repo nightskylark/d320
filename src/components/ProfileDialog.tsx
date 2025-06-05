@@ -59,7 +59,7 @@ const ProfileDialog: React.FC<Props> = ({ onClose }) => {
         ref={formRef}
         role="dialog"
         onClick={(e) => e.stopPropagation()}
-        className="relative bg-gray-900 rounded-2xl w-full max-w-md flex flex-col shadow-lg overflow-hidden p-6 items-center"
+        className="relative bg-gray-200 dark:bg-gray-900 text-gray-900 dark:text-white rounded-2xl w-full max-w-md flex flex-col shadow-lg overflow-hidden p-6 items-center"
       >
         <AvatarDropZone
           avatarURL={photoURL}

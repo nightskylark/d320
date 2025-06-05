@@ -82,7 +82,7 @@ const AddEnemy: React.FC = () => {
       <div
         role="button"
         tabIndex={0}
-        className="group relative flex flex-col items-center justify-center bg-gray-800 text-white p-4 rounded-xl shadow-lg cursor-pointer w-full sm:w-40 sm:h-56 aspect-[2/3] hover:scale-110 transition-all duration-300 ease-in-out"
+        className="group relative flex flex-col items-center justify-center bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white p-4 rounded-xl shadow-lg cursor-pointer w-full sm:w-40 sm:h-56 aspect-[2/3] hover:scale-110 transition-all duration-300 ease-in-out"
         onClick={() => {
           if (user) {
             setIsOpen(true);

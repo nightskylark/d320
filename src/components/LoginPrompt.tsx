@@ -30,7 +30,7 @@ const LoginPrompt: React.FC<Props> = ({ open, message = "Для продолже
       <div
         role="dialog"
         onClick={(e) => e.stopPropagation()}
-        className="relative bg-gray-900 rounded-2xl w-full max-w-sm p-6 flex flex-col items-center gap-4"
+        className="relative bg-gray-200 dark:bg-gray-900 text-gray-900 dark:text-white rounded-2xl w-full max-w-sm p-6 flex flex-col items-center gap-4"
       >
         <button
           onClick={onClose}

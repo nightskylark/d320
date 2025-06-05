@@ -51,7 +51,7 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
         placeholder="Поиск"
         value={search}
         onChange={e => setSearch(e.target.value)}
-        className="p-2 rounded bg-gray-700 text-white flex-1 h-10"
+        className="p-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white flex-1 h-10"
       />
       <button
         type="button"
@@ -65,7 +65,7 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
       <select
         value={tag}
         onChange={e => setTag(e.target.value)}
-        className="p-2 rounded bg-gray-700 text-white h-10 hover:bg-gray-500 transition cursor-pointer"
+        className="p-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white h-10 hover:bg-gray-300 dark:hover:bg-gray-500 transition cursor-pointer"
       >
         <option value="">Тег</option>
         {fixedTags.map(t => (
@@ -76,7 +76,7 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
         <button
           type="button"
           onClick={() => setAuthorOpen(o => !o)}
-          className="p-2 rounded bg-gray-700 text-white flex items-center gap-2 h-10 hover:bg-gray-500 transition cursor-pointer"
+        className="p-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white flex items-center gap-2 h-10 hover:bg-gray-300 dark:hover:bg-gray-500 transition cursor-pointer"
         >
           {authorProfile && <img src={authorProfile.photoURL} alt="avatar" className="w-6 h-6 rounded-full" />}
           <span>{authorProfile ? authorProfile.displayName : 'Автор'}</span>
@@ -84,10 +84,10 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
         {authorOpen && (
           <div
             ref={panelRef}
-            className="absolute left-0 z-10 bg-gray-800 rounded shadow p-2 mt-1 max-h-60 overflow-y-auto w-48"
+            className="absolute left-0 z-10 bg-gray-100 dark:bg-gray-800 rounded shadow p-2 mt-1 max-h-60 overflow-y-auto w-48"
           >
             <div
-              className="cursor-pointer hover:bg-gray-700 p-1 flex items-center gap-2"
+              className="cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-700 p-1 flex items-center gap-2"
               onClick={() => {
                 setAuthor('');
                 setAuthorOpen(false);
@@ -98,7 +98,7 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
             {Object.entries(authors).map(([uid, prof]) => (
               <div
                 key={uid}
-                className="cursor-pointer hover:bg-gray-700 p-1 flex items-center gap-2"
+                className="cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-700 p-1 flex items-center gap-2"
                 onClick={() => {
                   setAuthor(uid);
                   setAuthorOpen(false);
@@ -125,11 +125,11 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
         <XMarkIcon className="w-5 h-5" />
         Сбросить фильтры
       </button>
-      <span className="text-sm text-gray-300">Сортировка:</span>
+      <span className="text-sm text-gray-600 dark:text-gray-300">Сортировка:</span>
       <select
         value={sort}
         onChange={e => setSort(e.target.value)}
-        className="p-2 rounded bg-gray-700 text-white h-10 hover:bg-gray-500 transition cursor-pointer"
+        className="p-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white h-10 hover:bg-gray-300 dark:hover:bg-gray-500 transition cursor-pointer"
       >
         <option value="name">Имя</option>
         <option value="date">Дата</option>

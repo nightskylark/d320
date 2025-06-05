@@ -24,7 +24,7 @@ const AvatarDropZone: React.FC<Props> = ({ avatarURL, setAvatarURL, ownerUid, cl
 
   return (
     <div
-      className={`flex items-center justify-center bg-gray-800 relative overflow-hidden group ${className || ''}`}
+      className={`flex items-center justify-center bg-gray-200 dark:bg-gray-800 relative overflow-hidden group ${className || ''}`}
       onDrop={onDrop}
       onDragOver={(e) => e.preventDefault()}
     >
