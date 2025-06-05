@@ -6,11 +6,11 @@ export const printEnemies = (
 ) => {
   const styles = `
     @page { size: A4 landscape; margin: 1cm; }
-    body { font-family: sans-serif; padding: 0; }
-    .page { display: flex; align-items: flex-start; page-break-after: always; height: calc(100vh - 2cm); }
+    body { font-family: sans-serif; padding: 0; font-size: 14px; }
+    .page { display: flex; align-items: stretch; page-break-after: always; height: calc(100vh - 2cm); }
     .page:last-child { page-break-after: auto; }
-    .side { width: 20%; }
-    .side img { width: 100%; height: auto; }
+    .side { width: 20%; overflow: hidden; }
+    .side img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
     .content { width: 60%; padding: 0 10px; box-sizing: border-box; }
     h1 { text-align: center; margin: 0 0 10px; }
     .desc { white-space: pre-wrap; margin-bottom: 10px; }
