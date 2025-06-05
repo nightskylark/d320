@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import ReactMarkdown from "react-markdown";
-import { XMarkIcon, PencilSquareIcon, TrashIcon, ChevronLeftIcon, ChevronRightIcon, StarIcon as StarOutline, LinkIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon, PencilSquareIcon, TrashIcon, ChevronLeftIcon, ChevronRightIcon, StarIcon as StarOutline, LinkIcon, PrinterIcon } from "@heroicons/react/24/outline";
 import { StarIcon as StarSolid } from "@heroicons/react/24/solid";
 import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import { db } from "../firebase";
+import { printEnemies } from "../utils/printEnemies";
 import EditEnemy from "./EditEnemy";
 import type { Enemy, UserProfile } from "../types";
 import LoginPrompt from "./LoginPrompt";
@@ -46,6 +47,14 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
         } catch (e) {
             console.error('Failed to copy link', e);
         }
+    };
+
+    const handlePrint = () => {
+        const profiles: Record<string, UserProfile> = {};
+        if (author) {
+            profiles[enemy.authorUid] = author;
+        }
+        printEnemies([enemy], profiles);
     };
 
     useEffect(() => {
@@ -146,6 +155,13 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
                             className="text-gray-300 hover:scale-110 transition"
                         >
                             <LinkIcon className="w-6 h-6" />
+                        </button>
+                        <button
+                            onClick={handlePrint}
+                            title="Печать"
+                            className="text-gray-300 hover:scale-110 transition"
+                        >
+                            <PrinterIcon className="w-6 h-6" />
                         </button>
                         {user && user.uid === enemy.authorUid && (
                             <>
