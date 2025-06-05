@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import ReactMarkdown from "react-markdown";
 import { XMarkIcon, PencilSquareIcon, TrashIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
@@ -17,6 +17,25 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
     const user = useAuth();
     const cardRef = useRef<HTMLDivElement | null>(null);
     const [isEditing, setIsEditing] = useState(false);
+
+    useEffect(() => {
+        const handleKey = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                if (isEditing) {
+                    setIsEditing(false);
+                } else {
+                    close();
+                }
+            } else if (!isEditing && e.key === 'ArrowLeft') {
+                onPrev();
+            } else if (!isEditing && e.key === 'ArrowRight') {
+                onNext();
+            }
+        };
+
+        document.addEventListener('keydown', handleKey);
+        return () => document.removeEventListener('keydown', handleKey);
+    }, [isEditing, close, onPrev, onNext]);
 
     // Close card when clicking outside
     const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
