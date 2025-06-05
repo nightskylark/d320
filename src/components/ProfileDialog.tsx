@@ -77,7 +77,7 @@ const ProfileDialog: React.FC<Props> = ({ onClose }) => {
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 flex items-center justify-center gap-1 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-500 transition"
+            className="flex-1 flex items-center justify-center gap-1 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-500 transition cursor-pointer"
           >
             <XMarkIcon className="w-5 h-5" />
             Отмена
@@ -85,7 +85,7 @@ const ProfileDialog: React.FC<Props> = ({ onClose }) => {
           <button
             type="button"
             onClick={saveProfile}
-            className="flex-1 flex items-center justify-center gap-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 transition"
+            className="flex-1 flex items-center justify-center gap-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 transition cursor-pointer"
           >
             Сохранить
           </button>
