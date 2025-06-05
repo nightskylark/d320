@@ -24,7 +24,7 @@ const EnemyFields: FC<Props> = ({
   setCustomTags,
   children,
 }) => (
-  <div className="w-4/7 flex flex-col px-6 h-full overflow-y-auto">
+  <div className="w-full sm:w-4/7 flex flex-col px-6 h-full overflow-y-auto">
     <input
       type="text"
       placeholder="Имя противника"

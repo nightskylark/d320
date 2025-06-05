@@ -46,11 +46,11 @@ const EnemyCard: React.FC<Props> = ({ index, enemy, author, onClick }) => {
     <div
         key={enemy.id}
         ref={cardRef}
-        className={`bg-gray-800 text-white shadow-lg cursor-pointer  overflow-hidden relative w-40 h-56 aspect-[2/3] hover:scale-110 flex flex-col rounded-xl transition-all duration-300 ease-in-out`}
+        className={`bg-gray-800 text-white shadow-lg cursor-pointer  overflow-hidden relative w-full sm:w-40 sm:h-56 aspect-[2/3] hover:scale-110 flex flex-col rounded-xl transition-all duration-300 ease-in-out`}
         onClick={() => onClick(index)}
     >
         {/* 1st image */}
-        <img src={enemy.imageURL} alt={enemy.name} className="w-full h-32 object-cover" />
+        <img src={enemy.imageURL} alt={enemy.name} className="w-full h-1/2 sm:h-32 object-cover" />
 
         <button
             onClick={toggleLike}
