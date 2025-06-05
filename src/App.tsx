@@ -14,6 +14,7 @@ const App: React.FC = () => {
   const [enemies, setEnemies] = useState<Enemy[]>([]);
   const [profiles, setProfiles] = useState<Record<string, UserProfile>>({});
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [pendingEnemyId, setPendingEnemyId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [tag, setTag] = useState("");
   const [liked, setLiked] = useState(false);
@@ -27,6 +28,12 @@ const App: React.FC = () => {
       setEnemies(enemyData);
     });
     return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const eid = params.get('enemy');
+    if (eid) setPendingEnemyId(eid);
   }, []);
 
   useEffect(() => {
@@ -69,6 +76,15 @@ const App: React.FC = () => {
     });
   }
 
+  useEffect(() => {
+    if (!pendingEnemyId) return;
+    const idx = filtered.findIndex(e => e.id === pendingEnemyId);
+    if (idx !== -1) {
+      setSelectedIndex(idx);
+      setPendingEnemyId(null);
+    }
+  }, [filtered, pendingEnemyId]);
+
   const handleNext = () => {
     if (!filtered.length || selectedIndex === null) return;
     setSelectedIndex((selectedIndex + 1) % filtered.length);
@@ -96,6 +112,18 @@ const App: React.FC = () => {
     document.addEventListener('keydown', handleKey);
     return () => document.removeEventListener('keydown', handleKey);
   }, [selectedEnemy, handlePrev, handleNext]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (selectedEnemy) {
+      params.set('enemy', selectedEnemy.id!);
+    } else {
+      params.delete('enemy');
+    }
+    const search = params.toString();
+    const url = search ? `${window.location.pathname}?${search}` : window.location.pathname;
+    window.history.replaceState(null, '', url);
+  }, [selectedEnemy]);
 
   return (
     <div className="bg-slate-900 text-sky-200 min-h-screen">
