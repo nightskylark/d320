@@ -7,7 +7,9 @@ jest.mock('../contexts/AuthContext', () => ({
 }));
 
 jest.mock('./AddEnemy', () => () => <div data-testid="add-enemy" />);
-jest.mock('./EnemyCard', () => ({ index, enemy, onClick }: any) => (
+import type { Enemy } from '../types';
+
+jest.mock('./EnemyCard', () => ({ index, enemy, onClick }: { index: number; enemy: Enemy; onClick: (idx: number) => void }) => (
   <div data-testid={`card-${index}`} onClick={() => onClick(index)}>{enemy.name}</div>
 ));
 
