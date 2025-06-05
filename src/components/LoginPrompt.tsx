@@ -1,4 +1,5 @@
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import { auth } from "../firebase";
 
 interface Props {
@@ -29,8 +30,14 @@ const LoginPrompt: React.FC<Props> = ({ open, message = "Для продолже
       <div
         role="dialog"
         onClick={(e) => e.stopPropagation()}
-        className="bg-gray-900 rounded-2xl w-full max-w-sm p-6 flex flex-col items-center gap-4"
+        className="relative bg-gray-900 rounded-2xl w-full max-w-sm p-6 flex flex-col items-center gap-4"
       >
+        <button
+          onClick={onClose}
+          className="absolute top-2 right-2 text-gray-300 hover:text-white cursor-pointer"
+        >
+          <XMarkIcon className="w-5 h-5" />
+        </button>
         <p>{message}</p>
         <button
           onClick={login}
