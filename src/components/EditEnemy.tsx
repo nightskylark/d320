@@ -30,6 +30,9 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
       imageURL,
       imageURL2,
     };
+    if (!enemy.createdAt) {
+      updatedEnemy.createdAt = new Date().toISOString();
+    }
     await updateDoc(enemyDocRef, updatedEnemy);
   }, [enemy.id, name, customDescription, selectedTags, customTags, imageURL, imageURL2]);
 
