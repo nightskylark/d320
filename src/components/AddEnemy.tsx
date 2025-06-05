@@ -30,6 +30,7 @@ const AddEnemy: React.FC = () => {
       imageURL2,
       authorUid: user.uid,
       likedBy: [],
+      createdAt: new Date().toISOString(),
     };
     await addDoc(enemiesCollection, newEnemy);
     setIsOpen(false);

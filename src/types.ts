@@ -8,6 +8,7 @@ export interface Enemy {
   imageURL2?: string;
   authorUid: string;
   likedBy?: string[];
+  createdAt?: string;
 }
 
 export interface UserProfile {
