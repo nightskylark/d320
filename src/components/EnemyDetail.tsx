@@ -75,7 +75,7 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
         key={enemy.id}
         ref={cardRef}
         onClick={handleClickOutside}
-        className={`text-white shadow-lg cursor-pointer  overflow-hidden fixed z-50 inset-0 p-5 bg-black flex justify-center items-center`}
+        className={`text-white shadow-lg cursor-pointer  overflow-hidden fixed z-40 inset-0 p-5 bg-black flex justify-center items-center`}
     >
        {(isEditing 
             ? <EditEnemy enemy={enemy} onClose={() => setIsEditing(false)} />
