@@ -1,22 +1,45 @@
+import { useState, useEffect, useRef } from "react";
 import { auth, db } from "../firebase";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { collection, doc, setDoc } from "firebase/firestore";
-import { useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import ProfileDialog from "./ProfileDialog";
+import { Cog6ToothIcon, ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
 
 const usersCollection = collection(db, "users");
 
 const Auth: React.FC = () => {
   const user = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!user) return;
     const userRef = doc(usersCollection, user.uid);
-    setDoc(userRef, {
-      displayName: user.displayName || "Unknown",
-      photoURL: user.photoURL || "",
-    }, { merge: true });
+    setDoc(
+      userRef,
+      {
+        displayName: user.displayName || "Unknown",
+        photoURL: user.photoURL || "",
+      },
+      { merge: true }
+    );
   }, [user]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    if (menuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuOpen]);
 
   const login = async () => {
     const provider = new GoogleAuthProvider();
@@ -27,28 +50,58 @@ const Auth: React.FC = () => {
     await signOut(auth);
   };
 
+  const openProfile = () => {
+    setProfileOpen(true);
+    setMenuOpen(false);
+  };
+
   return (
-    <div className="flex items-center gap-4">
+    <div className="relative flex items-center gap-4">
       {user ? (
         <>
-          <img
-            src={user.photoURL || "https://firebasestorage.googleapis.com/v0/b/d320-971d2.firebasestorage.app/o/images%2Fphoto-placeholder.webp?alt=media&token=e80d935b-9ded-4684-b359-38434c0f6d26"}
-            alt="Avatar"
-            className="w-10 h-10 rounded-full border border-gray-600 shadow"
-          />
           <button
-            onClick={logout}
-            className="text-sm text-red-500 hover:text-red-400 transition"
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="flex items-center gap-2 focus:outline-none"
           >
-            Выйти
+            <img
+              src={
+                user.photoURL ||
+                "https://firebasestorage.googleapis.com/v0/b/d320-971d2.firebasestorage.app/o/images%2Fphoto-placeholder.webp?alt=media&token=e80d935b-9ded-4684-b359-38434c0f6d26"
+              }
+              alt="Avatar"
+              className="w-8 h-8 rounded-full border border-gray-600 shadow"
+            />
+            <span className="text-sm">{user.displayName || "Unknown"}</span>
           </button>
+          {menuOpen && (
+            <div
+              ref={menuRef}
+              className="absolute right-0 mt-2 w-40 bg-gray-800 rounded shadow-lg text-sm"
+            >
+              <button
+                onClick={openProfile}
+                className="w-full flex items-center gap-2 px-4 py-2 hover:bg-gray-700"
+              >
+                <Cog6ToothIcon className="w-5 h-5" />
+                Настройки
+              </button>
+              <button
+                onClick={logout}
+                className="w-full flex items-center gap-2 px-4 py-2 hover:bg-gray-700 text-red-400"
+              >
+                <ArrowLeftOnRectangleIcon className="w-5 h-5" />
+                Выход
+              </button>
+            </div>
+          )}
+          {profileOpen && <ProfileDialog onClose={() => setProfileOpen(false)} />}
         </>
       ) : (
         <button
           onClick={login}
           className="px-4 py-2 bg-neonBlue text-darkBg font-semibold rounded hover:bg-opacity-80 transition"
         >
-          Войти
+          Войти через Google
         </button>
       )}
     </div>
