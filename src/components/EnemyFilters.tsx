@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { StarIcon as StarSolid } from "@heroicons/react/24/solid";
+import { StarIcon as StarOutline, XMarkIcon } from "@heroicons/react/24/outline";
 import type { UserProfile } from "../types";
 import { useFixedTags } from "../contexts/TagContext";
 
@@ -39,10 +41,14 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
           ))}
         </select>
       </div>
-      <label className="flex items-center gap-2">
-        <input type="checkbox" checked={liked} onChange={e => setLiked(e.target.checked)} />
-        Избранное
-      </label>
+      <button
+        type="button"
+        title="Избранное"
+        onClick={() => setLiked(!liked)}
+        className="text-blue-300 hover:scale-110 transition"
+      >
+        {liked ? <StarSolid className="w-6 h-6" /> : <StarOutline className="w-6 h-6" />}
+      </button>
       <div className="relative">
         <button type="button" onClick={() => setAuthorOpen(o => !o)} className="p-2 rounded bg-gray-700 text-white flex items-center gap-2">
           {authorProfile && <img src={authorProfile.photoURL} alt="avatar" className="w-6 h-6 rounded-full" />}
@@ -69,6 +75,20 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
           <option value="date">По дате</option>
         </select>
       </div>
+      <button
+        type="button"
+        onClick={() => {
+          setSearch('');
+          setTag('');
+          setLiked(false);
+          setAuthor('');
+          setSort('name');
+        }}
+        className="flex items-center gap-1 p-2 rounded bg-gray-600 text-white hover:bg-gray-500 transition"
+      >
+        <XMarkIcon className="w-5 h-5" />
+        Очистить фильтр
+      </button>
     </div>
   );
 };
