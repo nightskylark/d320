@@ -3,6 +3,7 @@ import { onSnapshot, doc, deleteDoc } from "firebase/firestore";
 import { enemiesCollection, db } from "./firebase";
 import EnemyList from "./components/EnemyList";
 import EnemyDetail from "./components/EnemyDetail";
+import Footer from "./components/Footer";
 import Header from "./components/Header";
 import EnemyFilters from "./components/EnemyFilters";
 import type { Enemy, UserProfile } from "./types";
@@ -127,6 +128,7 @@ const App: React.FC = () => {
           onDelete={() => handleDelete(selectedEnemy.id!)}
         />
       )}
+      <Footer />
     </div>
   );
 };
