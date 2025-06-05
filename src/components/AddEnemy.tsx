@@ -80,6 +80,7 @@ const AddEnemy: React.FC = () => {
         className="fixed inset-0 z-50 p-5 bg-black flex items-center justify-center"
         onClick={() => setLoginPrompt(false)}
       >
+        {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
         <div
           role="dialog"
           onClick={(e) => e.stopPropagation()}
