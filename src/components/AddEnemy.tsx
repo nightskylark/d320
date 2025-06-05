@@ -4,6 +4,7 @@ import { enemiesCollection, auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import ImageDropZone from "./ImageDropZone";
 import EnemyFields from "./EnemyFields";
+import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import type { Enemy } from "../types";
 
 const AddEnemy: React.FC = () => {
@@ -97,18 +98,20 @@ const AddEnemy: React.FC = () => {
         >
           <div className="flex gap-4 py-4">
             <button
-              type="submit"
-              disabled={!user}
-              className="w-full px-4 py-2 bg-green-500 text-white rounded"
-            >
-              Добавить
-            </button>
-            <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="w-full px-4 py-2 bg-red-500 text-white rounded"
+              className="flex-1 flex items-center justify-center gap-1 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-500 transition cursor-pointer"
             >
+              <XMarkIcon className="w-5 h-5" />
               Отмена
+            </button>
+            <button
+              type="submit"
+              disabled={!user}
+              className="flex-1 flex items-center justify-center gap-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 transition cursor-pointer"
+            >
+              <PlusIcon className="w-5 h-5" />
+              Добавить
             </button>
           </div>
         </EnemyFields>
