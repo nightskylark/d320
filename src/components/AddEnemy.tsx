@@ -132,18 +132,8 @@ const AddEnemy: React.FC = () => {
           selectedTags={selectedTags}
           setSelectedTags={setSelectedTags}
         >
-          <div className="py-2">
+          <div className="flex items-center gap-4 py-4">
             <DraftSwitch draft={draft} setDraft={setDraft} />
-          </div>
-          <div className="flex gap-4 py-4">
-            <button
-              type="button"
-              onClick={() => setIsOpen(false)}
-              className="flex-1 flex items-center justify-center gap-1 px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-white rounded hover:bg-gray-200 dark:hover:bg-gray-500 transition cursor-pointer"
-            >
-              <XMarkIcon className="w-5 h-5" />
-              Отмена
-            </button>
             <button
               type="submit"
               disabled={!user}
@@ -161,6 +151,13 @@ const AddEnemy: React.FC = () => {
           placeholder="/eotv-enemy-location-placeholder.png"
         />
         </form>
+        <button
+          type="button"
+          onClick={() => setIsOpen(false)}
+          className="absolute top-2 right-2 text-gray-300 hover:text-white cursor-pointer"
+        >
+          <XMarkIcon className="w-6 h-6" />
+        </button>
       </div>
     </div>
   );
