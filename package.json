@@ -9,6 +9,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^13.5.0",
+    "@uiw/react-md-editor": "^3.20.1",
     "@vitejs/plugin-react": "^4.3.4",
     "firebase": "^11.4.0",
     "markdown-it": "^14.1.0",
