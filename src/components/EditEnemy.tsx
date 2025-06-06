@@ -66,7 +66,12 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
           <DraftSwitch draft={draft} setDraft={setDraft} />
         </div>
       </EnemyFields>
-      <ImageDropZone imageURL={imageURL2} setImageURL={setImageURL2} ownerUid={enemy.authorUid} />
+      <ImageDropZone
+        imageURL={imageURL2}
+        setImageURL={setImageURL2}
+        ownerUid={enemy.authorUid}
+        placeholder="/eotv-enemy-location-placeholder.png"
+      />
 
       <button
         onClick={onClose}

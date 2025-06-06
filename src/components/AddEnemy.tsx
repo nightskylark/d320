@@ -154,7 +154,12 @@ const AddEnemy: React.FC = () => {
             </button>
           </div>
         </EnemyFields>
-        <ImageDropZone imageURL={imageURL2} setImageURL={setImageURL2} ownerUid={user?.uid || ""} />
+        <ImageDropZone
+          imageURL={imageURL2}
+          setImageURL={setImageURL2}
+          ownerUid={user?.uid || ""}
+          placeholder="/eotv-enemy-location-placeholder.png"
+        />
         </form>
       </div>
     </div>
