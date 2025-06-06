@@ -121,7 +121,7 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
         onChange={e => setDraft(e.target.value)}
         className="p-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white h-10 hover:bg-gray-100 dark:hover:bg-gray-500 transition cursor-pointer"
       >
-        <option value="all">Все записи</option>
+        <option value="all">Любой статус</option>
         <option value="draft">Черновики</option>
         <option value="published">Опубликованные</option>
       </select>

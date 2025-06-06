@@ -7,10 +7,10 @@ const Header: React.FC = () => {
       <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center gap-2">
-            <img src="./logo.png" alt="d320" className="w-10 h-10" />
+          <a href="/" className="flex items-center gap-2">
+            <img src="/logo.png" alt="d320" className="w-10 h-10" />
             <h1 className="text-2xl font-bold text-blue-700 dark:text-sky-300">d320</h1>
-          </div>
+          </a>
 
           <div className="flex items-center gap-4">
             <ThemeToggle />
