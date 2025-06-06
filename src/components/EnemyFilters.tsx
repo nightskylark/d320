@@ -3,6 +3,7 @@ import { StarIcon as StarSolid } from "@heroicons/react/24/solid";
 import { StarIcon as StarOutline, XMarkIcon, PrinterIcon, CubeIcon } from "@heroicons/react/24/outline";
 import type { UserProfile } from "../types";
 import { useFixedTags } from "../contexts/TagContext";
+import { useAuth } from "../contexts/AuthContext";
 
 interface Props {
   search: string;
@@ -25,6 +26,7 @@ interface Props {
 
 const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, setLiked, author, setAuthor, sort, setSort, draft, setDraft, authors, onPrint, count, onRandom }) => {
   const fixedTags = useFixedTags();
+  const user = useAuth();
   const [authorOpen, setAuthorOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement | null>(null);
   const authorProfile = author ? authors[author] : undefined;
@@ -58,15 +60,17 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
         onChange={e => setSearch(e.target.value)}
         className="p-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white flex-1 h-10"
       />
-      <button
-        type="button"
-        title="Избранное"
-        onClick={() => setLiked(!liked)}
-        className="text-blue-700 dark:text-sky-300 hover:text-blue-500 dark:hover:text-sky-200 transition flex items-center gap-1 h-10 px-2 cursor-pointer"
-      >
-        {liked ? <StarSolid className="w-5 h-5" /> : <StarOutline className="w-5 h-5" />}
-        <span className="text-sm">Избранное</span>
-      </button>
+      {user && (
+        <button
+          type="button"
+          title="Избранное"
+          onClick={() => setLiked(!liked)}
+          className="text-blue-700 dark:text-sky-300 hover:text-blue-500 dark:hover:text-sky-200 transition flex items-center gap-1 h-10 px-2 cursor-pointer"
+        >
+          {liked ? <StarSolid className="w-5 h-5" /> : <StarOutline className="w-5 h-5" />}
+          <span className="text-sm">Избранное</span>
+        </button>
+      )}
       <select
         value={tag}
         onChange={e => setTag(e.target.value)}
@@ -116,15 +120,17 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
           </div>
         )}
       </div>
-      <select
-        value={draft}
-        onChange={e => setDraft(e.target.value)}
-        className="p-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white h-10 hover:bg-gray-100 dark:hover:bg-gray-500 transition cursor-pointer"
-      >
-        <option value="all">Любой статус</option>
-        <option value="draft">Черновики</option>
-        <option value="published">Опубликованные</option>
-      </select>
+      {user && (
+        <select
+          value={draft}
+          onChange={e => setDraft(e.target.value)}
+          className="p-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white h-10 hover:bg-gray-100 dark:hover:bg-gray-500 transition cursor-pointer"
+        >
+          <option value="all">Любой статус</option>
+          <option value="draft">Черновики</option>
+          <option value="published">Опубликованные</option>
+        </select>
+      )}
       <button
         type="button"
         onClick={() => {
