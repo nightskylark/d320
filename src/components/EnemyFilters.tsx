@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { StarIcon as StarSolid } from "@heroicons/react/24/solid";
-import { StarIcon as StarOutline, XMarkIcon } from "@heroicons/react/24/outline";
+import { StarIcon as StarOutline, XMarkIcon, PrinterIcon } from "@heroicons/react/24/outline";
 import type { UserProfile } from "../types";
 import { useFixedTags } from "../contexts/TagContext";
 
@@ -140,6 +140,7 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
         onClick={onPrint}
         className="ml-auto flex items-center gap-1 p-2 rounded border text-blue-700 dark:text-sky-300 hover:text-blue-500 dark:hover:text-sky-200 border-blue-700 dark:border-sky-300 hover:border-blue-500 dark:hover:border-sky-200 transition h-10 cursor-pointer"
       >
+        <PrinterIcon className="w-6 h-6" />
         Напечатать
       </button>
     </div>
