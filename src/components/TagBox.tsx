@@ -31,6 +31,16 @@ const TagBox: React.FC<Props> = ({ selectedTags, setSelectedTags }) => {
     }
   }, [input, addTag]);
 
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (allSuggestions.includes(value)) {
+      addTag(value);
+      setInput("");
+    } else {
+      setInput(value);
+    }
+  }, [allSuggestions, addTag]);
+
   const removeTag = useCallback((tag: string) => {
     setSelectedTags(selectedTags.filter(t => t !== tag));
   }, [selectedTags, setSelectedTags]);
@@ -49,7 +59,7 @@ const TagBox: React.FC<Props> = ({ selectedTags, setSelectedTags }) => {
           type="text"
           value={input}
           list="tag-suggestions"
-          onChange={e => setInput(e.target.value)}
+          onChange={handleChange}
           onKeyDown={handleKeyDown}
           className="bg-transparent outline-none flex-1 text-sm text-gray-900 dark:text-white"
         />
