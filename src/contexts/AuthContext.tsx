@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth } from '../firebase';
+import { syncEnemiesFromJson } from '../utils/syncEnemiesFromJson';
 
 interface AuthValue {
   user: User | null;
@@ -15,6 +16,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     return onAuthStateChanged(auth, setUser);
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      syncEnemiesFromJson(user.uid);
+    }
+  }, [user]);
 
   return <AuthContext.Provider value={{ user, setUser }}>{children}</AuthContext.Provider>;
 };
