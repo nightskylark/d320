@@ -53,7 +53,11 @@ const EnemyCard: React.FC<Props> = ({ index, enemy, author, onClick }) => {
             <PencilIcon className="w-5 h-5 absolute top-2 left-2 text-gray-400" title="Черновик" />
         )}
         {/* 1st image */}
-        <img src={enemy.imageURL} alt={enemy.name} className="w-full h-1/2 sm:h-32 object-cover" />
+        <img
+          src={enemy.imageURL || "/eotv-enemy-placeholder.png"}
+          alt={enemy.name}
+          className="w-full h-1/2 sm:h-32 object-cover"
+        />
 
         <button
             onClick={toggleLike}
