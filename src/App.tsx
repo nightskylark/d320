@@ -158,7 +158,7 @@ const App: React.FC = () => {
       <Header />
       <main className="p-6 max-w-screen-xl mx-auto">
         <h2 className="text-3xl font-bold text-center">Каталог противников для игры Грань Вселенной</h2>
-        <p className="text-center text-gray-400 p-4">Официальный сайт игры: <a className="link" href="http://eotvrpg.ru/" target="_blank"><img src="./eotv-logo.png" alt="EOTV" className="w-5 h-5 inline-block" />eotvrpg.ru</a></p>
+        <p className="text-center text-gray-400 p-4">Официальный сайт игры: <a className="link" href="http://eotvrpg.ru/" target="_blank"><img src="/eotv-logo.png" alt="EOTV" className="w-5 h-5 inline-block" />eotvrpg.ru</a></p>
         <EnemyFilters
           search={search}
           setSearch={setSearch}
