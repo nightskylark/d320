@@ -94,6 +94,12 @@ const App: React.FC = () => {
     setSelectedIndex((selectedIndex + 1) % filtered.length);
   };
 
+  const handleRandom = () => {
+    if (!filtered.length) return;
+    const idx = Math.floor(Math.random() * filtered.length);
+    setSelectedIndex(idx);
+  };
+
   const handlePrev = () => {
     if (!filtered.length || selectedIndex === null) return;
     setSelectedIndex((selectedIndex - 1 + filtered.length) % filtered.length);
@@ -158,6 +164,8 @@ const App: React.FC = () => {
           setSort={setSort}
           authors={profiles}
           onPrint={handlePrintAll}
+          count={filtered.length}
+          onRandom={handleRandom}
         />
         <EnemyList enemies={filtered} users={profiles} onSelect={setSelectedIndex} />
       </main>

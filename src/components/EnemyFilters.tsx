@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { StarIcon as StarSolid } from "@heroicons/react/24/solid";
-import { StarIcon as StarOutline, XMarkIcon, PrinterIcon } from "@heroicons/react/24/outline";
+import { StarIcon as StarOutline, XMarkIcon, PrinterIcon, CubeIcon } from "@heroicons/react/24/outline";
 import type { UserProfile } from "../types";
 import { useFixedTags } from "../contexts/TagContext";
 
@@ -17,9 +17,11 @@ interface Props {
   setSort: (v: string) => void;
   authors: Record<string, UserProfile>;
   onPrint: () => void;
+  count: number;
+  onRandom: () => void;
 }
 
-const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, setLiked, author, setAuthor, sort, setSort, authors, onPrint }) => {
+const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, setLiked, author, setAuthor, sort, setSort, authors, onPrint, count, onRandom }) => {
   const fixedTags = useFixedTags();
   const [authorOpen, setAuthorOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement | null>(null);
@@ -68,7 +70,7 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
         onChange={e => setTag(e.target.value)}
         className="p-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white h-10 hover:bg-gray-100 dark:hover:bg-gray-500 transition cursor-pointer"
       >
-        <option value="">Тег</option>
+        <option value="">Все теги</option>
         {fixedTags.map(t => (
           <option key={t} value={t}>{t}</option>
         ))}
@@ -132,17 +134,28 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
         onChange={e => setSort(e.target.value)}
         className="p-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white h-10 hover:bg-gray-100 dark:hover:bg-gray-500 transition cursor-pointer"
       >
-        <option value="name">Имя</option>
-        <option value="date">Дата</option>
+        <option value="name">по имени</option>
+        <option value="date">по дате</option>
       </select>
-      <button
-        type="button"
-        onClick={onPrint}
-        className="ml-auto flex items-center gap-1 p-2 rounded border text-blue-700 dark:text-sky-300 hover:text-blue-500 dark:hover:text-sky-200 border-blue-700 dark:border-sky-300 hover:border-blue-500 dark:hover:border-sky-200 transition h-10 cursor-pointer"
-      >
-        <PrinterIcon className="w-6 h-6" />
-        Напечатать
-      </button>
+      <div className="ml-auto flex items-center gap-2">
+        <span className="text-sm text-gray-500 dark:text-gray-300">Показано: {count}</span>
+        <button
+          type="button"
+          onClick={onRandom}
+          className="flex items-center gap-1 p-2 rounded border text-blue-700 dark:text-sky-300 hover:text-blue-500 dark:hover:text-sky-200 border-blue-700 dark:border-sky-300 hover:border-blue-500 dark:hover:border-sky-200 transition h-10 cursor-pointer"
+        >
+          <CubeIcon className="w-6 h-6" />
+          Случайный
+        </button>
+        <button
+          type="button"
+          onClick={onPrint}
+          className="flex items-center gap-1 p-2 rounded border text-blue-700 dark:text-sky-300 hover:text-blue-500 dark:hover:text-sky-200 border-blue-700 dark:border-sky-300 hover:border-blue-500 dark:hover:border-sky-200 transition h-10 cursor-pointer"
+        >
+          <PrinterIcon className="w-6 h-6" />
+          Напечатать
+        </button>
+      </div>
     </div>
   );
 };
