@@ -4,15 +4,13 @@ import { useFixedTags } from "../contexts/TagContext";
 interface Props {
   selectedTags: string[];
   setSelectedTags: (tags: string[]) => void;
-  customTags: string[];
-  setCustomTags: (tags: string[]) => void;
 }
 
-const TagBox: React.FC<Props> = ({ selectedTags, setSelectedTags, customTags, setCustomTags }) => {
+const TagBox: React.FC<Props> = ({ selectedTags, setSelectedTags }) => {
   const availableTags = useFixedTags().map(name => ({ name }));
   const [input, setInput] = useState("");
 
-  const allSuggestions = Array.from(new Set([...availableTags.map(t => t.name), ...customTags]));
+  const allSuggestions = Array.from(new Set([...availableTags.map(t => t.name)]));
   const filteredSuggestions = allSuggestions.filter(tag =>
     tag.toLowerCase().includes(input.toLowerCase()) && !selectedTags.includes(tag)
   );
@@ -23,10 +21,7 @@ const TagBox: React.FC<Props> = ({ selectedTags, setSelectedTags, customTags, se
     if (!selectedTags.includes(trimmed)) {
       setSelectedTags([...selectedTags, trimmed]);
     }
-    if (!availableTags.some(t => t.name === trimmed) && !customTags.includes(trimmed)) {
-      setCustomTags([...customTags, trimmed]);
-    }
-  }, [selectedTags, setSelectedTags, availableTags, customTags, setCustomTags]);
+  }, [selectedTags, setSelectedTags, availableTags]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" || e.key === ",") {

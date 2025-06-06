@@ -58,8 +58,7 @@ const App: React.FC = () => {
   let filtered = enemies.filter(e =>
     e.name.toLowerCase().includes(normalizedSearch) ||
     e.customDescription.toLowerCase().includes(normalizedSearch) ||
-    e.tags.some(t => t.toLowerCase().includes(normalizedSearch)) ||
-    e.customTags.some(t => t.toLowerCase().includes(normalizedSearch))
+    e.tags.some(t => t.toLowerCase().includes(normalizedSearch))
   );
   if (tag) {
     filtered = filtered.filter(e => e.tags.includes(tag));

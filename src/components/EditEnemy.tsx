@@ -15,7 +15,6 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
   const [name, setName] = useState<string>(enemy.name);
   const [customDescription, setCustomDescription] = useState<string>(enemy.customDescription);
   const [selectedTags, setSelectedTags] = useState<string[]>(enemy.tags || []);
-  const [customTags, setCustomTags] = useState<string[]>(enemy.customTags || []);
   const [imageURL, setImageURL] = useState<string>(enemy.imageURL || "");
   const [imageURL2, setImageURL2] = useState<string>(enemy.imageURL2 || "");
   const initialRender = useRef(true);
@@ -26,7 +25,6 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
       name,
       customDescription,
       tags: selectedTags,
-      customTags,
       imageURL,
       imageURL2,
     };
@@ -34,7 +32,7 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
       updatedEnemy.createdAt = new Date().toISOString();
     }
     await updateDoc(enemyDocRef, updatedEnemy);
-  }, [enemy.id, name, customDescription, selectedTags, customTags, imageURL, imageURL2]);
+  }, [enemy.id, name, customDescription, selectedTags, imageURL, imageURL2]);
 
   useEffect(() => {
     if (initialRender.current) {
@@ -47,7 +45,7 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
     }, 800);
 
     return () => clearTimeout(timeout);
-  }, [name, customDescription, selectedTags, customTags, imageURL, imageURL2, saveChanges]);
+  }, [name, customDescription, selectedTags, imageURL, imageURL2, saveChanges]);
 
 
   return (
@@ -60,8 +58,6 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
         setCustomDescription={setCustomDescription}
         selectedTags={selectedTags}
         setSelectedTags={setSelectedTags}
-        customTags={customTags}
-        setCustomTags={setCustomTags}
       />
       <ImageDropZone imageURL={imageURL2} setImageURL={setImageURL2} ownerUid={enemy.authorUid} />
 

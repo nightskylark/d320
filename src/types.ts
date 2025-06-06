@@ -3,7 +3,6 @@ export interface Enemy {
   name: string;
   customDescription: string;
   tags: string[];
-  customTags: string[];
   imageURL: string;
   imageURL2?: string;
   authorUid: string;

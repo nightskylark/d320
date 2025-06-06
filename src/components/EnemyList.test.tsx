@@ -20,7 +20,6 @@ describe('EnemyList', () => {
       name: 'E1',
       customDescription: '',
       tags: [],
-      customTags: [],
       imageURL: 'img',
       authorUid: 'u1'
     }];
