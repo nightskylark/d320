@@ -21,6 +21,7 @@ const App: React.FC = () => {
   const [liked, setLiked] = useState(false);
   const [author, setAuthor] = useState("");
   const [sort, setSort] = useState("name");
+  const [draftFilter, setDraftFilter] = useState("all");
   const user = useAuth();
 
   useEffect(() => {
@@ -56,9 +57,11 @@ const App: React.FC = () => {
 
   const normalizedSearch = search.toLowerCase();
   let filtered = enemies.filter(e =>
-    e.name.toLowerCase().includes(normalizedSearch) ||
-    e.customDescription.toLowerCase().includes(normalizedSearch) ||
-    e.tags.some(t => t.toLowerCase().includes(normalizedSearch))
+    (!e.draft || (user && e.authorUid === user.uid)) && (
+      e.name.toLowerCase().includes(normalizedSearch) ||
+      e.customDescription.toLowerCase().includes(normalizedSearch) ||
+      e.tags.some(t => t.toLowerCase().includes(normalizedSearch))
+    )
   );
   if (tag) {
     filtered = filtered.filter(e => e.tags.includes(tag));
@@ -68,6 +71,11 @@ const App: React.FC = () => {
   }
   if (author) {
     filtered = filtered.filter(e => e.authorUid === author);
+  }
+  if (draftFilter === 'draft') {
+    filtered = filtered.filter(e => e.draft);
+  } else if (draftFilter === 'published') {
+    filtered = filtered.filter(e => !e.draft);
   }
   filtered = [...filtered];
   if (sort === "name") {
@@ -160,6 +168,8 @@ const App: React.FC = () => {
           setLiked={setLiked}
           author={author}
           setAuthor={setAuthor}
+          draft={draftFilter}
+          setDraft={setDraftFilter}
           sort={sort}
           setSort={setSort}
           authors={profiles}

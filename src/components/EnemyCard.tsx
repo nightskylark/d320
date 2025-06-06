@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
-import { StarIcon as StarSolid } from "@heroicons/react/24/solid";
+import { StarIcon as StarSolid, PencilIcon } from "@heroicons/react/24/solid";
 import { StarIcon as StarOutline } from "@heroicons/react/24/outline";
 import { db } from "../firebase";
 import { useAuth } from "../contexts/AuthContext";
@@ -49,6 +49,9 @@ const EnemyCard: React.FC<Props> = ({ index, enemy, author, onClick }) => {
         className={`bg-white text-gray-900 dark:bg-gray-800 dark:text-white shadow-lg cursor-pointer  overflow-hidden relative w-full sm:w-40 sm:h-56 aspect-[2/3] hover:scale-110 flex flex-col rounded-xl transition-all duration-300 ease-in-out`}
         onClick={() => onClick(index)}
     >
+        {enemy.draft && (
+            <PencilIcon className="w-5 h-5 absolute top-2 left-2 text-gray-400" title="Черновик" />
+        )}
         {/* 1st image */}
         <img src={enemy.imageURL} alt={enemy.name} className="w-full h-1/2 sm:h-32 object-cover" />
 

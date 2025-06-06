@@ -5,6 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import ImageDropZone from "./ImageDropZone";
 import EnemyFields from "./EnemyFields";
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import DraftSwitch from "./DraftSwitch";
 import LoginPrompt from "./LoginPrompt";
 import type { Enemy } from "../types";
 
@@ -16,6 +17,7 @@ const AddEnemy: React.FC = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [imageURL, setImageURL] = useState("");
   const [imageURL2, setImageURL2] = useState("");
+  const [draft, setDraft] = useState(true);
   const user = useAuth();
   const formRef = useRef<HTMLFormElement | null>(null);
 
@@ -32,6 +34,7 @@ const AddEnemy: React.FC = () => {
       authorUid: user.uid,
       likedBy: [],
       createdAt: new Date().toISOString(),
+      ...(draft ? { draft: true } : {})
     };
     await addDoc(enemiesCollection, newEnemy);
     setIsOpen(false);
@@ -40,6 +43,7 @@ const AddEnemy: React.FC = () => {
     setSelectedTags([]);
     setImageURL("");
     setImageURL2("");
+    setDraft(true);
   };
 
   useEffect(() => {
@@ -82,6 +86,7 @@ const AddEnemy: React.FC = () => {
         className="group relative flex flex-col items-center justify-center bg-white text-gray-900 dark:bg-gray-800 dark:text-white p-4 rounded-xl shadow-lg cursor-pointer w-full sm:w-40 sm:h-56 aspect-[2/3] hover:scale-110 transition-all duration-300 ease-in-out"
         onClick={() => {
           if (user) {
+            setDraft(true);
             setIsOpen(true);
           } else {
             setLoginPrompt(true);
@@ -89,7 +94,7 @@ const AddEnemy: React.FC = () => {
         }}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
-            if (user) setIsOpen(true); else setLoginPrompt(true);
+            if (user) { setDraft(true); setIsOpen(true); } else setLoginPrompt(true);
           }
         }}
       >
@@ -127,6 +132,9 @@ const AddEnemy: React.FC = () => {
           selectedTags={selectedTags}
           setSelectedTags={setSelectedTags}
         >
+          <div className="py-2">
+            <DraftSwitch draft={draft} setDraft={setDraft} />
+          </div>
           <div className="flex gap-4 py-4">
             <button
               type="button"

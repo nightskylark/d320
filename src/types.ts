@@ -8,6 +8,7 @@ export interface Enemy {
   authorUid: string;
   likedBy?: string[];
   createdAt?: string;
+  draft?: boolean;
 }
 
 export interface UserProfile {

@@ -15,13 +15,15 @@ interface Props {
   setAuthor: (v: string) => void;
   sort: string;
   setSort: (v: string) => void;
+  draft: string;
+  setDraft: (v: string) => void;
   authors: Record<string, UserProfile>;
   onPrint: () => void;
   count: number;
   onRandom: () => void;
 }
 
-const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, setLiked, author, setAuthor, sort, setSort, authors, onPrint, count, onRandom }) => {
+const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, setLiked, author, setAuthor, sort, setSort, draft, setDraft, authors, onPrint, count, onRandom }) => {
   const fixedTags = useFixedTags();
   const [authorOpen, setAuthorOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement | null>(null);
@@ -114,6 +116,15 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
           </div>
         )}
       </div>
+      <select
+        value={draft}
+        onChange={e => setDraft(e.target.value)}
+        className="p-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white h-10 hover:bg-gray-100 dark:hover:bg-gray-500 transition cursor-pointer"
+      >
+        <option value="all">Все записи</option>
+        <option value="draft">Черновики</option>
+        <option value="published">Опубликованные</option>
+      </select>
       <button
         type="button"
         onClick={() => {
@@ -122,6 +133,7 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
           setLiked(false);
           setAuthor('');
           setSort('name');
+          setDraft('all');
         }}
         className="flex items-center gap-1 p-2 rounded border text-blue-700 dark:text-sky-300 hover:text-blue-500 dark:hover:text-sky-200 border-blue-700 dark:border-sky-300 hover:border-blue-500 dark:hover:border-sky-200 transition h-10 cursor-pointer"
       >
