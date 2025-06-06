@@ -25,12 +25,14 @@ const AboutPopup: React.FC<Props> = ({ about, onClose }) => {
     };
   }, [onClose]);
 
+  if (!about) return null;
+
   return (
     <div
       ref={ref}
       className="absolute bottom-12 right-0 z-50 w-64 bg-white dark:bg-gray-800 text-gray-900 dark:text-white p-4 rounded shadow"
     >
-      <p className="whitespace-pre-wrap text-sm">{about || "Нет информации"}</p>
+      <p className="whitespace-pre-wrap text-sm">{about}</p>
     </div>
   );
 };

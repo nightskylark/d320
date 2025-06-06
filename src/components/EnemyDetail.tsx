@@ -146,14 +146,20 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
                     <div className="absolute bottom-4 right-4 flex items-center gap-2 relative">
                         <button
                             type="button"
-                            onClick={() => setAboutOpen(o => !o)}
+                            onClick={() => author?.about && setAboutOpen((o) => !o)}
                             className="flex items-center gap-2 focus:outline-none"
                         >
-                            <span className="text-sm underline">{author?.displayName || "Unknown"}</span>
-                            <img src={author?.photoURL} alt="Avatar" className="w-8 h-8 rounded-full border border-gray-500" />
+                            <span className="text-sm underline">
+                                {author?.displayName || "Unknown"}
+                            </span>
+                            <img
+                                src={author?.photoURL}
+                                alt="Avatar"
+                                className="w-8 h-8 rounded-full border border-gray-500"
+                            />
                         </button>
-                        {aboutOpen && (
-                            <AboutPopup about={author?.about || ""} onClose={() => setAboutOpen(false)} />
+                        {aboutOpen && author?.about && (
+                            <AboutPopup about={author.about} onClose={() => setAboutOpen(false)} />
                         )}
                     </div>
 

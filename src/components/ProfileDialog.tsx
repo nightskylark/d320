@@ -55,7 +55,7 @@ const ProfileDialog: React.FC<Props> = ({ onClose }) => {
     setAuthUser(refreshed ? ({ ...refreshed } as User) : null);
     await setDoc(
       doc(db, "users", user.uid),
-      { displayName, photoURL, about },
+      { displayName, photoURL, about: about.trim() },
       { merge: true }
     );
     onClose();
