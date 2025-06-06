@@ -1,4 +1,5 @@
 import type { Enemy, UserProfile } from "../types";
+import MarkdownIt from "markdown-it";
 
 export const printEnemies = (
   enemies: Enemy[],
@@ -13,21 +14,20 @@ export const printEnemies = (
     .side img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
     .content { width: 60%; padding: 0 10px; box-sizing: border-box; }
     h1 { text-align: center; margin: 0 0 10px; }
-    .desc { white-space: pre-wrap; margin-bottom: 10px; }
+    .desc { margin-bottom: 10px; }
+    .desc p { margin: 0 0 4px; }
     .tags { margin-bottom: 10px; }
     .tags span { background: #eee; padding: 2px 4px; margin-right: 4px; border-radius: 3px; }
     .author { text-align: right; }
   `;
 
+  const md = new MarkdownIt({ html: false, breaks: true });
+
   const pages = enemies
     .map((enemy) => {
       const author = authors[enemy.authorUid];
       const tags = enemy.tags.map((t) => `<span>${t}</span>`).join(" ");
-      const desc = enemy.customDescription
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/\n/g, "<br/>");
+      const desc = md.render(enemy.customDescription);
       return `
         <div class="page">
           <div class="side">${enemy.imageURL ? `<img src="${enemy.imageURL}" />` : ''}</div>
