@@ -23,7 +23,7 @@ const DraftSwitch: FC<Props> = ({ draft, setDraft }) => {
           className={`absolute top-1 left-1 w-6 h-6 bg-white rounded-full transition-transform ${knob}`}
         />
       </div>
-      <span className="text-sm">{draft ? "Черновик" : "Опубликовано"}</span>
+      <span className="text-sm">{draft ? "Черновик (виден только автору)" : "Опубликовано (виден всем)"}</span>
     </label>
   );
 };
