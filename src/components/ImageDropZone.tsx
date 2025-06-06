@@ -7,9 +7,10 @@ interface Props {
   setImageURL: (url: string) => void;
   ownerUid: string;
   className?: string;
+  placeholder?: string;
 }
 
-const ImageDropZone: React.FC<Props> = ({ imageURL, setImageURL, ownerUid, className }) => {
+const ImageDropZone: React.FC<Props> = ({ imageURL, setImageURL, ownerUid, className, placeholder }) => {
   const [progress, setProgress] = useState(0);
 
   const handleFile = (file: File | null) => {
@@ -29,7 +30,7 @@ const ImageDropZone: React.FC<Props> = ({ imageURL, setImageURL, ownerUid, class
       onDragOver={(e) => e.preventDefault()}
     >
       <img
-        src={imageURL || "/eotv-enemy-placeholder.png"}
+        src={imageURL || placeholder || "/eotv-enemy-placeholder.png"}
         className="object-cover w-full h-full"
         alt=""
       />
