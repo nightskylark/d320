@@ -30,7 +30,7 @@ export const printEnemies = (
       const desc = md.render(enemy.customDescription);
       return `
         <div class="page">
-          <div class="side">${enemy.imageURL ? `<img src="${enemy.imageURL}" />` : ''}</div>
+          <div class="side"><img src="${enemy.imageURL || '/eotv-enemy-placeholder.png'}" /></div>
           <div class="content">
             <h1>${enemy.name}</h1>
             <div class="desc">${desc}</div>

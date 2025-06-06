@@ -28,7 +28,11 @@ const ImageDropZone: React.FC<Props> = ({ imageURL, setImageURL, ownerUid, class
       onDrop={onDrop}
       onDragOver={(e) => e.preventDefault()}
     >
-      {imageURL && <img src={imageURL} className="object-cover w-full h-full" alt="" />}
+      <img
+        src={imageURL || "/eotv-enemy-placeholder.png"}
+        className="object-cover w-full h-full"
+        alt=""
+      />
       <input
         type="file"
         accept="image/*"

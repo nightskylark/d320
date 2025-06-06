@@ -106,7 +106,11 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
                 {/* Expanded view */}
                 <div className="relative bg-white dark:bg-gray-900 rounded-2xl w-full flex flex-col sm:flex-row shadow-lg h-full max-w-7xl overflow-hidden">
                     {/* Left column - image 1 */}
-                    <img src={enemy.imageURL} alt={enemy.name} className="w-full sm:w-3/14 h-40 sm:h-auto object-cover" />
+                    <img
+                        src={enemy.imageURL || "/eotv-enemy-placeholder.png"}
+                        alt={enemy.name}
+                        className="w-full sm:w-3/14 h-40 sm:h-auto object-cover"
+                    />
                     {/* Center - title + description */}
                     <div className="sm:w-4/7 w-full flex flex-col px-6 overflow-y-auto">
                         <h2 className="text-2xl font-bold text-center p-6 pt-10">{enemy.name}</h2>
