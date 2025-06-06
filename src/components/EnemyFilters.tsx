@@ -70,7 +70,7 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
         onChange={e => setTag(e.target.value)}
         className="p-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white h-10 hover:bg-gray-100 dark:hover:bg-gray-500 transition cursor-pointer"
       >
-        <option value="">Тег</option>
+        <option value="">Все теги</option>
         {fixedTags.map(t => (
           <option key={t} value={t}>{t}</option>
         ))}
@@ -134,8 +134,8 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
         onChange={e => setSort(e.target.value)}
         className="p-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white h-10 hover:bg-gray-100 dark:hover:bg-gray-500 transition cursor-pointer"
       >
-        <option value="name">Имя</option>
-        <option value="date">Дата</option>
+        <option value="name">по имени</option>
+        <option value="date">по дате</option>
       </select>
       <div className="ml-auto flex items-center gap-2">
         <span className="text-sm text-gray-500 dark:text-gray-300">Показано: {count}</span>
