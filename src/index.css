@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @import "@uiw/react-md-editor/dist/mdeditor.min.css";
-@import "@uiw/react-markdown-preview/dist/markdown.min.css";
+@import "@uiw/react-markdown-preview/markdown.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
