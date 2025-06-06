@@ -7,6 +7,10 @@ const Footer: React.FC = () => (
       <img src="./telegram.svg" alt="Telegram" className="w-5 h-5" />
       t.me/d320stories
     </a>
+    <a href="https://github.com/nightskylark/d320" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 link">
+      <img src="./github.svg" alt="GItHub" className="w-5 h-5" />
+      github.com/nightskylark/d320
+    </a>
   </footer>
 );
 
