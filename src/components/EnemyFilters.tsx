@@ -52,7 +52,7 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
   }, [authorOpen]);
 
   return (
-    <div className="flex flex-wrap gap-4 my-4 items-center">
+    <div className="flex flex-wrap gap-4 mx-2 my-4 items-center">
       <input
         type="text"
         placeholder="Поиск"
@@ -171,7 +171,7 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
           className="flex items-center gap-1 p-2 rounded border text-blue-700 dark:text-sky-300 hover:text-blue-500 dark:hover:text-sky-200 border-blue-700 dark:border-sky-300 hover:border-blue-500 dark:hover:border-sky-200 transition h-10 cursor-pointer"
         >
           <PrinterIcon className="w-6 h-6" />
-          Напечатать
+          Печать
         </button>
       </div>
     </div>
