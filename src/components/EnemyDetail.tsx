@@ -149,7 +149,7 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
                             onClick={() => author?.about && setAboutOpen((o) => !o)}
                             className="flex items-center gap-2 focus:outline-none"
                         >
-                            <span className="text-sm underline">
+                            <span className="text-sm">
                                 {author?.displayName || "Unknown"}
                             </span>
                             <img

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { doc, setDoc, getDoc } from "firebase/firestore";
-import { updateProfile, User } from "firebase/auth";
+import { updateProfile } from "firebase/auth";
 import { db, auth } from "../firebase";
 import { useAuth, useSetAuthUser } from "../contexts/AuthContext";
 import AvatarDropZone from "./AvatarDropZone";
@@ -51,8 +51,10 @@ const ProfileDialog: React.FC<Props> = ({ onClose }) => {
     await updateProfile(user, { displayName, photoURL });
     await user.reload();
     const refreshed = auth.currentUser;
-    // set a new object reference so context updates
-    setAuthUser(refreshed ? ({ ...refreshed } as User) : null);
+    // clone with prototype so context updates without losing methods
+    const clone =
+      refreshed && Object.assign(Object.create(Object.getPrototypeOf(refreshed)), refreshed);
+    setAuthUser(clone || null);
     await setDoc(
       doc(db, "users", user.uid),
       { displayName, photoURL, about: about.trim() },
