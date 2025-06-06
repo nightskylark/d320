@@ -5,7 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import ImageDropZone from "./ImageDropZone";
 import EnemyFields from "./EnemyFields";
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { PencilIcon, DocumentCheckIcon } from "@heroicons/react/24/solid";
+import DraftSwitch from "./DraftSwitch";
 import LoginPrompt from "./LoginPrompt";
 import type { Enemy } from "../types";
 
@@ -132,25 +132,8 @@ const AddEnemy: React.FC = () => {
           selectedTags={selectedTags}
           setSelectedTags={setSelectedTags}
         >
-          <div className="flex gap-4 py-2 items-center">
-            <label className="flex items-center gap-1 cursor-pointer">
-              <input
-                type="radio"
-                name="draft"
-                checked={draft}
-                onChange={() => setDraft(true)}
-              />
-              <PencilIcon className="w-5 h-5" />Черновик
-            </label>
-            <label className="flex items-center gap-1 cursor-pointer">
-              <input
-                type="radio"
-                name="draft"
-                checked={!draft}
-                onChange={() => setDraft(false)}
-              />
-              <DocumentCheckIcon className="w-5 h-5" />Опубликовано
-            </label>
+          <div className="py-2">
+            <DraftSwitch draft={draft} setDraft={setDraft} />
           </div>
           <div className="flex gap-4 py-4">
             <button

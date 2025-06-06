@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { doc, updateDoc, deleteField } from "firebase/firestore";
 import { db } from "../firebase";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { PencilIcon, DocumentCheckIcon } from "@heroicons/react/24/solid";
+import DraftSwitch from "./DraftSwitch";
 import ImageDropZone from "./ImageDropZone";
 import EnemyFields from "./EnemyFields";
 import type { Enemy } from "../types";
@@ -62,25 +62,8 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
         selectedTags={selectedTags}
         setSelectedTags={setSelectedTags}
       >
-        <div className="flex gap-4 py-2 items-center">
-          <label className="flex items-center gap-1 cursor-pointer">
-            <input
-              type="radio"
-              name="draft"
-              checked={draft}
-              onChange={() => setDraft(true)}
-            />
-            <PencilIcon className="w-5 h-5" />Черновик
-          </label>
-          <label className="flex items-center gap-1 cursor-pointer">
-            <input
-              type="radio"
-              name="draft"
-              checked={!draft}
-              onChange={() => setDraft(false)}
-            />
-            <DocumentCheckIcon className="w-5 h-5" />Опубликовано
-          </label>
+        <div className="py-2">
+          <DraftSwitch draft={draft} setDraft={setDraft} />
         </div>
       </EnemyFields>
       <ImageDropZone imageURL={imageURL2} setImageURL={setImageURL2} ownerUid={enemy.authorUid} />
