@@ -12,6 +12,8 @@ import { enemiesCollection } from '../firebase';
 import type { Enemy } from '../types';
 
 export const syncEnemiesFromJson = async (uid: string) => {
+  if(true) return; // Disable sync for now
+  
   try {
     const res = await fetch('/eotv_enemies.json');
     const all: JsonEnemy[] = await res.json();
@@ -21,7 +23,6 @@ export const syncEnemiesFromJson = async (uid: string) => {
       if (qs.empty) {
         const newEnemy: Enemy = {
           ...enemy,
-          customTags: [],
           likedBy: [],
           createdAt: new Date().toISOString(),
         };

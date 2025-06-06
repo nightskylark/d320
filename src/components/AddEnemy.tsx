@@ -14,7 +14,6 @@ const AddEnemy: React.FC = () => {
   const [name, setName] = useState("");
   const [customDescription, setCustomDescription] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [customTags, setCustomTags] = useState<string[]>([]);
   const [imageURL, setImageURL] = useState("");
   const [imageURL2, setImageURL2] = useState("");
   const user = useAuth();
@@ -28,7 +27,6 @@ const AddEnemy: React.FC = () => {
       name,
       customDescription,
       tags: selectedTags,
-      customTags,
       imageURL,
       imageURL2,
       authorUid: user.uid,
@@ -40,7 +38,6 @@ const AddEnemy: React.FC = () => {
     setName("");
     setCustomDescription("");
     setSelectedTags([]);
-    setCustomTags([]);
     setImageURL("");
     setImageURL2("");
   };
@@ -129,8 +126,6 @@ const AddEnemy: React.FC = () => {
           setCustomDescription={setCustomDescription}
           selectedTags={selectedTags}
           setSelectedTags={setSelectedTags}
-          customTags={customTags}
-          setCustomTags={setCustomTags}
         >
           <div className="flex gap-4 py-4">
             <button

@@ -27,7 +27,6 @@ describe('EnemyCard', () => {
     name: 'Orc',
     customDescription: 'desc',
     tags: ['tag1', 'tag2'],
-    customTags: [],
     imageURL: 'img.jpg',
     authorUid: 'user1',
     likedBy: []

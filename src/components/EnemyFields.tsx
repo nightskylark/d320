@@ -8,8 +8,6 @@ interface Props {
   setCustomDescription: (value: string) => void;
   selectedTags: string[];
   setSelectedTags: (tags: string[]) => void;
-  customTags: string[];
-  setCustomTags: (tags: string[]) => void;
   children?: ReactNode;
 }
 
@@ -20,8 +18,6 @@ const EnemyFields: FC<Props> = ({
   setCustomDescription,
   selectedTags,
   setSelectedTags,
-  customTags,
-  setCustomTags,
   children,
 }) => (
   <div className="w-full sm:w-4/7 flex flex-col px-6 h-full overflow-y-auto">
@@ -42,8 +38,6 @@ const EnemyFields: FC<Props> = ({
     <TagBox
       selectedTags={selectedTags}
       setSelectedTags={setSelectedTags}
-      customTags={customTags}
-      setCustomTags={setCustomTags}
     />
     {children}
   </div>
