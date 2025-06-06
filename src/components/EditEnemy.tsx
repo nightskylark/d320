@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, deleteField } from "firebase/firestore";
 import { db } from "../firebase";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { PencilIcon, DocumentCheckIcon } from "@heroicons/react/24/solid";
 import ImageDropZone from "./ImageDropZone";
 import EnemyFields from "./EnemyFields";
 import type { Enemy } from "../types";
@@ -17,6 +18,7 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
   const [selectedTags, setSelectedTags] = useState<string[]>(enemy.tags || []);
   const [imageURL, setImageURL] = useState<string>(enemy.imageURL || "");
   const [imageURL2, setImageURL2] = useState<string>(enemy.imageURL2 || "");
+  const [draft, setDraft] = useState<boolean>(enemy.draft ?? false);
   const initialRender = useRef(true);
 
   const saveChanges = useCallback(async () => {
@@ -27,12 +29,13 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
       tags: selectedTags,
       imageURL,
       imageURL2,
+      ...(draft ? { draft: true } : { draft: deleteField() })
     };
     if (!enemy.createdAt) {
       updatedEnemy.createdAt = new Date().toISOString();
     }
     await updateDoc(enemyDocRef, updatedEnemy);
-  }, [enemy.id, name, customDescription, selectedTags, imageURL, imageURL2]);
+  }, [enemy.id, name, customDescription, selectedTags, imageURL, imageURL2, draft]);
 
   useEffect(() => {
     if (initialRender.current) {
@@ -45,7 +48,7 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
     }, 800);
 
     return () => clearTimeout(timeout);
-  }, [name, customDescription, selectedTags, imageURL, imageURL2, saveChanges]);
+  }, [name, customDescription, selectedTags, imageURL, imageURL2, draft, saveChanges]);
 
 
   return (
@@ -58,7 +61,28 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
         setCustomDescription={setCustomDescription}
         selectedTags={selectedTags}
         setSelectedTags={setSelectedTags}
-      />
+      >
+        <div className="flex gap-4 py-2 items-center">
+          <label className="flex items-center gap-1 cursor-pointer">
+            <input
+              type="radio"
+              name="draft"
+              checked={draft}
+              onChange={() => setDraft(true)}
+            />
+            <PencilIcon className="w-5 h-5" />Черновик
+          </label>
+          <label className="flex items-center gap-1 cursor-pointer">
+            <input
+              type="radio"
+              name="draft"
+              checked={!draft}
+              onChange={() => setDraft(false)}
+            />
+            <DocumentCheckIcon className="w-5 h-5" />Опубликовано
+          </label>
+        </div>
+      </EnemyFields>
       <ImageDropZone imageURL={imageURL2} setImageURL={setImageURL2} ownerUid={enemy.authorUid} />
 
       <button
