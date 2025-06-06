@@ -105,6 +105,16 @@ const App: React.FC = () => {
   useEffect(() => {
     if (selectedEnemy === null) return;
     const handleKey = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.closest('input') ||
+          target.closest('textarea') ||
+          target.closest('[contenteditable]'))
+      ) {
+        return;
+      }
+
       if (e.key === 'ArrowLeft') {
         handlePrev();
       } else if (e.key === 'ArrowRight') {
