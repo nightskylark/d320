@@ -51,10 +51,13 @@ const ProfileDialog: React.FC<Props> = ({ onClose }) => {
     await updateProfile(user, { displayName, photoURL });
     await user.reload();
     const refreshed = auth.currentUser;
-    // clone with prototype so context updates without losing methods
-    const clone =
-      refreshed && Object.assign(Object.create(Object.getPrototypeOf(refreshed)), refreshed);
-    setAuthUser(clone || null);
+    // clone user with property descriptors so methods like getIdToken stay intact
+    let clone: typeof refreshed | null = null;
+    if (refreshed) {
+      clone = Object.create(Object.getPrototypeOf(refreshed));
+      Object.defineProperties(clone, Object.getOwnPropertyDescriptors(refreshed));
+    }
+    setAuthUser(clone);
     await setDoc(
       doc(db, "users", user.uid),
       { displayName, photoURL, about: about.trim() },
