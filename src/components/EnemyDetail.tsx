@@ -8,6 +8,7 @@ import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import { db } from "../firebase";
 import { printEnemies } from "../utils/printEnemies";
 import EditEnemy from "./EditEnemy";
+import AboutPopup from "./AboutPopup";
 import type { Enemy, UserProfile } from "../types";
 import LoginPrompt from "./LoginPrompt";
 
@@ -25,6 +26,7 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
     const [isEditing, setIsEditing] = useState(false);
     const [loginPrompt, setLoginPrompt] = useState(false);
     const [linkCopied, setLinkCopied] = useState(false);
+    const [aboutOpen, setAboutOpen] = useState(false);
     const liked = !!user && enemy.likedBy?.includes(user.uid);
 
     const toggleLike = async () => {
@@ -141,9 +143,18 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
                     </div>
 
                     {/* Author */}
-                    <div className="absolute bottom-4 right-4 flex items-center gap-2">
-                        <span className="text-sm">{author?.displayName || "Unknown"}</span>
-                        <img src={author?.photoURL} alt="Avatar" className="w-8 h-8 rounded-full border border-gray-500" />
+                    <div className="absolute bottom-4 right-4 flex items-center gap-2 relative">
+                        <button
+                            type="button"
+                            onClick={() => setAboutOpen(o => !o)}
+                            className="flex items-center gap-2 focus:outline-none"
+                        >
+                            <span className="text-sm underline">{author?.displayName || "Unknown"}</span>
+                            <img src={author?.photoURL} alt="Avatar" className="w-8 h-8 rounded-full border border-gray-500" />
+                        </button>
+                        {aboutOpen && (
+                            <AboutPopup about={author?.about || ""} onClose={() => setAboutOpen(false)} />
+                        )}
                     </div>
 
                     {/* Action buttons */}

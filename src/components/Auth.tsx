@@ -22,6 +22,7 @@ const Auth: React.FC = () => {
       {
         displayName: user.displayName || "Unknown",
         photoURL: user.photoURL || "",
+        about: "",
       },
       { merge: true }
     );

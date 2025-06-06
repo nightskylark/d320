@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { updateProfile, User } from "firebase/auth";
 import { db, auth } from "../firebase";
 import { useAuth, useSetAuthUser } from "../contexts/AuthContext";
@@ -15,6 +15,7 @@ const ProfileDialog: React.FC<Props> = ({ onClose }) => {
   const setAuthUser = useSetAuthUser();
   const [displayName, setDisplayName] = useState(user?.displayName || "");
   const [photoURL, setPhotoURL] = useState(user?.photoURL || "");
+  const [about, setAbout] = useState("");
   const formRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -34,6 +35,17 @@ const ProfileDialog: React.FC<Props> = ({ onClose }) => {
     };
   }, [onClose]);
 
+  useEffect(() => {
+    const fetchAbout = async () => {
+      if (!user) return;
+      const snap = await getDoc(doc(db, "users", user.uid));
+      if (snap.exists()) {
+        setAbout((snap.data().about as string) || "");
+      }
+    };
+    fetchAbout();
+  }, [user]);
+
   const saveProfile = async () => {
     if (!user) return;
     await updateProfile(user, { displayName, photoURL });
@@ -41,7 +53,11 @@ const ProfileDialog: React.FC<Props> = ({ onClose }) => {
     const refreshed = auth.currentUser;
     // set a new object reference so context updates
     setAuthUser(refreshed ? ({ ...refreshed } as User) : null);
-    await setDoc(doc(db, "users", user.uid), { displayName, photoURL }, { merge: true });
+    await setDoc(
+      doc(db, "users", user.uid),
+      { displayName, photoURL, about },
+      { merge: true }
+    );
     onClose();
   };
 
@@ -72,6 +88,13 @@ const ProfileDialog: React.FC<Props> = ({ onClose }) => {
           value={displayName}
           onChange={(e) => setDisplayName(e.target.value)}
           className="w-full p-2 mt-4 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-neonBlue"
+        />
+        <textarea
+          value={about}
+          onChange={(e) => setAbout(e.target.value)}
+          maxLength={256}
+          placeholder="О себе"
+          className="w-full p-2 mt-4 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-neonBlue h-24 resize-none"
         />
         <div className="flex gap-4 mt-6 w-full">
           <button
