@@ -122,7 +122,7 @@ const AddEnemy: React.FC = () => {
           onClick={(e) => e.stopPropagation()}
           className="relative bg-white dark:bg-gray-900 rounded-2xl w-full max-w-7xl flex flex-col sm:flex-row shadow-lg overflow-hidden h-full"
         >
-        <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col sm:flex-row w-full h-full overflow-y-auto">
+        <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col sm:flex-row w-full h-full">
         <ImageDropZone imageURL={imageURL} setImageURL={setImageURL} ownerUid={user?.uid || ""} />
         <EnemyFields
           name={name}

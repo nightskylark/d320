@@ -14,7 +14,7 @@ import {
   strikethroughInputRule,
   strikethroughKeymap,
 } from '@milkdown/preset-gfm';
-import { history } from '@milkdown/plugin-history';
+import { history, undoCommand, redoCommand } from '@milkdown/plugin-history';
 import { listener, listenerCtx } from '@milkdown/plugin-listener';
 import { nord } from '@milkdown/theme-nord';
 import { underlineSchema, toggleUnderlineCommand, underlineInputRule, underlineKeymap } from '../plugins/underline';
@@ -25,6 +25,8 @@ import {
   StrikethroughIcon,
   ListBulletIcon,
   NumberedListIcon,
+  ArrowUturnLeftIcon,
+  ArrowUturnRightIcon,
 } from '@heroicons/react/20/solid';
 
 interface Props {
@@ -88,8 +90,14 @@ const EditorInner: FC<Props> = ({ value, onChange }) => {
         <button type="button" onClick={() => exec(wrapInBulletListCommand)} className="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600">
           <ListBulletIcon className="w-5 h-5" />
         </button>
+        <button type="button" onClick={() => exec(undoCommand)} className="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600">
+          <ArrowUturnLeftIcon className="w-5 h-5" />
+        </button>
+        <button type="button" onClick={() => exec(redoCommand)} className="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600">
+          <ArrowUturnRightIcon className="w-5 h-5" />
+        </button>
       </div>
-      <div className="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-md p-2">
+      <div className="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-md p-2 flex-1 overflow-y-auto">
         <Milkdown />
       </div>
     </div>
