@@ -52,8 +52,10 @@ const ProfileDialog: React.FC<Props> = ({ onClose }) => {
     await updateProfile(user, { displayName, photoURL });
     await user.reload();
     const refreshed = auth.currentUser;
-    // set a new object reference so context updates
-    setAuthUser(refreshed ? ({ ...refreshed } as User) : null);
+    // preserve Firebase User prototype when creating a new reference
+    const clone =
+      refreshed && Object.assign(Object.create(Object.getPrototypeOf(refreshed)), refreshed);
+    setAuthUser(clone as User | null);
     await setDoc(doc(db, "users", user.uid), { displayName, photoURL, about }, { merge: true });
     onClose();
   };
