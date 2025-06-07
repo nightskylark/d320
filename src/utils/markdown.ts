@@ -30,18 +30,21 @@ md.renderer.rules.ordered_list_open = () => '<ol class="list-decimal list-inside
 md.renderer.rules.ordered_list_close = () => '</ol>';
 md.renderer.rules.list_item_open = () => '<li class="ml-4">';
 md.renderer.rules.list_item_close = () => '</li>';
-md.renderer.rules.heading_open = (tokens, idx) => {
-  const level = tokens[idx].tag.slice(1);
-  const size = {
+md.renderer.rules.heading_open = (tokens: unknown, idx: number) => {
+  const t = tokens as Record<number, { tag: string }>;
+  const level = t[idx].tag.slice(1);
+  const sizes: Record<string, string> = {
     '1': 'text-2xl',
     '2': 'text-xl',
     '3': 'text-lg',
     '4': 'text-base',
     '5': 'text-sm',
     '6': 'text-xs',
-  }[level] || 'text-base';
+  };
+  const size = sizes[level] || 'text-base';
   return `<h${level} class="font-bold mt-2 ${size}">`;
 };
-md.renderer.rules.heading_close = (tokens, idx) => `</${tokens[idx].tag}>`;
+md.renderer.rules.heading_close = (tokens: unknown, idx: number) =>
+  `</${(tokens as Record<number, { tag: string }>)[idx].tag}>`;
 
 export const renderMarkdown = (text: string): string => md.render(text);

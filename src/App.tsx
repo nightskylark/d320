@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { onSnapshot, doc, deleteDoc } from "firebase/firestore";
+import { onSnapshot, doc, deleteDoc, addDoc, updateDoc, getDoc } from "firebase/firestore";
 import { enemiesCollection, db } from "./firebase";
 import EnemyList from "./components/EnemyList";
 import EnemyDetail from "./components/EnemyDetail";
@@ -22,13 +22,18 @@ const App: React.FC = () => {
   const [author, setAuthor] = useState("");
   const [sort, setSort] = useState("name");
   const [draftFilter, setDraftFilter] = useState("all");
+  const [importing, setImporting] = useState(false);
+  const [importProgress, setImportProgress] = useState(0);
   const user = useAuth();
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(enemiesCollection, (snapshot) => {
-      const enemyData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setEnemies(enemyData);
-    });
+      const unsubscribe = onSnapshot(enemiesCollection, (snapshot) => {
+        const enemyData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...(doc.data() as Omit<Enemy, 'id'>),
+        })) as Enemy[];
+        setEnemies(enemyData);
+      });
     return unsubscribe;
   }, []);
 
@@ -53,6 +58,90 @@ const App: React.FC = () => {
 
   const handlePrintAll = () => {
     printEnemies(filtered, profiles);
+  };
+
+  const handleExport = () => {
+    const data = filtered.map(e => ({
+      uid: e.id,
+      name: e.name,
+      customDescription: e.customDescription,
+      imageURL: e.imageURL,
+      imageURL2: e.imageURL2,
+      tags: e.tags,
+      draft: e.draft ?? false,
+      author: profiles[e.authorUid]?.displayName || ""
+    }));
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "enemies.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImport = async (file: File) => {
+    if (!user) return;
+    setImporting(true);
+    setImportProgress(0);
+    try {
+      const text = await file.text();
+      const arr = JSON.parse(text);
+      if (!Array.isArray(arr)) throw new Error();
+      for (const item of arr) {
+        if (typeof item !== 'object' || item === null) throw new Error();
+        if ('name' in item && typeof item.name !== 'string') throw new Error();
+        if ('customDescription' in item && typeof item.customDescription !== 'string') throw new Error();
+        if ('imageURL' in item && typeof item.imageURL !== 'string') throw new Error();
+        if ('imageURL2' in item && typeof item.imageURL2 !== 'string') throw new Error();
+        if ('draft' in item && typeof item.draft !== 'boolean') throw new Error();
+        if (
+          'tags' in item &&
+          (!Array.isArray(item.tags) || item.tags.some((t: unknown) => typeof t !== 'string'))
+        )
+          throw new Error();
+      }
+      for (let i = 0; i < arr.length; i++) {
+        const item = arr[i];
+        const uid = item.uid as string | undefined;
+        const data: Partial<Enemy> = {};
+        if ('name' in item) data.name = item.name;
+        if ('customDescription' in item) data.customDescription = item.customDescription;
+        if ('imageURL' in item) data.imageURL = item.imageURL;
+        if ('imageURL2' in item) data.imageURL2 = item.imageURL2;
+        if ('tags' in item) data.tags = item.tags;
+        if ('draft' in item) data.draft = item.draft;
+        if (uid) {
+          const ref = doc(db, 'eotv-enemies', uid);
+          const snap = await getDoc(ref);
+          if (snap.exists() && snap.data().authorUid === user.uid) {
+            await updateDoc(ref, data);
+          }
+        } else {
+          const newEnemy: Enemy = {
+            name: item.name ?? '',
+            customDescription: item.customDescription ?? '',
+            imageURL: item.imageURL ?? '',
+            imageURL2: item.imageURL2 ?? '',
+            tags: item.tags ?? [],
+            draft: item.draft ?? false,
+            authorUid: user.uid,
+            likedBy: [],
+            createdAt: new Date().toISOString()
+          };
+          await addDoc(enemiesCollection, newEnemy);
+        }
+        setImportProgress((i + 1) / arr.length);
+      }
+      alert("Импорт завершен");
+    } catch {
+      alert("Неверный формат файла");
+    } finally {
+      setImporting(false);
+      setTimeout(() => setImportProgress(0), 500);
+    }
   };
 
   const normalizedSearch = search.toLowerCase();
@@ -174,6 +263,11 @@ const App: React.FC = () => {
           setSort={setSort}
           authors={profiles}
           onPrint={handlePrintAll}
+          onExport={handleExport}
+          onImport={handleImport}
+          importing={importing}
+          importProgress={importProgress}
+          importAllowed={!!user}
           count={filtered.length}
           onRandom={handleRandom}
         />

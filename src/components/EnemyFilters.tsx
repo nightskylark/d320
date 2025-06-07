@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { StarIcon as StarSolid } from "@heroicons/react/24/solid";
-import { StarIcon as StarOutline, XMarkIcon, PrinterIcon, CubeIcon } from "@heroicons/react/24/outline";
+import { StarIcon as StarOutline, XMarkIcon, PrinterIcon, CubeIcon, ArrowDownTrayIcon, ArrowUpTrayIcon } from "@heroicons/react/24/outline";
 import type { UserProfile } from "../types";
 import { useFixedTags } from "../contexts/TagContext";
 import { useAuth } from "../contexts/AuthContext";
@@ -20,15 +20,21 @@ interface Props {
   setDraft: (v: string) => void;
   authors: Record<string, UserProfile>;
   onPrint: () => void;
+  onExport: () => void;
+  onImport: (file: File) => void;
+  importing: boolean;
+  importProgress: number;
+  importAllowed: boolean;
   count: number;
   onRandom: () => void;
 }
 
-const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, setLiked, author, setAuthor, sort, setSort, draft, setDraft, authors, onPrint, count, onRandom }) => {
+const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, setLiked, author, setAuthor, sort, setSort, draft, setDraft, authors, onPrint, onExport, onImport, importing, importProgress, importAllowed, count, onRandom }) => {
   const fixedTags = useFixedTags();
   const user = useAuth();
   const [authorOpen, setAuthorOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const authorProfile = author ? authors[author] : undefined;
 
   useEffect(() => {
@@ -52,7 +58,13 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
   }, [authorOpen]);
 
   return (
-    <div className="flex flex-wrap gap-4 mx-2 my-4 items-center">
+    <div className="flex flex-wrap mx-2 py-4 gap-2 items-center relative">
+      {(importing || importProgress > 0) && (
+        <div
+          className="absolute top-0 left-0 h-0.5 bg-blue-700 dark:bg-sky-300 transition-all"
+          style={{ width: `${importProgress * 100}%` }}
+        />
+      )}
       <input
         type="text"
         placeholder="Поиск"
@@ -63,12 +75,12 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
       {user && (
         <button
           type="button"
-          title="Избранное"
+          title="Избранные"
           onClick={() => setLiked(!liked)}
           className="text-blue-700 dark:text-sky-300 hover:text-blue-500 dark:hover:text-sky-200 transition flex items-center gap-1 h-10 px-2 cursor-pointer"
         >
           {liked ? <StarSolid className="w-5 h-5" /> : <StarOutline className="w-5 h-5" />}
-          <span className="text-sm">Избранное</span>
+          <span className="text-sm">Избранные</span>
         </button>
       )}
       <select
@@ -173,6 +185,38 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
           <PrinterIcon className="w-6 h-6" />
           Печать
         </button>
+        <button
+          type="button"
+          onClick={onExport}
+          className="flex items-center gap-1 p-2 rounded border text-blue-700 dark:text-sky-300 hover:text-blue-500 dark:hover:text-sky-200 border-blue-700 dark:border-sky-300 hover:border-blue-500 dark:hover:border-sky-200 transition h-10 cursor-pointer"
+        >
+          <ArrowDownTrayIcon className="w-6 h-6" />
+          Экспорт
+        </button>
+        {importAllowed && (
+          <>
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="flex items-center gap-1 p-2 rounded border text-blue-700 dark:text-sky-300 hover:text-blue-500 dark:hover:text-sky-200 border-blue-700 dark:border-sky-300 hover:border-blue-500 dark:hover:border-sky-200 transition h-10 cursor-pointer"
+            >
+              <ArrowUpTrayIcon className="w-6 h-6" />
+              Импорт
+            </button>
+            <input
+              type="file"
+              accept="application/json"
+              ref={fileInputRef}
+              className="hidden"
+              onChange={e => {
+                if (e.target.files && e.target.files[0]) {
+                  onImport(e.target.files[0]);
+                  e.target.value = '';
+                }
+              }}
+            />
+          </>
+        )}
       </div>
     </div>
   );
