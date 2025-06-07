@@ -55,7 +55,7 @@ const EditorInner: FC<Props> = ({ value, onChange }) => {
   };
 
   return (
-    <div className="flex flex-col flex-1 mt-4">
+    <div className="flex flex-col flex-1 mt-4 min-h-0">
       <div className="flex gap-2 mb-2">
         <button type="button" onClick={() => exec(toggleStrongCommand)} className="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600">
           <BoldIcon className="w-5 h-5" />
@@ -76,7 +76,7 @@ const EditorInner: FC<Props> = ({ value, onChange }) => {
           <ArrowUturnRightIcon className="w-5 h-5" />
         </button>
       </div>
-      <div className="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-md p-2 flex-1 overflow-y-auto">
+      <div className="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-md p-2 flex-1 overflow-y-auto min-h-0">
         <Milkdown />
       </div>
     </div>

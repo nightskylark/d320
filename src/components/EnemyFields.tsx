@@ -31,11 +31,13 @@ const EnemyFields: FC<Props> = ({
       required
     />
     <MarkdownEditor value={customDescription} onChange={setCustomDescription} />
-    <TagBox
-      selectedTags={selectedTags}
-      setSelectedTags={setSelectedTags}
-    />
-    {children}
+    <div className="mt-auto flex flex-col">
+      <TagBox
+        selectedTags={selectedTags}
+        setSelectedTags={setSelectedTags}
+      />
+      {children}
+    </div>
   </div>
 );
 
