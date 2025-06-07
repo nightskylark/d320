@@ -71,12 +71,12 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
       {user && (
         <button
           type="button"
-          title="Избранное"
+          title="Избранные"
           onClick={() => setLiked(!liked)}
           className="text-blue-700 dark:text-sky-300 hover:text-blue-500 dark:hover:text-sky-200 transition flex items-center gap-1 h-10 px-2 cursor-pointer"
         >
           {liked ? <StarSolid className="w-5 h-5" /> : <StarOutline className="w-5 h-5" />}
-          <span className="text-sm">Избранное</span>
+          <span className="text-sm">Избранные</span>
         </button>
       )}
       <select
