@@ -114,11 +114,26 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
                 {/* Expanded view */}
                 <div className="relative bg-white dark:bg-gray-900 rounded-2xl w-full flex flex-col sm:flex-row shadow-lg h-full max-w-7xl overflow-hidden">
                     {/* Left column - image 1 */}
-                    <img
-                        src={enemy.imageURL || "/eotv-enemy-placeholder.png"}
-                        alt={enemy.name}
-                        className="w-full sm:w-3/14 h-40 sm:h-auto object-cover"
-                    />
+                    <div className="relative">
+                        <img
+                            src={enemy.imageURL || "/eotv-enemy-placeholder.png"}
+                            alt={enemy.name}
+                            className="w-full sm:w-3/14 h-40 sm:h-auto object-cover"
+                        />
+                        {/* Tags */}
+                        <div className="absolute bottom-4 left-0 right-0 px-4">
+                            <div className="flex flex-wrap gap-1">
+                                {enemy.tags.map((tag, index) => (
+                                    <span
+                                        key={index}
+                                        className="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-xs drop-shadow-2xl"
+                                    >
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
                     {/* Center - title + description */}
                     <div className="sm:w-4/7 w-full flex flex-col px-6 overflow-y-auto">
                         <h2 className="text-2xl font-bold text-center p-6 pt-10">{enemy.name}</h2>
@@ -131,14 +146,6 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
                     {/* Right column - image 2 */}
                     {enemy.imageURL2 && <img src={enemy.imageURL2} alt="Extra" className="w-full sm:w-3/14 h-40 sm:h-auto object-cover" />}
 
-                    {/* Tags */}
-                    <div className="absolute bottom-4 left-4 flex flex-col items-end gap-2">
-                        <div className="flex flex-wrap gap-1">
-                        {enemy.tags.map((tag, index) => (
-                            <span key={index} className="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-xs drop-shadow-2xl">{tag}</span>
-                        ))}
-                        </div>
-                    </div>
 
                     {/* Author */}
                     <div className="absolute bottom-4 right-4 flex items-center gap-2">
