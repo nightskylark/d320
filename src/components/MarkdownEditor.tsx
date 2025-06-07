@@ -11,7 +11,7 @@ interface Props {
   onChange: (val: string) => void;
 }
 
-const MarkdownEditor: FC<Props> = ({ value, onChange }) => {
+const EditorInner: FC<Props> = ({ value, onChange }) => {
   useEditor(
     (root) =>
       Editor.make()
@@ -36,23 +36,27 @@ const MarkdownEditor: FC<Props> = ({ value, onChange }) => {
   };
 
   return (
-    <MilkdownProvider>
-      <div className="flex flex-col flex-1 mt-4">
-        <div className="flex justify-end mb-2">
-          <button
-            type="button"
-            className="px-2 py-1 text-sm bg-blue-600 text-white rounded"
-            onClick={normalizeText}
-          >
-            Normalize Text
-          </button>
-        </div>
-        <div className="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-md p-2">
-          <Milkdown />
-        </div>
+    <div className="flex flex-col flex-1 mt-4">
+      <div className="flex justify-end mb-2">
+        <button
+          type="button"
+          className="px-2 py-1 text-sm bg-blue-600 text-white rounded"
+          onClick={normalizeText}
+        >
+          Normalize Text
+        </button>
       </div>
-    </MilkdownProvider>
+      <div className="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-md p-2">
+        <Milkdown />
+      </div>
+    </div>
   );
 };
+
+const MarkdownEditor: FC<Props> = ({ value, onChange }) => (
+  <MilkdownProvider>
+    <EditorInner value={value} onChange={onChange} />
+  </MilkdownProvider>
+);
 
 export default MarkdownEditor;
