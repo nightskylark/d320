@@ -64,6 +64,7 @@ const App: React.FC = () => {
       imageURL: e.imageURL,
       imageURL2: e.imageURL2,
       tags: e.tags,
+      draft: e.draft ?? false,
       author: profiles[e.authorUid]?.displayName || ""
     }));
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
@@ -85,24 +86,37 @@ const App: React.FC = () => {
       const arr = JSON.parse(text);
       if (!Array.isArray(arr)) throw new Error();
       for (const item of arr) {
-        if (typeof item.name !== "string") throw new Error();
+        if (typeof item !== 'object' || item === null) throw new Error();
+        if ('name' in item && typeof item.name !== 'string') throw new Error();
+        if ('customDescription' in item && typeof item.customDescription !== 'string') throw new Error();
+        if ('imageURL' in item && typeof item.imageURL !== 'string') throw new Error();
+        if ('imageURL2' in item && typeof item.imageURL2 !== 'string') throw new Error();
+        if ('draft' in item && typeof item.draft !== 'boolean') throw new Error();
+        if ('tags' in item && (!Array.isArray(item.tags) || item.tags.some((t: any) => typeof t !== 'string'))) throw new Error();
       }
       for (const item of arr) {
-        const { uid, name, customDescription, imageURL, imageURL2, tags } = item;
-        const data: any = { name, customDescription, imageURL, imageURL2, tags };
+        const uid = item.uid as string | undefined;
+        const data: Partial<Enemy> = {};
+        if ('name' in item) data.name = item.name;
+        if ('customDescription' in item) data.customDescription = item.customDescription;
+        if ('imageURL' in item) data.imageURL = item.imageURL;
+        if ('imageURL2' in item) data.imageURL2 = item.imageURL2;
+        if ('tags' in item) data.tags = item.tags;
+        if ('draft' in item) data.draft = item.draft;
         if (uid) {
-          const ref = doc(db, "eotv-enemies", uid);
+          const ref = doc(db, 'eotv-enemies', uid);
           const snap = await getDoc(ref);
           if (snap.exists() && snap.data().authorUid === user.uid) {
             await updateDoc(ref, data);
           }
         } else {
           const newEnemy: Enemy = {
-            name,
-            customDescription,
-            imageURL,
-            imageURL2,
-            tags,
+            name: item.name ?? '',
+            customDescription: item.customDescription ?? '',
+            imageURL: item.imageURL ?? '',
+            imageURL2: item.imageURL2 ?? '',
+            tags: item.tags ?? [],
+            draft: item.draft ?? false,
             authorUid: user.uid,
             likedBy: [],
             createdAt: new Date().toISOString()
