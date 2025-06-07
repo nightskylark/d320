@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useLayoutEffect, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import type { UserProfile } from "../types";
 
@@ -10,6 +10,18 @@ interface Props {
 
 const AboutDialog: React.FC<Props> = ({ user, anchor, onClose }) => {
   const panelRef = useRef<HTMLDivElement | null>(null);
+  const [position, setPosition] = useState<{ top: number; left: number }>({
+    top: anchor.top,
+    left: anchor.left,
+  });
+
+  useLayoutEffect(() => {
+    if (panelRef.current) {
+      const rect = panelRef.current.getBoundingClientRect();
+      const top = Math.max(0, anchor.top - rect.height - 4);
+      setPosition({ top, left: anchor.left });
+    }
+  }, [anchor]);
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -33,7 +45,7 @@ const AboutDialog: React.FC<Props> = ({ user, anchor, onClose }) => {
       ref={panelRef}
       role="dialog"
       className="fixed z-50 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md p-4 shadow-lg"
-      style={{ top: anchor.bottom + 4, left: anchor.left }}
+      style={{ top: position.top, left: position.left }}
     >
       <button
         onClick={onClose}
