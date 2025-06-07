@@ -132,7 +132,7 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
                     {enemy.imageURL2 && <img src={enemy.imageURL2} alt="Extra" className="w-full sm:w-3/14 h-40 sm:h-auto object-cover" />}
 
                     {/* Tags */}
-                    <div className="absolute bottom-4 left-4 flex flex-col items-end gap-2">
+                    <div className="absolute bottom-4 left-4 flex flex-col items-end gap-2 sm:w-3/14 h-32 sm:h-auto">
                         <div className="flex flex-wrap gap-1">
                         {enemy.tags.map((tag, index) => (
                             <span key={index} className="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-xs drop-shadow-2xl">{tag}</span>
