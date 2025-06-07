@@ -8,21 +8,12 @@ import {
   wrapInBulletListCommand,
   wrapInOrderedListCommand,
 } from '@milkdown/preset-commonmark';
-import {
-  strikethroughSchema,
-  toggleStrikethroughCommand,
-  strikethroughInputRule,
-  strikethroughKeymap,
-} from '@milkdown/preset-gfm';
 import { history, undoCommand, redoCommand } from '@milkdown/plugin-history';
 import { listener, listenerCtx } from '@milkdown/plugin-listener';
 import { nord } from '@milkdown/theme-nord';
-import { underlineSchema, toggleUnderlineCommand, underlineInputRule, underlineKeymap } from '../plugins/underline';
 import {
   BoldIcon,
   ItalicIcon,
-  UnderlineIcon,
-  StrikethroughIcon,
   ListBulletIcon,
   NumberedListIcon,
   ArrowUturnLeftIcon,
@@ -46,12 +37,6 @@ const EditorInner: FC<Props> = ({ value, onChange }) => {
           });
         })
         .use(commonmark)
-        .use(strikethroughSchema)
-        .use(strikethroughInputRule)
-        .use(strikethroughKeymap)
-        .use(underlineSchema)
-        .use(underlineInputRule)
-        .use(underlineKeymap)
         .use(history)
         .use(listener)
         .config(nord),
@@ -77,12 +62,6 @@ const EditorInner: FC<Props> = ({ value, onChange }) => {
         </button>
         <button type="button" onClick={() => exec(toggleEmphasisCommand)} className="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600">
           <ItalicIcon className="w-5 h-5" />
-        </button>
-        <button type="button" onClick={() => exec(toggleUnderlineCommand)} className="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600">
-          <UnderlineIcon className="w-5 h-5" />
-        </button>
-        <button type="button" onClick={() => exec(toggleStrikethroughCommand)} className="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600">
-          <StrikethroughIcon className="w-5 h-5" />
         </button>
         <button type="button" onClick={() => exec(wrapInOrderedListCommand)} className="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600">
           <NumberedListIcon className="w-5 h-5" />
