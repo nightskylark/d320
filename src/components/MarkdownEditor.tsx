@@ -13,7 +13,7 @@ import {
   toggleStrikethroughCommand,
   strikethroughInputRule,
   strikethroughKeymap,
-} from '@milkdown/preset-gfm/mark/strike-through';
+} from '@milkdown/preset-gfm';
 import { history } from '@milkdown/plugin-history';
 import { listener, listenerCtx } from '@milkdown/plugin-listener';
 import { nord } from '@milkdown/theme-nord';
@@ -24,7 +24,7 @@ import {
   UnderlineIcon,
   StrikethroughIcon,
   ListBulletIcon,
-  ListOrderedIcon,
+  NumberedListIcon,
 } from '@heroicons/react/20/solid';
 
 interface Props {
@@ -83,7 +83,7 @@ const EditorInner: FC<Props> = ({ value, onChange }) => {
           <StrikethroughIcon className="w-5 h-5" />
         </button>
         <button type="button" onClick={() => exec(wrapInOrderedListCommand)} className="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600">
-          <ListOrderedIcon className="w-5 h-5" />
+          <NumberedListIcon className="w-5 h-5" />
         </button>
         <button type="button" onClick={() => exec(wrapInBulletListCommand)} className="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600">
           <ListBulletIcon className="w-5 h-5" />
