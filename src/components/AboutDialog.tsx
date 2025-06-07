@@ -1,5 +1,6 @@
 import { useEffect, useRef, useLayoutEffect, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import MarkdownIt from "markdown-it";
 import type { UserProfile } from "../types";
 
 interface Props {
@@ -14,6 +15,7 @@ const AboutDialog: React.FC<Props> = ({ user, anchor, onClose }) => {
     top: anchor.top,
     left: anchor.left,
   });
+  const mdRef = useRef(new MarkdownIt({ linkify: true, breaks: true }));
 
   useLayoutEffect(() => {
     if (panelRef.current) {
@@ -54,7 +56,11 @@ const AboutDialog: React.FC<Props> = ({ user, anchor, onClose }) => {
         <XMarkIcon className="w-4 h-4" />
       </button>
       <h3 className="text-sm font-bold mb-2">{user.displayName}</h3>
-      <p className="whitespace-pre-line text-xs max-w-xs">{user.about || ""}</p>
+      <div
+        className="text-xs max-w-xs whitespace-pre-line [&_a]:text-blue-600 [&_a]:underline hover:[&_a]:underline"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: mdRef.current.render(user.about || "") }}
+      />
     </div>
   );
 };
