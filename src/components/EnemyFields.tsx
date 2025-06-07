@@ -1,4 +1,5 @@
 import TagBox from "./TagBox";
+import MarkdownEditor from "./MarkdownEditor";
 import type { FC, ReactNode } from "react";
 
 interface Props {
@@ -20,7 +21,7 @@ const EnemyFields: FC<Props> = ({
   setSelectedTags,
   children,
 }) => (
-  <div className="w-full sm:w-4/7 flex flex-col px-6 h-full overflow-y-auto">
+  <div className="w-full sm:w-4/7 flex flex-col px-6 h-full">
     <input
       type="text"
       placeholder="Имя противника"
@@ -29,17 +30,14 @@ const EnemyFields: FC<Props> = ({
       className="w-full p-2 mt-4 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-neonBlue"
       required
     />
-    <textarea
-      placeholder="Описание"
-      value={customDescription}
-      onChange={(e) => setCustomDescription(e.target.value)}
-      className="w-full p-2 mt-4 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-neonBlue flex-1 resize-none"
-    />
-    <TagBox
-      selectedTags={selectedTags}
-      setSelectedTags={setSelectedTags}
-    />
-    {children}
+    <MarkdownEditor value={customDescription} onChange={setCustomDescription} />
+    <div className="mt-auto flex flex-col">
+      <TagBox
+        selectedTags={selectedTags}
+        setSelectedTags={setSelectedTags}
+      />
+      {children}
+    </div>
   </div>
 );
 
