@@ -57,7 +57,7 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
   }, [authorOpen]);
 
   return (
-    <div className="relative flex flex-wrap gap-4 mx-2 my-4 items-center">
+    <div className="relative flex flex-wrap gap-4 mx-2 py-4 items-center">
       {importing && (
         <div className="absolute top-0 left-0 h-0.5 w-full bg-blue-700 dark:bg-sky-300" />
       )}
