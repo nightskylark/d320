@@ -1,6 +1,10 @@
 import { FC } from 'react';
-import MDEditor, { commands } from '@uiw/react-md-editor';
-import { renderMarkdown } from '../utils/markdown';
+import { Milkdown, MilkdownProvider, useEditor } from '@milkdown/react';
+import { Editor, rootCtx, defaultValueCtx } from '@milkdown/core';
+import { commonmark } from '@milkdown/preset-commonmark';
+import { history } from '@milkdown/plugin-history';
+import { listener, listenerCtx } from '@milkdown/plugin-listener';
+import { nord } from '@milkdown/theme-nord';
 
 interface Props {
   value: string;
@@ -8,6 +12,23 @@ interface Props {
 }
 
 const MarkdownEditor: FC<Props> = ({ value, onChange }) => {
+  useEditor(
+    (root) =>
+      Editor.make()
+        .config((ctx) => {
+          ctx.set(rootCtx, root);
+          ctx.set(defaultValueCtx, value);
+          ctx.get(listenerCtx).markdownUpdated((_, markdown) => {
+            onChange(markdown);
+          });
+        })
+        .use(commonmark)
+        .use(history)
+        .use(listener)
+        .config(nord),
+    []
+  );
+
   const normalizeText = () => {
     let text = value.replace(/<br\s*\/?>/gi, '\n');
     text = text.replace(/(?<! {2})\n/g, '  \n');
@@ -15,36 +36,22 @@ const MarkdownEditor: FC<Props> = ({ value, onChange }) => {
   };
 
   return (
-    <div className="flex flex-col flex-1 mt-4" data-color-mode="light">
-      <div className="flex justify-end mb-2">
-        <button
-          type="button"
-          className="px-2 py-1 text-sm bg-blue-600 text-white rounded"
-          onClick={normalizeText}
-        >
-          Normalize Text
-        </button>
+    <MilkdownProvider>
+      <div className="flex flex-col flex-1 mt-4">
+        <div className="flex justify-end mb-2">
+          <button
+            type="button"
+            className="px-2 py-1 text-sm bg-blue-600 text-white rounded"
+            onClick={normalizeText}
+          >
+            Normalize Text
+          </button>
+        </div>
+        <div className="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-md p-2">
+          <Milkdown />
+        </div>
       </div>
-      <MDEditor
-        value={value}
-        onChange={(v) => onChange(v || '')}
-        preview="edit"
-        commands={[
-          commands.bold,
-          commands.italic,
-          commands.title,
-          commands.unorderedListCommand,
-          commands.orderedListCommand,
-        ]}
-        extraCommands={[]}
-        height={200}
-        className="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-md"
-      />
-      <div
-        className="mt-4 p-2 bg-gray-100 dark:bg-gray-800 rounded text-sm overflow-y-auto flex-1 prose dark:prose-invert"
-        dangerouslySetInnerHTML={{ __html: renderMarkdown(value) }}
-      />
-    </div>
+    </MilkdownProvider>
   );
 };
 
