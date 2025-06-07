@@ -16,6 +16,16 @@ const AboutDialog: React.FC<Props> = ({ user, anchor, onClose }) => {
     left: anchor.left,
   });
   const mdRef = useRef(new MarkdownIt({ linkify: true, breaks: true }));
+  useEffect(() => {
+    const md = mdRef.current;
+    const defaultRender = md.renderer.rules.link_open ||
+      ((tokens, idx, options, env, self) => self.renderToken(tokens, idx, options));
+    md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
+      tokens[idx].attrPush(["target", "_blank"]);
+      tokens[idx].attrPush(["rel", "noopener noreferrer"]);
+      return defaultRender(tokens, idx, options, env, self);
+    };
+  }, []);
 
   useLayoutEffect(() => {
     if (panelRef.current) {
