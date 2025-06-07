@@ -27,6 +27,7 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
     const [loginPrompt, setLoginPrompt] = useState(false);
     const [linkCopied, setLinkCopied] = useState(false);
     const [aboutOpen, setAboutOpen] = useState(false);
+    const [aboutAnchor, setAboutAnchor] = useState<DOMRect | null>(null);
     const liked = !!user && enemy.likedBy?.includes(user.uid);
 
     const toggleLike = async () => {
@@ -152,7 +153,10 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
                     <div className="absolute bottom-4 right-4 flex items-center gap-2">
                         <span
                             className="text-sm hover:underline cursor-pointer"
-                            onClick={() => setAboutOpen(true)}
+                            onClick={(e) => {
+                                setAboutAnchor(e.currentTarget.getBoundingClientRect());
+                                setAboutOpen(true);
+                            }}
                         >
                             {author?.displayName || "Unknown"}
                         </span>
@@ -215,8 +219,12 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
             </> 
         )}
     </div>
-    {author && aboutOpen && (
-        <AboutDialog user={author} onClose={() => setAboutOpen(false)} />
+    {author && aboutOpen && aboutAnchor && (
+        <AboutDialog
+            user={author}
+            anchor={aboutAnchor}
+            onClose={() => setAboutOpen(false)}
+        />
     )}
     </>
   );

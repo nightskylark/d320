@@ -4,10 +4,11 @@ import type { UserProfile } from "../types";
 
 interface Props {
   user: UserProfile;
+  anchor: DOMRect;
   onClose: () => void;
 }
 
-const AboutDialog: React.FC<Props> = ({ user, onClose }) => {
+const AboutDialog: React.FC<Props> = ({ user, anchor, onClose }) => {
   const panelRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -29,27 +30,19 @@ const AboutDialog: React.FC<Props> = ({ user, onClose }) => {
 
   return (
     <div
-      role="button"
-      tabIndex={-1}
-      className="fixed inset-0 z-50 p-5 bg-gray-500 bg-opacity-75 dark:bg-black flex items-center justify-center"
-      onClick={onClose}
+      ref={panelRef}
+      role="dialog"
+      className="fixed z-50 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md p-4 shadow-lg"
+      style={{ top: anchor.bottom + 4, left: anchor.left }}
     >
-      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
-      <div
-        ref={panelRef}
-        role="dialog"
-        onClick={(e) => e.stopPropagation()}
-        className="relative bg-white dark:bg-gray-900 rounded-2xl w-full max-w-sm p-6 flex flex-col items-center"
+      <button
+        onClick={onClose}
+        className="absolute top-1 right-1 text-gray-400 hover:text-gray-700"
       >
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 text-gray-300 hover:text-white cursor-pointer"
-        >
-          <XMarkIcon className="w-5 h-5" />
-        </button>
-        <h3 className="text-lg font-bold mb-2">{user.displayName}</h3>
-        <p className="whitespace-pre-line text-sm text-center">{user.about || ""}</p>
-      </div>
+        <XMarkIcon className="w-4 h-4" />
+      </button>
+      <h3 className="text-sm font-bold mb-2">{user.displayName}</h3>
+      <p className="whitespace-pre-line text-xs max-w-xs">{user.about || ""}</p>
     </div>
   );
 };
