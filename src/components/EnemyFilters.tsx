@@ -58,12 +58,12 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
   }, [authorOpen]);
 
   return (
-      {(importing || importProgress > 0) && (
+      {importing || importProgress > 0 ? (
         <div
           className="absolute top-0 left-0 h-0.5 bg-blue-700 dark:bg-sky-300 transition-all"
           style={{ width: `${importProgress * 100}%` }}
         />
-        <div className="absolute top-0 left-0 h-0.5 w-full bg-blue-700 dark:bg-sky-300" />
+      ) : null}
       )}
       <input
         type="text"
