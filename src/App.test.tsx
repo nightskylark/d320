@@ -17,6 +17,12 @@ jest.mock('@milkdown/plugin-history', () => ({ history: {} }));
 jest.mock('@milkdown/plugin-listener', () => ({ listener: {}, listenerCtx: { markdownUpdated: () => ({}) } }));
 jest.mock('@milkdown/core', () => ({ Editor: { make: () => ({ config: () => ({ use: () => ({ config: () => ({}) }) }) }) }, rootCtx: {}, defaultValueCtx: {} }));
 jest.mock('@milkdown/theme-nord', () => ({ nord: {} }));
+jest.mock('./plugins/underline', () => ({
+  underlineSchema: {},
+  toggleUnderlineCommand: { key: 'underline' },
+  underlineInputRule: {},
+  underlineKeymap: {},
+}));
 
 import App from './App';
 jest.mock('firebase/firestore', () => ({

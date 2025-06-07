@@ -1,10 +1,31 @@
 import { FC } from 'react';
-import { Milkdown, MilkdownProvider, useEditor } from '@milkdown/react';
-import { Editor, rootCtx, defaultValueCtx } from '@milkdown/core';
-import { commonmark } from '@milkdown/preset-commonmark';
+import { Milkdown, MilkdownProvider, useEditor, useInstance } from '@milkdown/react';
+import { Editor, rootCtx, defaultValueCtx, commandsCtx } from '@milkdown/core';
+import {
+  commonmark,
+  toggleStrongCommand,
+  toggleEmphasisCommand,
+  wrapInBulletListCommand,
+  wrapInOrderedListCommand,
+} from '@milkdown/preset-commonmark';
+import {
+  strikethroughSchema,
+  toggleStrikethroughCommand,
+  strikethroughInputRule,
+  strikethroughKeymap,
+} from '@milkdown/preset-gfm/mark/strike-through';
 import { history } from '@milkdown/plugin-history';
 import { listener, listenerCtx } from '@milkdown/plugin-listener';
 import { nord } from '@milkdown/theme-nord';
+import { underlineSchema, toggleUnderlineCommand, underlineInputRule, underlineKeymap } from '../plugins/underline';
+import {
+  BoldIcon,
+  ItalicIcon,
+  UnderlineIcon,
+  StrikethroughIcon,
+  ListBulletIcon,
+  ListOrderedIcon,
+} from '@heroicons/react/20/solid';
 
 interface Props {
   value: string;
@@ -23,27 +44,49 @@ const EditorInner: FC<Props> = ({ value, onChange }) => {
           });
         })
         .use(commonmark)
+        .use(strikethroughSchema)
+        .use(strikethroughInputRule)
+        .use(strikethroughKeymap)
+        .use(underlineSchema)
+        .use(underlineInputRule)
+        .use(underlineKeymap)
         .use(history)
         .use(listener)
         .config(nord),
     []
   );
 
-  const normalizeText = () => {
-    let text = value.replace(/<br\s*\/?>/gi, '\n');
-    text = text.replace(/(?<! {2})\n/g, '  \n');
-    onChange(text);
+  const [, getEditor] = useInstance();
+
+  const exec = (cmd: { key: unknown }) => {
+    const editor = getEditor();
+    if (!editor) return;
+    editor.action((ctx) => {
+      const commands = ctx.get(commandsCtx);
+      commands.call(cmd.key);
+    });
   };
 
   return (
     <div className="flex flex-col flex-1 mt-4">
-      <div className="flex justify-end mb-2">
-        <button
-          type="button"
-          className="px-2 py-1 text-sm bg-blue-600 text-white rounded"
-          onClick={normalizeText}
-        >
-          Normalize Text
+      <div className="flex gap-2 mb-2">
+        <button type="button" onClick={() => exec(toggleStrongCommand)} className="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600">
+          <BoldIcon className="w-5 h-5" />
+        </button>
+        <button type="button" onClick={() => exec(toggleEmphasisCommand)} className="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600">
+          <ItalicIcon className="w-5 h-5" />
+        </button>
+        <button type="button" onClick={() => exec(toggleUnderlineCommand)} className="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600">
+          <UnderlineIcon className="w-5 h-5" />
+        </button>
+        <button type="button" onClick={() => exec(toggleStrikethroughCommand)} className="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600">
+          <StrikethroughIcon className="w-5 h-5" />
+        </button>
+        <button type="button" onClick={() => exec(wrapInOrderedListCommand)} className="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600">
+          <ListOrderedIcon className="w-5 h-5" />
+        </button>
+        <button type="button" onClick={() => exec(wrapInBulletListCommand)} className="p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600">
+          <ListBulletIcon className="w-5 h-5" />
         </button>
       </div>
       <div className="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-md p-2">

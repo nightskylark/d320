@@ -1,10 +1,13 @@
 import MarkdownIt from 'markdown-it';
+import ins from 'markdown-it-ins';
 
 const md = new MarkdownIt('commonmark', {
   html: false,
   linkify: false,
   breaks: false,
 })
+  .use(ins)
+  .enable('strikethrough')
   .disable([
     'image',
     'link',
@@ -24,6 +27,10 @@ md.renderer.rules.strong_open = () => '<strong class="font-bold">';
 md.renderer.rules.strong_close = () => '</strong>';
 md.renderer.rules.em_open = () => '<em class="italic">';
 md.renderer.rules.em_close = () => '</em>';
+md.renderer.rules.del_open = () => '<del class="line-through">';
+md.renderer.rules.del_close = () => '</del>';
+md.renderer.rules.ins_open = () => '<span class="underline">';
+md.renderer.rules.ins_close = () => '</span>';
 md.renderer.rules.bullet_list_open = () => '<ul class="list-disc list-inside mt-2">';
 md.renderer.rules.bullet_list_close = () => '</ul>';
 md.renderer.rules.ordered_list_open = () => '<ol class="list-decimal list-inside mt-2">';
