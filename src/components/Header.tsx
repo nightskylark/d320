@@ -3,7 +3,7 @@ import ThemeToggle from "./ThemeToggle";
 
 const Header: React.FC = () => {
   return (
-    <header className="text-gray-900 dark:text-sky-300 sticky top-0 z-50 bg-white shadow-md shadow-slate-900/5 transition duration-500 dark:shadow-none dark:bg-slate-900/95 dark:backdrop-blur-sm dark:[@supports(backdrop-filter:blur(0))]:bg-slate-900/75">
+    <header className="text-gray-900 dark:text-sky-300 sticky top-0 z-35 bg-white shadow-md shadow-slate-900/5 transition duration-500 dark:shadow-none dark:bg-slate-900/95 dark:backdrop-blur-sm dark:[@supports(backdrop-filter:blur(0))]:bg-slate-900/75">
       <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
