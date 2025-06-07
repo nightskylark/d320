@@ -14,4 +14,5 @@ export interface Enemy {
 export interface UserProfile {
   displayName: string;
   photoURL: string;
+  about?: string;
 }

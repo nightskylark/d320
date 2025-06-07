@@ -21,3 +21,4 @@ export const provider = new GoogleAuthProvider();
 
 export const enemiesCollection = collection(db, "eotv-enemies");
 export const tagsCollection = collection(db, "eotv-enemy-tags");
+export const usersCollection = collection(db, "users");
