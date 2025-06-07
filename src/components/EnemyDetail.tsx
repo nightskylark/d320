@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import ReactMarkdown from "react-markdown";
+import { renderMarkdown } from "../utils/markdown";
 import { XMarkIcon, PencilSquareIcon, TrashIcon, ChevronLeftIcon, ChevronRightIcon, StarIcon as StarOutline, LinkIcon, PrinterIcon } from "@heroicons/react/24/outline";
 import { StarIcon as StarSolid } from "@heroicons/react/24/solid";
 import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
@@ -122,17 +122,10 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
                     {/* Center - title + description */}
                     <div className="sm:w-4/7 w-full flex flex-col px-6 overflow-y-auto">
                         <h2 className="text-2xl font-bold text-center p-6 pt-10">{enemy.name}</h2>
-                        <ReactMarkdown
-                        components={{
-                            p: ({ node, ...props }) => <p className="text-sm mt-2" {...props} />,
-                            strong: ({ node, ...props }) => <strong className="font-bold" {...props} />,
-                            em: ({ node, ...props }) => <em className="italic" {...props} />,
-                            ul: ({ node, ...props }) => <ul className="list-disc list-inside mt-2" {...props} />,
-                            li: ({ node, ...props }) => <li className="ml-4" {...props} />
-                        }}
-                        >
-                        {enemy.customDescription}
-                        </ReactMarkdown>
+                        <div
+                            className="prose dark:prose-invert text-sm"
+                            dangerouslySetInnerHTML={{ __html: renderMarkdown(enemy.customDescription) }}
+                        />
 
                     </div>
                     {/* Right column - image 2 */}
