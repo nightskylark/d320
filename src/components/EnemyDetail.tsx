@@ -8,6 +8,7 @@ import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import { db } from "../firebase";
 import { printEnemies } from "../utils/printEnemies";
 import EditEnemy from "./EditEnemy";
+import AboutDialog from "./AboutDialog";
 import type { Enemy, UserProfile } from "../types";
 import LoginPrompt from "./LoginPrompt";
 
@@ -25,6 +26,7 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
     const [isEditing, setIsEditing] = useState(false);
     const [loginPrompt, setLoginPrompt] = useState(false);
     const [linkCopied, setLinkCopied] = useState(false);
+    const [aboutOpen, setAboutOpen] = useState(false);
     const liked = !!user && enemy.likedBy?.includes(user.uid);
 
     const toggleLike = async () => {
@@ -61,27 +63,33 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
     useEffect(() => {
         const handleKey = (e: KeyboardEvent) => {
             if (e.key === 'Escape') {
-                if (isEditing) {
+                if (aboutOpen) {
+                    setAboutOpen(false);
+                } else if (isEditing) {
                     setIsEditing(false);
                 } else {
                     close();
                 }
-            } else if (!isEditing && e.key === 'ArrowLeft') {
+            } else if (!isEditing && !aboutOpen && e.key === 'ArrowLeft') {
                 onPrev();
-            } else if (!isEditing && e.key === 'ArrowRight') {
+            } else if (!isEditing && !aboutOpen && e.key === 'ArrowRight') {
                 onNext();
             }
         };
 
         document.addEventListener('keydown', handleKey);
         return () => document.removeEventListener('keydown', handleKey);
-    }, [isEditing, close, onPrev, onNext]);
+    }, [isEditing, aboutOpen, close, onPrev, onNext]);
 
     // Close card when clicking outside
     const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
         if (cardRef.current === event.target) {
-            close();
-            setIsEditing(false);
+            if (aboutOpen) {
+                setAboutOpen(false);
+            } else {
+                close();
+                setIsEditing(false);
+            }
         }
     };
   
@@ -142,7 +150,12 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
 
                     {/* Author */}
                     <div className="absolute bottom-4 right-4 flex items-center gap-2">
-                        <span className="text-sm">{author?.displayName || "Unknown"}</span>
+                        <span
+                            className="text-sm hover:underline cursor-pointer"
+                            onClick={() => setAboutOpen(true)}
+                        >
+                            {author?.displayName || "Unknown"}
+                        </span>
                         <img src={author?.photoURL} alt="Avatar" className="w-8 h-8 rounded-full border border-gray-500" />
                     </div>
 
@@ -202,6 +215,9 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
             </> 
         )}
     </div>
+    {author && aboutOpen && (
+        <AboutDialog user={author} onClose={() => setAboutOpen(false)} />
+    )}
     </>
   );
 };
