@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { onSnapshot, doc, deleteDoc } from "firebase/firestore";
+import { onSnapshot, doc, deleteDoc, addDoc, updateDoc, getDoc } from "firebase/firestore";
 import { enemiesCollection, db } from "./firebase";
 import EnemyList from "./components/EnemyList";
 import EnemyDetail from "./components/EnemyDetail";
@@ -22,6 +22,7 @@ const App: React.FC = () => {
   const [author, setAuthor] = useState("");
   const [sort, setSort] = useState("name");
   const [draftFilter, setDraftFilter] = useState("all");
+  const [importing, setImporting] = useState(false);
   const user = useAuth();
 
   useEffect(() => {
@@ -53,6 +54,68 @@ const App: React.FC = () => {
 
   const handlePrintAll = () => {
     printEnemies(filtered, profiles);
+  };
+
+  const handleExport = () => {
+    const data = filtered.map(e => ({
+      uid: e.id,
+      name: e.name,
+      customDescription: e.customDescription,
+      imageURL: e.imageURL,
+      imageURL2: e.imageURL2,
+      tags: e.tags,
+      author: profiles[e.authorUid]?.displayName || ""
+    }));
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "enemies.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImport = async (file: File) => {
+    if (!user) return;
+    setImporting(true);
+    try {
+      const text = await file.text();
+      const arr = JSON.parse(text);
+      if (!Array.isArray(arr)) throw new Error();
+      for (const item of arr) {
+        if (typeof item.name !== "string") throw new Error();
+      }
+      for (const item of arr) {
+        const { uid, name, customDescription, imageURL, imageURL2, tags } = item;
+        const data: any = { name, customDescription, imageURL, imageURL2, tags };
+        if (uid) {
+          const ref = doc(db, "eotv-enemies", uid);
+          const snap = await getDoc(ref);
+          if (snap.exists() && snap.data().authorUid === user.uid) {
+            await updateDoc(ref, data);
+          }
+        } else {
+          const newEnemy: Enemy = {
+            name,
+            customDescription,
+            imageURL,
+            imageURL2,
+            tags,
+            authorUid: user.uid,
+            likedBy: [],
+            createdAt: new Date().toISOString()
+          };
+          await addDoc(enemiesCollection, newEnemy);
+        }
+      }
+      alert("Импорт завершен");
+    } catch {
+      alert("Неверный формат файла");
+    } finally {
+      setImporting(false);
+    }
   };
 
   const normalizedSearch = search.toLowerCase();
@@ -174,6 +237,10 @@ const App: React.FC = () => {
           setSort={setSort}
           authors={profiles}
           onPrint={handlePrintAll}
+          onExport={handleExport}
+          onImport={handleImport}
+          importing={importing}
+          importAllowed={!!user}
           count={filtered.length}
           onRandom={handleRandom}
         />
