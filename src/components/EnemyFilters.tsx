@@ -23,12 +23,13 @@ interface Props {
   onExport: () => void;
   onImport: (file: File) => void;
   importing: boolean;
+  importProgress: number;
   importAllowed: boolean;
   count: number;
   onRandom: () => void;
 }
 
-const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, setLiked, author, setAuthor, sort, setSort, draft, setDraft, authors, onPrint, onExport, onImport, importing, importAllowed, count, onRandom }) => {
+const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, setLiked, author, setAuthor, sort, setSort, draft, setDraft, authors, onPrint, onExport, onImport, importing, importProgress, importAllowed, count, onRandom }) => {
   const fixedTags = useFixedTags();
   const user = useAuth();
   const [authorOpen, setAuthorOpen] = useState(false);
@@ -57,8 +58,11 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
   }, [authorOpen]);
 
   return (
-    <div className="relative flex flex-wrap gap-4 mx-2 py-4 items-center">
-      {importing && (
+      {(importing || importProgress > 0) && (
+        <div
+          className="absolute top-0 left-0 h-0.5 bg-blue-700 dark:bg-sky-300 transition-all"
+          style={{ width: `${importProgress * 100}%` }}
+        />
         <div className="absolute top-0 left-0 h-0.5 w-full bg-blue-700 dark:bg-sky-300" />
       )}
       <input

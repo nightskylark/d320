@@ -23,6 +23,7 @@ const App: React.FC = () => {
   const [sort, setSort] = useState("name");
   const [draftFilter, setDraftFilter] = useState("all");
   const [importing, setImporting] = useState(false);
+  const [importProgress, setImportProgress] = useState(0);
   const user = useAuth();
 
   useEffect(() => {
@@ -81,6 +82,7 @@ const App: React.FC = () => {
   const handleImport = async (file: File) => {
     if (!user) return;
     setImporting(true);
+    setImportProgress(0);
     try {
       const text = await file.text();
       const arr = JSON.parse(text);
@@ -94,7 +96,8 @@ const App: React.FC = () => {
         if ('draft' in item && typeof item.draft !== 'boolean') throw new Error();
         if ('tags' in item && (!Array.isArray(item.tags) || item.tags.some((t: any) => typeof t !== 'string'))) throw new Error();
       }
-      for (const item of arr) {
+      for (let i = 0; i < arr.length; i++) {
+        const item = arr[i];
         const uid = item.uid as string | undefined;
         const data: Partial<Enemy> = {};
         if ('name' in item) data.name = item.name;
@@ -123,12 +126,14 @@ const App: React.FC = () => {
           };
           await addDoc(enemiesCollection, newEnemy);
         }
+        setImportProgress((i + 1) / arr.length);
       }
       alert("Импорт завершен");
     } catch {
       alert("Неверный формат файла");
     } finally {
       setImporting(false);
+      setTimeout(() => setImportProgress(0), 500);
     }
   };
 
@@ -254,6 +259,7 @@ const App: React.FC = () => {
           onExport={handleExport}
           onImport={handleImport}
           importing={importing}
+          importProgress={importProgress}
           importAllowed={!!user}
           count={filtered.length}
           onRandom={handleRandom}
