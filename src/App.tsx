@@ -27,10 +27,13 @@ const App: React.FC = () => {
   const user = useAuth();
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(enemiesCollection, (snapshot) => {
-      const enemyData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setEnemies(enemyData);
-    });
+      const unsubscribe = onSnapshot(enemiesCollection, (snapshot) => {
+        const enemyData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...(doc.data() as Omit<Enemy, 'id'>),
+        })) as Enemy[];
+        setEnemies(enemyData);
+      });
     return unsubscribe;
   }, []);
 
@@ -94,7 +97,11 @@ const App: React.FC = () => {
         if ('imageURL' in item && typeof item.imageURL !== 'string') throw new Error();
         if ('imageURL2' in item && typeof item.imageURL2 !== 'string') throw new Error();
         if ('draft' in item && typeof item.draft !== 'boolean') throw new Error();
-        if ('tags' in item && (!Array.isArray(item.tags) || item.tags.some((t: any) => typeof t !== 'string'))) throw new Error();
+        if (
+          'tags' in item &&
+          (!Array.isArray(item.tags) || item.tags.some((t: unknown) => typeof t !== 'string'))
+        )
+          throw new Error();
       }
       for (let i = 0; i < arr.length; i++) {
         const item = arr[i];

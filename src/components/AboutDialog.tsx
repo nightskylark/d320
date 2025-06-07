@@ -18,11 +18,30 @@ const AboutDialog: React.FC<Props> = ({ user, anchor, onClose }) => {
   const mdRef = useRef(new MarkdownIt({ linkify: true, breaks: true }));
   useEffect(() => {
     const md = mdRef.current;
-    const defaultRender = md.renderer.rules.link_open ||
-      ((tokens, idx, options, env, self) => self.renderToken(tokens, idx, options));
-    md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
-      tokens[idx].attrPush(["target", "_blank"]);
-      tokens[idx].attrPush(["rel", "noopener noreferrer"]);
+    const defaultRender =
+      md.renderer.rules.link_open ||
+      ((
+        tokens: unknown,
+        idx: number,
+        options: unknown,
+        env: unknown,
+        self: unknown,
+      ) =>
+        (self as { renderToken: (t: unknown, i: number, o: unknown) => string }).renderToken(
+          tokens,
+          idx,
+          options,
+        ));
+    md.renderer.rules.link_open = (
+      tokens: unknown,
+      idx: number,
+      options: unknown,
+      env: unknown,
+      self: unknown,
+    ) => {
+      const t = tokens as Record<number, { attrPush: (attr: string[]) => void }>;
+      t[idx].attrPush(["target", "_blank"]);
+      t[idx].attrPush(["rel", "noopener noreferrer"]);
       return defaultRender(tokens, idx, options, env, self);
     };
   }, []);

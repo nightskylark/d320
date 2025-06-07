@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { doc, updateDoc, deleteField } from "firebase/firestore";
+import { doc, updateDoc, deleteField, FieldValue } from "firebase/firestore";
 import { db } from "../firebase";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import DraftSwitch from "./DraftSwitch";
@@ -22,8 +22,8 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
   const initialRender = useRef(true);
 
   const saveChanges = useCallback(async () => {
-    const enemyDocRef = doc(db, "eotv-enemies", enemy.id);
-    const updatedEnemy: Partial<Enemy> = {
+    const enemyDocRef = doc(db, "eotv-enemies", enemy.id!);
+    const updatedEnemy: Partial<Omit<Enemy, 'draft'>> & { draft?: boolean | FieldValue } = {
       name,
       customDescription,
       tags: selectedTags,

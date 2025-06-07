@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Milkdown, MilkdownProvider, useEditor, useInstance } from '@milkdown/react';
-import { Editor, rootCtx, defaultValueCtx, commandsCtx } from '@milkdown/core';
+import { Editor, rootCtx, defaultValueCtx, commandsCtx, CmdKey } from '@milkdown/core';
 import {
   commonmark,
   toggleStrongCommand,
@@ -50,7 +50,7 @@ const EditorInner: FC<Props> = ({ value, onChange }) => {
     if (!editor) return;
     editor.action((ctx) => {
       const commands = ctx.get(commandsCtx);
-      commands.call(cmd.key);
+      commands.call(cmd.key as CmdKey);
     });
   };
 
