@@ -61,7 +61,7 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
     <div className="flex flex-wrap mx-2 py-4 gap-2 items-center relative">
       {(importing || importProgress > 0) && (
         <div
-          className="absolute top-0 left-0 h-0.5 bg-blue-700 dark:bg-sky-300 transition-all"
+          className="absolute top-0 left-0 h-0.5 bg-sky-500 dark:bg-sky-300 transition-all"
           style={{ width: `${importProgress * 100}%` }}
         />
       )}
@@ -77,7 +77,7 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
           type="button"
           title="Избранные"
           onClick={() => setLiked(!liked)}
-          className="text-blue-700 dark:text-sky-300 hover:text-blue-500 dark:hover:text-sky-200 transition flex items-center gap-1 h-10 px-2 cursor-pointer"
+          className="text-sky-500 dark:text-sky-300 hover:text-sky-400 dark:hover:text-sky-200 transition flex items-center gap-1 h-10 px-2 cursor-pointer"
         >
           {liked ? <StarSolid className="w-5 h-5" /> : <StarOutline className="w-5 h-5" />}
           <span className="text-sm">Избранные</span>
@@ -153,7 +153,7 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
           setSort('date');
           setDraft('all');
         }}
-        className="flex items-center gap-1 p-2 rounded border text-blue-700 dark:text-sky-300 hover:text-blue-500 dark:hover:text-sky-200 border-blue-700 dark:border-sky-300 hover:border-blue-500 dark:hover:border-sky-200 transition h-10 cursor-pointer"
+        className="flex items-center gap-1 p-2 rounded border text-sky-500 dark:text-sky-300 hover:text-sky-400 dark:hover:text-sky-200 border-sky-500 dark:border-sky-300 hover:border-sky-400 dark:hover:border-sky-200 transition h-10 cursor-pointer"
       >
         <XMarkIcon className="w-5 h-5" />
         Сбросить фильтры
@@ -172,7 +172,7 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
         <button
           type="button"
           onClick={onRandom}
-          className="flex items-center gap-1 p-2 rounded border text-blue-700 dark:text-sky-300 hover:text-blue-500 dark:hover:text-sky-200 border-blue-700 dark:border-sky-300 hover:border-blue-500 dark:hover:border-sky-200 transition h-10 cursor-pointer"
+          className="flex items-center gap-1 p-2 rounded border text-sky-500 dark:text-sky-300 hover:text-sky-400 dark:hover:text-sky-200 border-sky-500 dark:border-sky-300 hover:border-sky-400 dark:hover:border-sky-200 transition h-10 cursor-pointer"
         >
           <CubeIcon className="w-6 h-6" />
           Случайный
@@ -180,7 +180,7 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
         <button
           type="button"
           onClick={onPrint}
-          className="flex items-center gap-1 p-2 rounded border text-blue-700 dark:text-sky-300 hover:text-blue-500 dark:hover:text-sky-200 border-blue-700 dark:border-sky-300 hover:border-blue-500 dark:hover:border-sky-200 transition h-10 cursor-pointer"
+          className="flex items-center gap-1 p-2 rounded border text-sky-500 dark:text-sky-300 hover:text-sky-400 dark:hover:text-sky-200 border-sky-500 dark:border-sky-300 hover:border-sky-400 dark:hover:border-sky-200 transition h-10 cursor-pointer"
         >
           <PrinterIcon className="w-6 h-6" />
           Печать
@@ -188,7 +188,7 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
         <button
           type="button"
           onClick={onExport}
-          className="flex items-center gap-1 p-2 rounded border text-blue-700 dark:text-sky-300 hover:text-blue-500 dark:hover:text-sky-200 border-blue-700 dark:border-sky-300 hover:border-blue-500 dark:hover:border-sky-200 transition h-10 cursor-pointer"
+          className="flex items-center gap-1 p-2 rounded border text-sky-500 dark:text-sky-300 hover:text-sky-400 dark:hover:text-sky-200 border-sky-500 dark:border-sky-300 hover:border-sky-400 dark:hover:border-sky-200 transition h-10 cursor-pointer"
         >
           <ArrowDownTrayIcon className="w-6 h-6" />
           Экспорт
@@ -198,7 +198,7 @@ const EnemyFilters: React.FC<Props> = ({ search, setSearch, tag, setTag, liked, 
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="flex items-center gap-1 p-2 rounded border text-blue-700 dark:text-sky-300 hover:text-blue-500 dark:hover:text-sky-200 border-blue-700 dark:border-sky-300 hover:border-blue-500 dark:hover:border-sky-200 transition h-10 cursor-pointer"
+              className="flex items-center gap-1 p-2 rounded border text-sky-500 dark:text-sky-300 hover:text-sky-400 dark:hover:text-sky-200 border-sky-500 dark:border-sky-300 hover:border-sky-400 dark:hover:border-sky-200 transition h-10 cursor-pointer"
             >
               <ArrowUpTrayIcon className="w-6 h-6" />
               Импорт

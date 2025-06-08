@@ -106,7 +106,7 @@ const ProfileDialog: React.FC<Props> = ({ onClose }) => {
           <button
             type="button"
             onClick={saveProfile}
-            className="flex-1 flex items-center justify-center gap-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 transition cursor-pointer"
+            className="flex-1 flex items-center justify-center gap-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-sky-400 transition cursor-pointer"
           >
             Сохранить
           </button>
