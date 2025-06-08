@@ -1,5 +1,6 @@
 import type { Enemy, UserProfile } from "../types";
 import MarkdownIt from "markdown-it";
+import { cleanMarkdown } from "./markdown";
 
 export const printEnemies = (
   enemies: Enemy[],
@@ -15,10 +16,12 @@ export const printEnemies = (
     .content { width: 60%; padding: 0 10px; box-sizing: border-box; }
     h1 { text-align: center; margin: 0 0 10px; }
     .desc { margin-bottom: 10px; }
-    .desc p { margin: 0 0 4px; }
+    .desc p, ul, ol { margin-bottom: 8px; }
+    .author { text-align: right; }
+    *, ::after, ::before { margin: 0; padding: 0;}
+    li { margin: 0 0 0 16px; }
     .tags { margin-bottom: 10px; }
     .tags span { background: #eee; padding: 2px 4px; margin-right: 4px; border-radius: 3px; }
-    .author { text-align: right; }
   `;
 
   const md = new MarkdownIt({ html: false, breaks: true });
@@ -27,7 +30,7 @@ export const printEnemies = (
     .map((enemy) => {
       const author = authors[enemy.authorUid];
       const tags = enemy.tags.map((t) => `<span>${t}</span>`).join(" ");
-      const desc = md.render(enemy.customDescription);
+      const desc = md.render(cleanMarkdown(enemy.customDescription));
       return `
         <div class="page">
           <div class="side"><img src="${enemy.imageURL || '/eotv-enemy-placeholder.png'}" /></div>

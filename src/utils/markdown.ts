@@ -18,17 +18,19 @@ const md = new MarkdownIt('commonmark', {
     'hr',
   ]);
 
-md.renderer.rules.paragraph_open = () => '<p class="text-sm mt-2">';
-md.renderer.rules.paragraph_close = () => '</p>';
+md.renderer.rules.paragraph_open = (tokens, idx) =>
+  tokens[idx].hidden ? '' : '<p class="text-sm mt-2">';
+md.renderer.rules.paragraph_close = (tokens, idx) =>
+  tokens[idx].hidden ? '' : '</p>';
 md.renderer.rules.strong_open = () => '<strong class="font-bold">';
 md.renderer.rules.strong_close = () => '</strong>';
 md.renderer.rules.em_open = () => '<em class="italic">';
 md.renderer.rules.em_close = () => '</em>';
-md.renderer.rules.bullet_list_open = () => '<ul class="list-disc list-inside mt-2">';
+md.renderer.rules.bullet_list_open = () => '<ul class="list-disc mt-2">';
 md.renderer.rules.bullet_list_close = () => '</ul>';
-md.renderer.rules.ordered_list_open = () => '<ol class="list-decimal list-inside mt-2">';
+md.renderer.rules.ordered_list_open = () => '<ol class="list-decimal mt-2">';
 md.renderer.rules.ordered_list_close = () => '</ol>';
-md.renderer.rules.list_item_open = () => '<li class="ml-4">';
+md.renderer.rules.list_item_open = () => '<li class="ml-4 pt-0">';
 md.renderer.rules.list_item_close = () => '</li>';
 md.renderer.rules.heading_open = (tokens: unknown, idx: number) => {
   const t = tokens as Record<number, { tag: string }>;
@@ -47,4 +49,15 @@ md.renderer.rules.heading_open = (tokens: unknown, idx: number) => {
 md.renderer.rules.heading_close = (tokens: unknown, idx: number) =>
   `</${(tokens as Record<number, { tag: string }>)[idx].tag}>`;
 
-export const renderMarkdown = (text: string): string => md.render(text);
+export const cleanMarkdown =  (text: string): string => {
+  return text
+    .replace(/<br\s*\/?>/gi, '  \n')
+    .replace(/<\/p>\s*<p>/gi, '\n\n')
+    .replace(/<\/?p>/gi, '\n');
+};
+
+export const renderMarkdown = (text: string): string => {
+  const cleaned = cleanMarkdown(text);
+  return md.render(cleaned);
+};
+
