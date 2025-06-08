@@ -68,7 +68,7 @@ const App: React.FC = () => {
       imageURL: e.imageURL,
       imageURL2: e.imageURL2,
       tags: e.tags,
-      draft: e.draft ?? false,
+      draft: e.draft,
       author: profiles[e.authorUid]?.displayName || ""
     }));
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
@@ -126,7 +126,7 @@ const App: React.FC = () => {
             imageURL: item.imageURL ?? '',
             imageURL2: item.imageURL2 ?? '',
             tags: item.tags ?? [],
-            draft: item.draft ?? false,
+            draft: item.draft ?? true,
             authorUid: user.uid,
             likedBy: [],
             createdAt: new Date().toISOString()

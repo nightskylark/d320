@@ -18,7 +18,7 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
   const [selectedTags, setSelectedTags] = useState<string[]>(enemy.tags || []);
   const [imageURL, setImageURL] = useState<string>(enemy.imageURL || "");
   const [imageURL2, setImageURL2] = useState<string>(enemy.imageURL2 || "");
-  const [draft, setDraft] = useState<boolean>(enemy.draft ?? false);
+  const [draft, setDraft] = useState<boolean>(enemy.draft ?? true);
   const initialRender = useRef(true);
 
   const saveChanges = useCallback(async () => {
@@ -29,7 +29,7 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
       tags: selectedTags,
       imageURL,
       imageURL2,
-      ...(draft ? { draft: true } : { draft: deleteField() })
+      draft: !!draft
     };
     if (!enemy.createdAt) {
       updatedEnemy.createdAt = new Date().toISOString();
