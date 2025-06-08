@@ -26,10 +26,10 @@ md.renderer.rules.strong_open = () => '<strong class="font-bold">';
 md.renderer.rules.strong_close = () => '</strong>';
 md.renderer.rules.em_open = () => '<em class="italic">';
 md.renderer.rules.em_close = () => '</em>';
-md.renderer.rules.bullet_list_open = () => '<ul class="list-disc mt-2">';
-md.renderer.rules.bullet_list_close = () => '</ul>';
-md.renderer.rules.ordered_list_open = () => '<ol class="list-decimal mt-2">';
-md.renderer.rules.ordered_list_close = () => '</ol>';
+export const cleanMarkdown = (text: string): string =>
+  text
+
+export const renderMarkdown = (text: string): string => md.render(cleanMarkdown(text));
 md.renderer.rules.list_item_open = () => '<li class="ml-4">';
 md.renderer.rules.list_item_close = () => '</li>';
 md.renderer.rules.heading_open = (tokens: unknown, idx: number) => {

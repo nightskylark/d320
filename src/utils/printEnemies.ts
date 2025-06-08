@@ -1,5 +1,6 @@
 import type { Enemy, UserProfile } from "../types";
 import MarkdownIt from "markdown-it";
+import { cleanMarkdown } from "./markdown";
 
 export const printEnemies = (
   enemies: Enemy[],
@@ -27,7 +28,7 @@ export const printEnemies = (
     .map((enemy) => {
       const author = authors[enemy.authorUid];
       const tags = enemy.tags.map((t) => `<span>${t}</span>`).join(" ");
-      const desc = md.render(enemy.customDescription);
+      const desc = md.render(cleanMarkdown(enemy.customDescription));
       return `
         <div class="page">
           <div class="side"><img src="${enemy.imageURL || '/eotv-enemy-placeholder.png'}" /></div>
