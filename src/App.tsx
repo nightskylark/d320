@@ -20,7 +20,7 @@ const App: React.FC = () => {
   const [tag, setTag] = useState("");
   const [liked, setLiked] = useState(false);
   const [author, setAuthor] = useState("");
-  const [sort, setSort] = useState("name");
+  const [sort, setSort] = useState("date");
   const [draftFilter, setDraftFilter] = useState("all");
   const [importing, setImporting] = useState(false);
   const [importProgress, setImportProgress] = useState(0);
