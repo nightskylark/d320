@@ -30,9 +30,9 @@ const ThemeToggle: React.FC = () => {
         checked={!dark}
         onChange={toggle}
       />
-      <div className="w-12 h-6 bg-gray-300 rounded-full peer-focus:ring-2 peer-focus:ring-blue-700 dark:peer-focus:ring-sky-300 dark:bg-gray-600">
+      <div className="w-12 h-6 bg-gray-300 rounded-full peer-focus:ring-2 peer-focus:ring-sky-500 dark:peer-focus:ring-sky-300 dark:bg-gray-600">
         <SunIcon className="absolute left-1 top-1 w-4 h-4 text-yellow-400" />
-        <MoonIcon className="absolute right-1 top-1 w-4 h-4 text-blue-700" />
+        <MoonIcon className="absolute right-1 top-1 w-4 h-4 text-sky-500" />
         <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform ${knobPosition}`} />
       </div>
     </label>

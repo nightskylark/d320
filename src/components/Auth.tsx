@@ -99,7 +99,7 @@ const Auth: React.FC = () => {
       ) : (
         <button
           onClick={login}
-          className="px-4 py-2 bg-blue-700 dark:bg-sky-300 hover:bg-blue-500 dark:hover:bg-sky-200 text-white dark:text-black font-semibold rounded transition cursor-pointer"
+          className="px-4 py-2 bg-sky-500 dark:bg-sky-300 hover:bg-sky-400 dark:hover:bg-sky-200 text-white dark:text-black font-semibold rounded transition cursor-pointer"
         >
           Войти через Google
         </button>

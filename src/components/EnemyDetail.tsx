@@ -143,7 +143,7 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
                     {/* Author */}
                     <div className="absolute bottom-4 right-4 flex items-center gap-2">
                         <span
-                            className="text-sm hover:underline cursor-pointer"
+                            className="text-sm text-white hover:underline cursor-pointer drop-shadow-[0_0_2px_#000]"
                             onClick={(e) => {
                                 setAboutAnchor(e.currentTarget.getBoundingClientRect());
                                 setAboutOpen(true);
@@ -159,30 +159,30 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
                         <button
                             onClick={toggleLike}
                             title={liked ? 'Сохранено' : 'Сохранить'}
-                            className="text-gray-300 hover:scale-110 transition"
+                            className="text-white drop-shadow-[0_0_2px_#000] hover:scale-110 transition"
                         >
                             {liked ? <StarSolid className="w-6 h-6" /> : <StarOutline className="w-6 h-6" />}
                         </button>
                         <button
                             onClick={handleShare}
                             title="Поделиться"
-                            className="text-gray-300 hover:scale-110 transition"
+                            className="text-white drop-shadow-[0_0_2px_#000] hover:scale-110 transition"
                         >
                             <LinkIcon className="w-6 h-6" />
                         </button>
                         <button
                             onClick={handlePrint}
                             title="Печать"
-                            className="text-gray-300 hover:scale-110 transition"
+                            className="text-white drop-shadow-[0_0_2px_#000] hover:scale-110 transition"
                         >
                             <PrinterIcon className="w-6 h-6" />
                         </button>
                         {user && user.uid === enemy.authorUid && (
                             <>
-                                <button onClick={() => setIsEditing(true)} className="text-gray-300 hover:text-white cursor-pointer drop-shadow-md">
+                                <button onClick={() => setIsEditing(true)} className="text-white cursor-pointer drop-shadow-[0_0_2px_#000] hover:scale-110 transition">
                                     <PencilSquareIcon className="w-6 h-6" />
                                 </button>
-                                <button onClick={onDelete} className="text-gray-300 hover:text-white cursor-pointer drop-shadow-md">
+                                <button onClick={onDelete} className="text-white cursor-pointer drop-shadow-[0_0_2px_#000] hover:scale-110 transition">
                                     <TrashIcon className="w-6 h-6" />
                                 </button>
                             </>
@@ -195,7 +195,7 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
                     )}
 
                     {/* Close button */}
-                    <button onClick={close} className="absolute top-2 right-2 text-gray-300 hover:text-white cursor-pointer drop-shadow-xl">
+                    <button onClick={close} className="absolute top-2 right-2 text-white cursor-pointer drop-shadow-[0_0_2px_#000] hover:scale-110 transition">
                         <XMarkIcon className="w-6 h-6" />
                     </button>
 
