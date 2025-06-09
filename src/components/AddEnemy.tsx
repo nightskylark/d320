@@ -19,9 +19,19 @@ const AddEnemy: React.FC = () => {
   const [imageURL2, setImageURL2] = useState("");
   const [draft, setDraft] = useState(true);
   const [publishError, setPublishError] = useState("");
+  const canPublish = () =>
+    !!imageURL && !!name.trim() && !!customDescription.trim() && selectedTags.length > 0;
+  const validatePublish = () => {
+    if (!canPublish()) {
+      setPublishError(
+        "Для публикации заполните имя, описание, добавьте тег и изображение"
+      );
+      return false;
+    }
+    return true;
+  };
   const handleDraftChange = (newDraft: boolean) => {
-    if (!newDraft && !imageURL) {
-      setPublishError("Чтобы опубликовать, загрузите основное изображение");
+    if (!newDraft && !validatePublish()) {
       return;
     }
     setPublishError("");
@@ -34,8 +44,7 @@ const AddEnemy: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
-    if (!draft && !imageURL) {
-      setPublishError("Чтобы опубликовать, загрузите основное изображение");
+    if (!draft && !validatePublish()) {
       return;
     }
     const newEnemy: Enemy = {
@@ -82,6 +91,12 @@ const AddEnemy: React.FC = () => {
       document.removeEventListener("keydown", handleEsc);
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    if (canPublish() && publishError) {
+      setPublishError("");
+    }
+  }, [name, customDescription, selectedTags, imageURL, publishError]);
 
   if (loginPrompt) {
     return (
@@ -154,7 +169,7 @@ const AddEnemy: React.FC = () => {
               <DraftSwitch draft={draft} setDraft={handleDraftChange} />
               <button
                 type="submit"
-                disabled={!user || (!draft && !imageURL)}
+                disabled={!user || (!draft && !canPublish())}
                 className="flex-1 flex items-center justify-center gap-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-sky-400 transition cursor-pointer disabled:opacity-50"
               >
                 <PlusIcon className="w-5 h-5" />

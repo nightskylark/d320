@@ -21,9 +21,19 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
   const [draft, setDraft] = useState<boolean>(enemy.draft ?? true);
   const [publishError, setPublishError] = useState("");
   const initialRender = useRef(true);
+  const canPublish = () =>
+    !!imageURL && !!name.trim() && !!customDescription.trim() && selectedTags.length > 0;
+  const validatePublish = () => {
+    if (!canPublish()) {
+      setPublishError(
+        "Для публикации заполните имя, описание, добавьте тег и изображение"
+      );
+      return false;
+    }
+    return true;
+  };
   const handleDraftChange = (newDraft: boolean) => {
-    if (!newDraft && !imageURL) {
-      setPublishError("Чтобы опубликовать, загрузите основное изображение");
+    if (!newDraft && !validatePublish()) {
       return;
     }
     setPublishError("");
@@ -31,10 +41,10 @@ const EditEnemy: React.FC<Props> = ({ enemy, onClose }) => {
   };
 
   useEffect(() => {
-    if (imageURL && publishError) {
+    if (canPublish() && publishError) {
       setPublishError("");
     }
-  }, [imageURL, publishError]);
+  }, [name, customDescription, selectedTags, imageURL, publishError]);
 
   const saveChanges = useCallback(async () => {
     const enemyDocRef = doc(db, "eotv-enemies", enemy.id!);
