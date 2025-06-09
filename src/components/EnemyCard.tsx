@@ -72,7 +72,7 @@ const EnemyCard: React.FC<Props> = ({ index, enemy, author, onClick }) => {
 
         <div className="p-2 flex flex-col">
             {/* Name */}
-            <p className="text-sm text-center font-bold mb-10 max-h-10 overflow-hidden text-ellipsis">{enemy.name}</p>
+            <p className="flex text-sm font-bold h-10 overflow-hidden text-ellipsis justify-center items-center text-center">{enemy.name}</p>
 
             {/* Tags */}
             <div className="absolute bottom-4 left-4 flex flex-col items-end gap-2">
