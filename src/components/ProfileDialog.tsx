@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { updateProfile, User } from "firebase/auth";
 import { db, auth } from "../firebase";
@@ -62,7 +63,7 @@ const ProfileDialog: React.FC<Props> = ({ onClose }) => {
 
   if (!user) return null;
 
-  return (
+  return createPortal(
     <div
       role="button"
       tabIndex={-1}
@@ -112,7 +113,8 @@ const ProfileDialog: React.FC<Props> = ({ onClose }) => {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
