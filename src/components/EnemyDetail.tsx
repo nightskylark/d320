@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { renderMarkdown } from "../utils/markdown";
 import { XMarkIcon, PencilSquareIcon, TrashIcon, ChevronLeftIcon, ChevronRightIcon, StarIcon as StarOutline, LinkIcon, PrinterIcon } from "@heroicons/react/24/outline";
-import { StarIcon as StarSolid } from "@heroicons/react/24/solid";
+import { StarIcon as StarSolid, PencilIcon, DocumentCheckIcon } from "@heroicons/react/24/solid";
 import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import { db } from "../firebase";
 import { printEnemies } from "../utils/printEnemies";
@@ -113,6 +113,15 @@ const EnemyDetail: React.FC<Props> = ({ enemy, author, onPrev, onNext, close, on
             : <>
                 {/* Expanded view */}
                 <div className="relative bg-white dark:bg-gray-900 rounded-2xl w-full flex flex-col sm:flex-row shadow-lg h-full max-w-7xl overflow-hidden">
+                    <div className="absolute top-4 left-4 flex items-center gap-1 text-white drop-shadow-[0_0_2px_#000]">
+                        {enemy.draft && (
+                            <>
+                                <PencilIcon className="w-5 h-5 text-sky-300" />
+                                <span className="text-xs">Черновик</span>
+                            </>
+                        )}
+                        
+                    </div>
                     {/* Left column - image 1 */}
                     <img
                         src={enemy.imageURL || "/eotv-enemy-placeholder.png"}

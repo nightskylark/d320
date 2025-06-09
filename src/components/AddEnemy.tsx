@@ -18,6 +18,25 @@ const AddEnemy: React.FC = () => {
   const [imageURL, setImageURL] = useState("");
   const [imageURL2, setImageURL2] = useState("");
   const [draft, setDraft] = useState(true);
+  const [publishError, setPublishError] = useState("");
+  const canPublish = () =>
+    !!imageURL && !!name.trim() && !!customDescription.trim() && selectedTags.length > 0;
+  const validatePublish = () => {
+    if (!canPublish()) {
+      setPublishError(
+        "Для публикации заполните имя, описание, добавьте тег и изображение"
+      );
+      return false;
+    }
+    return true;
+  };
+  const handleDraftChange = (newDraft: boolean) => {
+    if (!newDraft && !validatePublish()) {
+      return;
+    }
+    setPublishError("");
+    setDraft(newDraft);
+  };
   const user = useAuth();
   const formRef = useRef<HTMLFormElement | null>(null);
 
@@ -25,6 +44,9 @@ const AddEnemy: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
+    if (!draft && !validatePublish()) {
+      return;
+    }
     const newEnemy: Enemy = {
       name,
       customDescription,
@@ -44,6 +66,7 @@ const AddEnemy: React.FC = () => {
     setImageURL("");
     setImageURL2("");
     setDraft(true);
+    setPublishError("");
   };
 
   useEffect(() => {
@@ -60,12 +83,20 @@ const AddEnemy: React.FC = () => {
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
       document.addEventListener("keydown", handleEsc);
+    } else {
+      setPublishError("");
     }
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleEsc);
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    if (canPublish() && publishError) {
+      setPublishError("");
+    }
+  }, [name, customDescription, selectedTags, imageURL, publishError]);
 
   if (loginPrompt) {
     return (
@@ -87,6 +118,7 @@ const AddEnemy: React.FC = () => {
         onClick={() => {
           if (user) {
             setDraft(true);
+            setPublishError("");
             setIsOpen(true);
           } else {
             setLoginPrompt(true);
@@ -94,7 +126,7 @@ const AddEnemy: React.FC = () => {
         }}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
-            if (user) { setDraft(true); setIsOpen(true); } else setLoginPrompt(true);
+            if (user) { setDraft(true); setPublishError(""); setIsOpen(true); } else setLoginPrompt(true);
           }
         }}
       >
@@ -132,16 +164,21 @@ const AddEnemy: React.FC = () => {
           selectedTags={selectedTags}
           setSelectedTags={setSelectedTags}
         >
-          <div className="flex items-center gap-4 py-4">
-            <DraftSwitch draft={draft} setDraft={setDraft} />
-            <button
-              type="submit"
-              disabled={!user}
-              className="flex-1 flex items-center justify-center gap-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-sky-400 transition cursor-pointer"
-            >
-              <PlusIcon className="w-5 h-5" />
-              Добавить
-            </button>
+          <div className="flex flex-col gap-2 py-4">
+            <div className="flex items-center gap-4">
+              <DraftSwitch draft={draft} setDraft={handleDraftChange} />
+              <button
+                type="submit"
+                disabled={!user || (!draft && !canPublish())}
+                className="flex-1 flex items-center justify-center gap-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-sky-400 transition cursor-pointer disabled:opacity-50"
+              >
+                <PlusIcon className="w-5 h-5" />
+                Добавить
+              </button>
+            </div>
+            {publishError && (
+              <span className="text-xs text-red-600" role="alert">{publishError}</span>
+            )}
           </div>
         </EnemyFields>
         <ImageDropZone
