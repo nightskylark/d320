@@ -66,7 +66,7 @@ const ProfileDialog: React.FC<Props> = ({ onClose }) => {
     <div
       role="button"
       tabIndex={-1}
-      className="fixed inset-0 z-50 p-5 bg-gray-500 dark:bg-black flex items-center justify-center"
+      className="fixed inset-0 z-50 p-5 bg-gray-500/70 dark:bg-black/80 flex items-center justify-center"
       onClick={onClose}
     >
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
