@@ -9,11 +9,13 @@ import DraftSwitch from "./DraftSwitch";
 import LoginPrompt from "./LoginPrompt";
 import type { Enemy } from "../types";
 
+const DESCRIPTION_TEMAPLATE = "<Описание>\\\n**ПОЯВЛЕНИЕ** <Появление>\\\n**Сопротивление** <На чем держится сопротивление>.\\\n🔹 <Реакция>.\\\n**<Грань>**. <Описание грани>\\\n🔹 <Реакция грани>\\\n🔹 <Реакция грани>\\\n**<Грань>**. <Описание грани>\\\n🔹 <Реакция грани>\\\n🔹 <Реакция грани>\n\n...\n\n**КРАХ**\\\n🔻 <Реакция краха>\\\n🔻 <Реакция краха>\\\n...\n";
+
 const AddEnemy: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [loginPrompt, setLoginPrompt] = useState(false);
   const [name, setName] = useState("");
-  const [customDescription, setCustomDescription] = useState("");
+  const [customDescription, setCustomDescription] = useState(DESCRIPTION_TEMAPLATE);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [imageURL, setImageURL] = useState("");
   const [imageURL2, setImageURL2] = useState("");
