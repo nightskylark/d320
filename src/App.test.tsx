@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 
-jest.mock('./components/EnemyList', () => () => <div data-testid="enemy-list" />);
-jest.mock('./components/Header', () => () => <header />);
+jest.mock('./pages/eotvEnemies/components/EnemyList', () => () => <div data-testid="enemy-list" />);
+jest.mock('./components/layout/Header', () => () => <header />);
 jest.mock('./firebase', () => ({
   enemiesCollection: {},
   auth: {},
@@ -20,7 +20,18 @@ jest.mock('@milkdown/theme-nord', () => ({ nord: {} }));
 
 import App from './App';
 jest.mock('firebase/firestore', () => ({
-  onSnapshot: jest.fn(() => () => {})
+  collection: jest.fn(() => ({})),
+  onSnapshot: jest.fn(() => () => {}),
+  doc: jest.fn(),
+  updateDoc: jest.fn(),
+  addDoc: jest.fn(),
+  deleteDoc: jest.fn(),
+  getDoc: jest.fn(),
+  getDocs: jest.fn(),
+  query: jest.fn(),
+  where: jest.fn(),
+  arrayUnion: jest.fn(),
+  arrayRemove: jest.fn()
 }));
 jest.mock('firebase/auth', () => ({
   onAuthStateChanged: jest.fn(() => () => {})

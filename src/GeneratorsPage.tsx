@@ -1,5 +1,5 @@
-import Header from './components/Header';
-import Footer from './components/Footer';
+import React from 'react';
+import { Header, Footer } from './components/layout';
 
 const GeneratorsPage: React.FC = () => (
   <div className="min-h-screen flex flex-col bg-gray-50 text-gray-900 dark:bg-slate-900 dark:text-sky-200">
