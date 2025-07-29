@@ -3,7 +3,7 @@ import { ArrowUpTrayIcon } from "@heroicons/react/24/outline";
 
 interface FileDropZoneProps {
   currentFileUrl?: string;
-  onFileUpload: (file: File, setProgress: (progress: number) => void) => Promise<void> | void;
+  onFileUpload: (file: File, setProgress: (progress: number) => void) => Promise<void>;
   className?: string;
   accept?: string;
   placeholder?: string;
