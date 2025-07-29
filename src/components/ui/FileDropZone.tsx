@@ -33,6 +33,8 @@ const FileDropZone: React.FC<FileDropZoneProps> = ({
     
     try {
       await onFileUpload(file, setProgress);
+    } catch (error) {
+      console.error("File upload failed:", error);
     } finally {
       setIsUploading(false);
       setProgress(0);
