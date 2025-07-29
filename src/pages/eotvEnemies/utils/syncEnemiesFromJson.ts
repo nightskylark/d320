@@ -7,7 +7,7 @@ export interface JsonEnemy {
   authorUid: string;
 }
 
-import { addDoc, updateDoc, deleteDoc, getDoc, doc, onSnapshot, getDocs, query, where } from 'firebase/firestore';
+import { addDoc, getDocs, query, where } from 'firebase/firestore';
 import { enemiesCollection } from '../../../firebase';
 import type { Enemy } from '../../../types';
 
