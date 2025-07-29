@@ -20,7 +20,7 @@ const EotvEnemiesPage: React.FC = () => {
   const [tag, setTag] = useState("");
   const [liked, setLiked] = useState(false);
   const [author, setAuthor] = useState("");
-  const [sort, setSort] = useState("date"); // По умолчанию сортировка по дате
+  const [sort, setSort] = useState("date");
   const [draft, setDraft] = useState("all");
   const [importing, setImporting] = useState(false);
   const [importProgress, setImportProgress] = useState(0);
@@ -56,7 +56,6 @@ const EotvEnemiesPage: React.FC = () => {
     }
   };
 
-  // Функции для работы с фильтрами
   const handlePrint = () => {
     window.print();
   };
@@ -72,7 +71,6 @@ const EotvEnemiesPage: React.FC = () => {
   };
 
   const handleImport = async (file: File) => {
-    // Реализация импорта (если нужна)
     console.log('Import file:', file);
   };
 

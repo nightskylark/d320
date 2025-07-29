@@ -1,6 +1,5 @@
 import MarkdownIt from 'markdown-it';
 
-// Определяем минимальный интерфейс для token
 interface MarkdownToken {
   hidden?: boolean;
 }
