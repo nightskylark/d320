@@ -1,5 +1,10 @@
 import MarkdownIt from 'markdown-it';
 
+// Определяем минимальный интерфейс для token
+interface MarkdownToken {
+  hidden?: boolean;
+}
+
 const md = new MarkdownIt('commonmark', {
   html: false,
   linkify: false,
@@ -18,9 +23,9 @@ const md = new MarkdownIt('commonmark', {
     'hr',
   ]);
 
-md.renderer.rules.paragraph_open = (tokens: any, idx: number) =>
+md.renderer.rules.paragraph_open = (tokens: MarkdownToken[], idx: number) =>
   tokens[idx].hidden ? '' : '<p class="mb-4">';
-md.renderer.rules.paragraph_close = (tokens: any, idx: number) =>
+md.renderer.rules.paragraph_close = (tokens: MarkdownToken[], idx: number) =>
   tokens[idx].hidden ? '' : '</p>';
 md.renderer.rules.strong_open = () => '<strong class="font-bold">';
 md.renderer.rules.strong_close = () => '</strong>';
