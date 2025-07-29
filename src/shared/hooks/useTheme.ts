@@ -3,9 +3,14 @@ import { useEffect, useState } from "react";
 export function useTheme() {
   const [theme, setTheme] = useState(() => {
     if (typeof window !== "undefined") {
-      return localStorage.getItem("theme") || "dark";
+      const storedTheme = localStorage.getItem("theme");
+      if (storedTheme) {
+        return storedTheme;
+      }
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      return prefersDark ? "dark" : "light";
     }
-    return "dark";
+    return "light"; // Default to "light" for non-browser environments
   });
 
   useEffect(() => {
