@@ -13,7 +13,7 @@ const ImageDropZone: React.FC<Props> = ({
   imageURL, 
   setImageURL, 
   ownerUid, 
-  className = "w-full sm:w-3/14",
+  className = "w-full sm:w-1/4",
   placeholder
 }) => {
   const handleUpload = (file: File, setProgress: (progress: number) => void) => {
