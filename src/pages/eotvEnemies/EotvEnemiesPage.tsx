@@ -86,7 +86,7 @@ const EotvEnemiesPage: React.FC = () => {
     e.name.toLowerCase().includes(normalizedSearch) ||
     e.customDescription.toLowerCase().includes(normalizedSearch) ||
     e.tags.some(t => t.toLowerCase().includes(normalizedSearch)) ||
-    (e.customTags && e.customTags.some(t => t.toLowerCase().includes(normalizedSearch)))
+    e.customTags?.some(t => t.toLowerCase().includes(normalizedSearch))
   );
   if (tag) {
     filtered = filtered.filter(e => e.tags.includes(tag));
