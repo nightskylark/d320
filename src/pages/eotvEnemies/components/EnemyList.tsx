@@ -1,6 +1,6 @@
 import AddEnemy from "./AddEnemy";
 import EnemyCard from "./EnemyCard";
-import type { Enemy, UserProfile } from "../types";
+import type { Enemy, UserProfile } from "../../../types";
 
 interface Props {
   enemies: Enemy[];

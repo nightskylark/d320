@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ArrowUpTrayIcon } from "@heroicons/react/24/outline";
-import { uploadAvatar } from "../utils/uploadAvatar";
+import { uploadAvatar } from "../../shared/utils/uploadAvatar";
 
 interface Props {
   avatarURL: string;

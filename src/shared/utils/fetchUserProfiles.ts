@@ -1,6 +1,6 @@
 import { getDoc, doc } from "firebase/firestore";
-import { db } from "../firebase";
-import type { UserProfile } from "../types";
+import { db } from "../../firebase";
+import type { UserProfile } from "../../types";
 
 export const fetchUserProfiles = async (uids: string[]): Promise<Record<string, UserProfile>> => {
   const profiles: Record<string, UserProfile> = {};

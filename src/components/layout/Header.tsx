@@ -1,5 +1,5 @@
 import Auth from "./Auth";
-import ThemeToggle from "./ThemeToggle";
+import ThemeToggle from "../ui/ThemeToggle";
 
 const Header: React.FC = () => {
   return (

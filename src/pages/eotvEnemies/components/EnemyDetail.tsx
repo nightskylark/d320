@@ -1,15 +1,14 @@
 import { useState, useRef, useEffect } from "react";
-import { useAuth } from "../contexts/AuthContext";
-import { renderMarkdown } from "../utils/markdown";
+import { useAuth } from "../../../contexts/AuthContext";
+import { renderMarkdown } from "../../../shared/utils/markdown";
 import { XMarkIcon, PencilSquareIcon, TrashIcon, ChevronLeftIcon, ChevronRightIcon, StarIcon as StarOutline, LinkIcon, PrinterIcon } from "@heroicons/react/24/outline";
 import { StarIcon as StarSolid, PencilIcon, DocumentCheckIcon } from "@heroicons/react/24/solid";
 import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
-import { db } from "../firebase";
+import { db } from "../../../firebase";
 import { printEnemies } from "../utils/printEnemies";
 import EditEnemy from "./EditEnemy";
-import AboutDialog from "./AboutDialog";
-import type { Enemy, UserProfile } from "../types";
-import LoginPrompt from "./LoginPrompt";
+import { AboutDialog, LoginPrompt } from "../../../shared/components";
+import type { Enemy, UserProfile } from "../../../types";
 
 interface Props {
   enemy: Enemy;

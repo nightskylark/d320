@@ -1,5 +1,5 @@
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { storage } from "../firebase";
+import { storage } from "../../firebase";
 
 export const uploadImage = (
   userId: string,

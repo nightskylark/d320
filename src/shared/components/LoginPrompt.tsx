@@ -1,6 +1,6 @@
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { auth } from "../firebase";
+import { auth } from "../../firebase";
 
 interface Props {
   open: boolean;

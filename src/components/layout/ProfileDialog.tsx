@@ -2,9 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { updateProfile, User } from "firebase/auth";
-import { db, auth } from "../firebase";
-import { useAuth, useSetAuthUser } from "../contexts/AuthContext";
-import AvatarDropZone from "./AvatarDropZone";
+import { db, auth } from "../../firebase";
+import { useAuth, useSetAuthUser } from "../../contexts/AuthContext";
+import { AvatarDropZone } from "../ui";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 interface Props {

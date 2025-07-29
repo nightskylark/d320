@@ -1,7 +1,7 @@
 import { useEffect, useRef, useLayoutEffect, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import MarkdownIt from "markdown-it";
-import type { UserProfile } from "../types";
+import type { UserProfile } from "../../types";
 
 interface Props {
   user: UserProfile;

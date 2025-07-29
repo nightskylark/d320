@@ -7,9 +7,9 @@ export interface JsonEnemy {
   authorUid: string;
 }
 
-import { addDoc, getDocs, query, where } from 'firebase/firestore';
-import { enemiesCollection } from '../firebase';
-import type { Enemy } from '../types';
+import { addDoc, updateDoc, deleteDoc, getDoc, doc, onSnapshot, getDocs, query, where } from 'firebase/firestore';
+import { enemiesCollection } from '../../../firebase';
+import type { Enemy } from '../../../types';
 
 export const syncEnemiesFromJson = async (uid: string) => {
   return; // Disable sync for now

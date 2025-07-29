@@ -1,12 +1,12 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import { StarIcon as StarSolid, PencilIcon } from "@heroicons/react/24/solid";
 import { StarIcon as StarOutline } from "@heroicons/react/24/outline";
-import { db } from "../firebase";
-import { useAuth } from "../contexts/AuthContext";
-import { useFixedTags } from "../contexts/TagContext";
-import type { Enemy, UserProfile } from "../types";
-import LoginPrompt from "./LoginPrompt";
+import { db } from "../../../firebase";
+import { useAuth } from "../../../contexts/AuthContext";
+import { useFixedTags } from "../../../contexts/TagContext";
+import type { Enemy, UserProfile } from "../../../types";
+import { LoginPrompt } from "../../../shared/components";
 
 interface Props {
   index: number;

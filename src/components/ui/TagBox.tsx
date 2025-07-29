@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { useFixedTags } from "../contexts/TagContext";
+import { useFixedTags } from "../../contexts/TagContext";
 
 interface Props {
   selectedTags: string[];

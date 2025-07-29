@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { addDoc } from "firebase/firestore";
-import { enemiesCollection } from "../firebase";
-import { useAuth } from "../contexts/AuthContext";
-import ImageDropZone from "./ImageDropZone";
+import { enemiesCollection } from "../../../firebase";
+import { useAuth } from "../../../contexts/AuthContext";
+import { ImageDropZone } from "../../../components/ui";
 import EnemyFields from "./EnemyFields";
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import DraftSwitch from "./DraftSwitch";
-import LoginPrompt from "./LoginPrompt";
-import type { Enemy } from "../types";
+import LoginPrompt from "../../../shared/components/LoginPrompt";
+import type { Enemy } from "../../../types";
 
 const DESCRIPTION_TEMAPLATE = "<Описание>\\\n**ПОЯВЛЕНИЕ** <Появление>\\\n**Сопротивление** <На чем держится сопротивление>.\\\n🔹 <Реакция>.\\\n**<Грань>**. <Описание грани>\\\n🔹 <Реакция грани>\\\n🔹 <Реакция грани>\\\n**<Грань>**. <Описание грани>\\\n🔹 <Реакция грани>\\\n🔹 <Реакция грани>\n\n...\n\n**КРАХ**\\\n🔻 <Реакция краха>\\\n🔻 <Реакция краха>\\\n...\n";
 

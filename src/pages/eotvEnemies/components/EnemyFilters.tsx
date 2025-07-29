@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { StarIcon as StarSolid } from "@heroicons/react/24/solid";
 import { StarIcon as StarOutline, XMarkIcon, PrinterIcon, CubeIcon, ArrowDownTrayIcon, ArrowUpTrayIcon } from "@heroicons/react/24/outline";
-import type { UserProfile } from "../types";
-import { useFixedTags } from "../contexts/TagContext";
-import { useAuth } from "../contexts/AuthContext";
+import type { UserProfile } from "../../../types";
+import { useFixedTags } from "../../../contexts/TagContext";
+import { useAuth } from "../../../contexts/AuthContext";
 
 interface Props {
   search: string;

@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { doc, updateDoc, deleteField, FieldValue } from "firebase/firestore";
-import { db } from "../firebase";
+import { db } from "../../../firebase";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import DraftSwitch from "./DraftSwitch";
-import ImageDropZone from "./ImageDropZone";
+import { ImageDropZone } from "../../../components/ui";
 import EnemyFields from "./EnemyFields";
-import type { Enemy } from "../types";
+import type { Enemy } from "../../../types";
 
 interface Props {
   enemy: Enemy;

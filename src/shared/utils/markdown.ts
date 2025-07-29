@@ -18,9 +18,9 @@ const md = new MarkdownIt('commonmark', {
     'hr',
   ]);
 
-md.renderer.rules.paragraph_open = (tokens, idx) =>
-  tokens[idx].hidden ? '' : '<p class="text-sm mt-2">';
-md.renderer.rules.paragraph_close = (tokens, idx) =>
+md.renderer.rules.paragraph_open = (tokens: any, idx: number) =>
+  tokens[idx].hidden ? '' : '<p class="mb-4">';
+md.renderer.rules.paragraph_close = (tokens: any, idx: number) =>
   tokens[idx].hidden ? '' : '</p>';
 md.renderer.rules.strong_open = () => '<strong class="font-bold">';
 md.renderer.rules.strong_close = () => '</strong>';

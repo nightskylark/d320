@@ -1,6 +1,6 @@
-import type { Enemy, UserProfile } from "../types";
+import type { Enemy, UserProfile } from "../../../types";
 import MarkdownIt from "markdown-it";
-import { cleanMarkdown } from "./markdown";
+import { cleanMarkdown } from "../../../shared/utils/markdown";
 
 export const printEnemies = (
   enemies: Enemy[],

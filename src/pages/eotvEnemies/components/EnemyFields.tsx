@@ -1,5 +1,5 @@
-import TagBox from "./TagBox";
-import MarkdownEditor from "./MarkdownEditor";
+import { TagBox } from "../../../components/ui";
+import { MarkdownEditor } from "../../../components/ui";
 import type { FC, ReactNode } from "react";
 
 interface Props {
