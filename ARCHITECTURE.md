@@ -9,9 +9,10 @@ src/
 │   │   ├── ThemeToggle.tsx
 │   │   ├── ThemeIcons.tsx
 │   │   ├── TagBox.tsx
-│   │   ├── ImageDropZone.tsx
+│   │   ├── FileDropZone.tsx      # Базовый компонент для загрузки файлов
+│   │   ├── ImageDropZone.tsx     # Специализированный для изображений
 │   │   ├── MarkdownEditor.tsx
-│   │   └── AvatarDropZone.tsx
+│   │   └── AvatarDropZone.tsx    # Специализированный для аватаров
 │   ├── layout/          # Layout компоненты (хедер, футер, навигация)
 │   │   ├── Header.tsx
 │   │   ├── Footer.tsx  
