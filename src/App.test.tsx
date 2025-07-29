@@ -20,7 +20,18 @@ jest.mock('@milkdown/theme-nord', () => ({ nord: {} }));
 
 import App from './App';
 jest.mock('firebase/firestore', () => ({
-  onSnapshot: jest.fn(() => () => {})
+  collection: jest.fn(() => ({})),
+  onSnapshot: jest.fn(() => () => {}),
+  doc: jest.fn(),
+  updateDoc: jest.fn(),
+  addDoc: jest.fn(),
+  deleteDoc: jest.fn(),
+  getDoc: jest.fn(),
+  getDocs: jest.fn(),
+  query: jest.fn(),
+  where: jest.fn(),
+  arrayUnion: jest.fn(),
+  arrayRemove: jest.fn()
 }));
 jest.mock('firebase/auth', () => ({
   onAuthStateChanged: jest.fn(() => () => {})
