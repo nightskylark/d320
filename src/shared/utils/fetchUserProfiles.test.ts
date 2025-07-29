@@ -1,7 +1,7 @@
 import { fetchUserProfiles } from './fetchUserProfiles';
 import { getDoc, doc } from 'firebase/firestore';
 
-jest.mock('../firebase', () => ({ db: {} }));
+jest.mock('../../firebase', () => ({ db: {} }));
 
 jest.mock('firebase/firestore', () => ({
   getDoc: jest.fn(),

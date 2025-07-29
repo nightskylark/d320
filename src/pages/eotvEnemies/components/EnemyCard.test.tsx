@@ -1,18 +1,18 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import EnemyCard from './EnemyCard';
-import type { Enemy, UserProfile } from '../types';
-import { useAuth } from '../contexts/AuthContext';
-import { useFixedTags } from '../contexts/TagContext';
+import type { Enemy, UserProfile } from '../../../types';
+import { useAuth } from '../../../contexts/AuthContext';
+import { useFixedTags } from '../../../contexts/TagContext';
 
-jest.mock('../contexts/AuthContext', () => ({
+jest.mock('../../../contexts/AuthContext', () => ({
   useAuth: jest.fn()
 }));
 
-jest.mock('../contexts/TagContext', () => ({
+jest.mock('../../../contexts/TagContext', () => ({
   useFixedTags: jest.fn()
 }));
 
-jest.mock('../firebase', () => ({ db: {} }));
+jest.mock('../../../firebase', () => ({ db: {} }));
 
 jest.mock('firebase/firestore', () => ({
   doc: jest.fn(),

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 
-jest.mock('./components/EnemyList', () => () => <div data-testid="enemy-list" />);
-jest.mock('./components/Header', () => () => <header />);
+jest.mock('./pages/eotvEnemies/components/EnemyList', () => () => <div data-testid="enemy-list" />);
+jest.mock('./components/layout/Header', () => () => <header />);
 jest.mock('./firebase', () => ({
   enemiesCollection: {},
   auth: {},
