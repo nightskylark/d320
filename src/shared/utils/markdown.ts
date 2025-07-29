@@ -23,7 +23,7 @@ const md = new MarkdownIt('commonmark', {
   ]);
 
 md.renderer.rules.paragraph_open = (tokens: MarkdownToken[], idx: number) =>
-  tokens[idx].hidden ? '' : '<p class="mb-4">';
+  tokens[idx].hidden ? '' : '<p class="text-sm mt-2">';
 md.renderer.rules.paragraph_close = (tokens: MarkdownToken[], idx: number) =>
   tokens[idx].hidden ? '' : '</p>';
 md.renderer.rules.strong_open = () => '<strong class="font-bold">';
