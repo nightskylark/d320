@@ -47,6 +47,7 @@ src/
 │   ├── utils/          # Общие утилиты
 │   │   ├── fetchUserProfiles.ts
 │   │   ├── fetchUserProfiles.test.ts
+│   │   ├── uploadFile.ts
 │   │   ├── uploadAvatar.ts
 │   │   ├── uploadImage.ts
 │   │   └── markdown.ts
