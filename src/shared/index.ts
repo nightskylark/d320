@@ -9,3 +9,4 @@ export { useTheme } from './hooks/useTheme';
 export { fetchUserProfiles } from './utils/fetchUserProfiles';
 export { uploadAvatar } from './utils/uploadAvatar';
 export { uploadImage } from './utils/uploadImage';
+export { uploadFile } from './utils/uploadFile';

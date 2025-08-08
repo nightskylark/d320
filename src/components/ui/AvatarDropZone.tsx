@@ -14,8 +14,12 @@ const AvatarDropZone: React.FC<Props> = ({
   ownerUid, 
   className = ""
 }) => {
-  const handleUpload = (file: File, setProgress: (progress: number) => void) => {
-    return uploadAvatar(ownerUid, file, setAvatarURL, setProgress);
+  const handleUpload = async (
+    file: File,
+    setProgress: (progress: number) => void
+  ) => {
+    const url = await uploadAvatar(ownerUid, file, setProgress);
+    setAvatarURL(url);
   };
 
   return (

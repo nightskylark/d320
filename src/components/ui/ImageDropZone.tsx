@@ -16,8 +16,12 @@ const ImageDropZone: React.FC<Props> = ({
   className = "w-full sm:w-1/4",
   placeholder
 }) => {
-  const handleUpload = (file: File, setProgress: (progress: number) => void) => {
-    return uploadImage(ownerUid, file, setImageURL, setProgress);
+  const handleUpload = async (
+    file: File,
+    setProgress: (progress: number) => void
+  ) => {
+    const url = await uploadImage(ownerUid, file, setProgress);
+    setImageURL(url);
   };
 
   return (
