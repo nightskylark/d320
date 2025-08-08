@@ -1,6 +1,10 @@
 import { defineConfig } from 'vite';
-import tailwindcss from '@tailwindcss/vite'
+import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+
+const isCI = !!process.env.GITHUB_REPOSITORY;
+// for pages by address https://<user>.github.io/d320/
+const base = isCI ? '/d320/' : '/';
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
@@ -14,7 +18,7 @@ export default defineConfig({
   define: {
     global: 'globalThis',
   },
-  base: '/',
+  base,
 });
 
 

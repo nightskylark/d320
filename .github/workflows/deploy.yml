@@ -1,36 +1,54 @@
-name: Manual deploy
+name: Deploy (manual)
 
 on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Deploy environment'
-        required: true
-        default: prod
+        description: 'Target environment (prod/stage, not used by Pages but kept for future)'
+        required: false
+        default: 'prod'
+      version:
+        description: 'Release/version label (optional)'
+        required: false
 
 permissions:
-  contents: read
-  id-token: write
+  contents: write
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
-      - run: npm ci
-      - name: Configure git
+          node-version: '20'
+
+      - name: Install deps (CI clean install)
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Configure git auth for gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-      - name: Deploy
+          git remote set-url origin "https://git:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
+
+      - name: Deploy (gh-pages)
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "Running npm run deploy"
-          npm run deploy
+          # Если нужно — пробрасываем inputs в скрипт (на будущее)
+          if [ -n "${{ inputs.version }}" ]; then
+            npm run deploy -- -u "github-actions-bot <support+actions@github.com>"
+          else
+            npm run deploy -- -u "github-actions-bot <support+actions@github.com>"
+          fi
 
