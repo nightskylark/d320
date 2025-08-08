@@ -31,6 +31,8 @@ jobs:
         run: npm ci
 
       - name: Build
+        env:
+          VITE_BASE: /d320/
         run: npm run build
 
       - name: Configure git auth for gh-pages
