@@ -7,9 +7,6 @@ on:
         description: 'Deploy environment'
         required: true
         default: prod
-      version:
-        description: 'Application version'
-        required: false
 
 permissions:
   contents: read
@@ -30,10 +27,6 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          CMD="npm run deploy -- --env ${{ inputs.environment }}"
-          if [ -n "${{ inputs.version }}" ]; then
-            CMD="$CMD --version ${{ inputs.version }}"
-          fi
-          echo "Running $CMD"
-          $CMD
+          echo "Running npm run deploy"
+          npm run deploy
 
