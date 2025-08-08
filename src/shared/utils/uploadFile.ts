@@ -17,7 +17,7 @@ export const uploadFile = (
         setProgress(progress);
       },
       error => {
-        console.error("Upload error:", error);
+        console.error("Failed to upload file to Firebase Storage:", error);
         reject(error);
       },
       async () => {
