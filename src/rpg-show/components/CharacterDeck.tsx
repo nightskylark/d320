@@ -6,16 +6,19 @@ interface CharacterDeckProps {
 
 const CharacterDeck: React.FC<CharacterDeckProps> = ({ characters }) => {
   return (
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-      {characters.map((character) => (
-        <article
-          key={character.id}
-          className="rounded-2xl border border-white/10 bg-slate-900/70 p-4 shadow-xl"
-          style={{ boxShadow: `0 10px 35px -20px ${character.accent}` }}
-        >
-          <div className="mb-3 h-1 w-20 rounded-full" style={{ backgroundColor: character.accent }} />
-          <h3 className="text-lg font-semibold text-white">{character.name}</h3>
-          {character.subtitle ? <p className="mt-1 text-sm text-slate-300">{character.subtitle}</p> : null}
+    <div className="grid gap-3 sm:grid-cols-2">
+      {characters.map((character, index) => (
+        <article key={character.id} className="rounded-2xl border border-white/10 bg-slate-900/70 p-3">
+          <div className="mb-2 text-sm text-slate-300">{character.name || `Персонаж ${index + 1}`}</div>
+          <div className="relative aspect-[210/297] overflow-hidden rounded-xl border border-white/10 bg-slate-950/70">
+            {character.imageUrl ? (
+              <img src={character.imageUrl} alt={character.name || `Персонаж ${index + 1}`} className="h-full w-full object-cover" />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center text-center text-sm text-slate-400">
+                Плейсхолдер A4
+              </div>
+            )}
+          </div>
         </article>
       ))}
     </div>

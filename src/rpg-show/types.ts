@@ -7,9 +7,9 @@ export type PollStatus = "ACTIVE" | "FINISHED";
 export interface CharacterCard {
   id: string;
   name: string;
+  imageUrl?: string;
   subtitle?: string;
-  avatar?: string;
-  accent: string;
+  accent?: string;
 }
 
 export interface ShowDoc {
@@ -52,6 +52,6 @@ export interface PollStats {
 
 export interface StartPollPayload {
   question: string;
-  options: [string, string, string];
+  options: string[];
   durationSec: number;
 }

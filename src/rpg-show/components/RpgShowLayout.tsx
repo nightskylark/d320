@@ -1,25 +1,22 @@
 import type { ReactNode } from "react";
 
-type ViewType = "audience" | "master" | "screen";
-
 interface RpgShowLayoutProps {
-  showId: string;
-  view: ViewType;
+  showId?: string;
+  showIdVisible?: boolean;
   title: string;
   subtitle?: string;
   children: ReactNode;
   toolbar?: ReactNode;
 }
 
-const buildHref = (view: ViewType, showId: string): string => `/rpg-show/${view}?showId=${encodeURIComponent(showId)}`;
-
-const tabs: { id: ViewType; label: string }[] = [
-  { id: "audience", label: "Пульт зрителя" },
-  { id: "master", label: "Панель мастера" },
-  { id: "screen", label: "Экран сцены" },
-];
-
-const RpgShowLayout: React.FC<RpgShowLayoutProps> = ({ showId, view, title, subtitle, children, toolbar }) => {
+const RpgShowLayout: React.FC<RpgShowLayoutProps> = ({
+  showId,
+  showIdVisible = true,
+  title,
+  subtitle,
+  children,
+  toolbar,
+}) => {
   return (
     <div className="rpg-show-shell min-h-screen text-slate-100">
       <div className="rpg-show-overlay" />
@@ -31,26 +28,8 @@ const RpgShowLayout: React.FC<RpgShowLayoutProps> = ({ showId, view, title, subt
               <h1 className="mt-1 text-2xl font-semibold sm:text-3xl">{title}</h1>
               {subtitle ? <p className="mt-1 text-sm text-slate-300">{subtitle}</p> : null}
             </div>
-            <div className="text-xs text-slate-400">showId: {showId}</div>
+            {showIdVisible && showId ? <div className="text-xs text-slate-400">showId: {showId}</div> : null}
           </div>
-          <nav className="mt-4 flex flex-wrap gap-2">
-            {tabs.map((tab) => {
-              const active = tab.id === view;
-              return (
-                <a
-                  key={tab.id}
-                  href={buildHref(tab.id, showId)}
-                  className={`rounded-full border px-4 py-1.5 text-sm transition ${
-                    active
-                      ? "border-amber-300 bg-amber-300/20 text-amber-100"
-                      : "border-slate-500/60 bg-slate-900/50 text-slate-300 hover:border-slate-300"
-                  }`}
-                >
-                  {tab.label}
-                </a>
-              );
-            })}
-          </nav>
           {toolbar ? <div className="mt-4">{toolbar}</div> : null}
         </header>
         {children}

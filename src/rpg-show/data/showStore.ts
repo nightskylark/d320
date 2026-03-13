@@ -2,15 +2,17 @@ import {
   collection,
   doc,
   getDoc,
+  limit,
   onSnapshot,
   orderBy,
   query,
   runTransaction,
   setDoc,
   updateDoc,
-  limit,
+  where,
 } from "firebase/firestore";
 import { db } from "../../firebase";
+import { generateReadableShowId, normalizeShowIdInput } from "../utils/showId";
 import type {
   CharacterCard,
   PollDoc,
@@ -29,53 +31,18 @@ const POLLS_COLLECTION = "polls";
 const VOTES_COLLECTION = "votes";
 
 const DEFAULT_CHARACTERS: CharacterCard[] = [
-  {
-    id: "char-1",
-    name: "Капитан Ро",
-    subtitle: "Тактик и штурман",
-    accent: "#f97316",
-  },
-  {
-    id: "char-2",
-    name: "Мира К",
-    subtitle: "Псионик и дипломат",
-    accent: "#0ea5e9",
-  },
-  {
-    id: "char-3",
-    name: "Ригг",
-    subtitle: "Инженер и взломщик",
-    accent: "#22c55e",
-  },
+  { id: "char-1", name: "Персонаж 1" },
+  { id: "char-2", name: "Персонаж 2" },
+  { id: "char-3", name: "Персонаж 3" },
+  { id: "char-4", name: "Персонаж 4" },
 ];
 
 const isString = (value: unknown): value is string => typeof value === "string";
 
 const isNumber = (value: unknown): value is number => typeof value === "number" && Number.isFinite(value);
 
-const normalizeCharacters = (value: unknown): CharacterCard[] => {
-  if (!Array.isArray(value) || value.length === 0) {
-    return DEFAULT_CHARACTERS;
-  }
-
-  const cards = value
-    .map((item, index) => {
-      const raw = item as Partial<CharacterCard>;
-      const name = isString(raw.name) && raw.name.trim() ? raw.name.trim() : `Персонаж ${index + 1}`;
-      return {
-        id: isString(raw.id) && raw.id.trim() ? raw.id : `char-${index + 1}`,
-        name,
-        subtitle: isString(raw.subtitle) ? raw.subtitle : "",
-        avatar: isString(raw.avatar) ? raw.avatar : "",
-        accent: isString(raw.accent) && raw.accent.trim() ? raw.accent : "#64748b",
-      } as CharacterCard;
-    })
-    .slice(0, 6);
-
-  return cards.length > 0 ? cards : DEFAULT_CHARACTERS;
-};
-
 const showRef = (showId: string) => doc(collection(db, SHOWS_COLLECTION), showId);
+const showsCollectionRef = () => collection(db, SHOWS_COLLECTION);
 const pollsCollectionRef = (showId: string) => collection(showRef(showId), POLLS_COLLECTION);
 const pollRef = (showId: string, pollId: string) => doc(pollsCollectionRef(showId), pollId);
 const votesCollectionRef = (showId: string, pollId: string) => collection(pollRef(showId, pollId), VOTES_COLLECTION);
@@ -93,6 +60,37 @@ const mapScreenMode = (value: unknown): ScreenMode => {
     return value;
   }
   return "IDLE";
+};
+
+const normalizeCharacters = (value: unknown): CharacterCard[] => {
+  if (!Array.isArray(value)) {
+    return DEFAULT_CHARACTERS;
+  }
+
+  const normalized = value
+    .map((item, index) => {
+      const data = (item as Partial<CharacterCard>) ?? {};
+      const legacyAvatar = (data as { avatar?: unknown }).avatar;
+      const imageUrl = isString(data.imageUrl) ? data.imageUrl : isString(legacyAvatar) ? legacyAvatar : "";
+      return {
+        id: isString(data.id) && data.id.trim() ? data.id : `char-${index + 1}`,
+        name: isString(data.name) && data.name.trim() ? data.name.trim() : `Персонаж ${index + 1}`,
+        imageUrl,
+        subtitle: isString(data.subtitle) ? data.subtitle : "",
+      } satisfies CharacterCard;
+    })
+    .slice(0, 8);
+
+  return normalized.length > 0 ? normalized : DEFAULT_CHARACTERS;
+};
+
+const normalizePollOptions = (value: unknown): string[] => {
+  if (!Array.isArray(value)) {
+    return ["", "", ""];
+  }
+
+  const options = value.map((item) => (isString(item) ? item : "")).slice(0, 12);
+  return options.length > 0 ? options : ["", "", ""];
 };
 
 const mapShow = (id: string, raw: unknown): ShowDoc => {
@@ -116,28 +114,14 @@ const mapShow = (id: string, raw: unknown): ShowDoc => {
 
 const mapPoll = (id: string, raw: unknown, showId: string): PollDoc => {
   const data = (raw as Partial<PollDoc>) ?? {};
-  const optionsRaw = Array.isArray(data.options) ? data.options : [];
-  const options = optionsRaw
-    .slice(0, 3)
-    .map((option, idx) => {
-      if (isString(option) && option.trim()) {
-        return option.trim();
-      }
-      return `Вариант ${idx + 1}`;
-    }) as [string, string, string] | string[];
-
-  while (options.length < 3) {
-    options.push(`Вариант ${options.length + 1}`);
-  }
-
   const startedAt = isNumber(data.startedAt) ? data.startedAt : Date.now();
   const durationSec = isNumber(data.durationSec) ? data.durationSec : 30;
 
   return {
     id,
     showId,
-    question: isString(data.question) && data.question.trim() ? data.question : "Что делают герои дальше?",
-    options: options.slice(0, 3),
+    question: isString(data.question) ? data.question : "",
+    options: normalizePollOptions(data.options),
     status: data.status === "FINISHED" ? "FINISHED" : "ACTIVE",
     durationSec,
     startedAt,
@@ -180,7 +164,7 @@ const buildStats = (votes: VoteDoc[], optionCount: number): PollStats => {
   };
 };
 
-const defaultShow = (showId: string, name = "RPG Show", masterUid: string | null = null): ShowDoc => {
+const createDefaultShow = (showId: string, name: string, masterUid: string): ShowDoc => {
   const now = Date.now();
   return {
     id: showId,
@@ -196,7 +180,28 @@ const defaultShow = (showId: string, name = "RPG Show", masterUid: string | null
   };
 };
 
-export const ensureShow = async (showId: string, name = "RPG Show", masterUid: string | null = null): Promise<ShowDoc> => {
+const toValidOptions = (options: string[]): string[] => {
+  const normalized = options.map((item) => item.trim()).slice(0, 12);
+  return normalized.length > 0 ? normalized : ["", "", ""];
+};
+
+const mapModeToStatus = (mode: ScreenMode): ShowStatus => {
+  if (mode === "POLL") {
+    return "POLL_ACTIVE";
+  }
+
+  if (mode === "RESULT") {
+    return "POLL_RESULT";
+  }
+
+  return "IDLE";
+};
+
+export const ensureShow = async (
+  showId: string,
+  name = "RPG Show",
+  masterUid?: string | null
+): Promise<ShowDoc> => {
   const ref = showRef(showId);
   const snapshot = await getDoc(ref);
 
@@ -204,9 +209,51 @@ export const ensureShow = async (showId: string, name = "RPG Show", masterUid: s
     return mapShow(snapshot.id, snapshot.data());
   }
 
-  const show = defaultShow(showId, name, masterUid);
+  if (!masterUid) {
+    throw new Error("SHOW_NOT_FOUND");
+  }
+
+  const show = createDefaultShow(showId, name, masterUid);
   await setDoc(ref, show, { merge: true });
   return show;
+};
+
+export const createShow = async (masterUid: string, name: string): Promise<ShowDoc> => {
+  const showName = name.trim() || `Новое шоу ${new Date().toLocaleDateString()}`;
+  let resolvedId = "";
+
+  for (let attempt = 0; attempt < 24; attempt += 1) {
+    const candidate = normalizeShowIdInput(generateReadableShowId());
+    if (!candidate) {
+      continue;
+    }
+
+    const candidateSnapshot = await getDoc(showRef(candidate));
+    if (!candidateSnapshot.exists()) {
+      resolvedId = candidate;
+      break;
+    }
+  }
+
+  if (!resolvedId) {
+    resolvedId = doc(showsCollectionRef()).id;
+  }
+
+  const show = createDefaultShow(resolvedId, showName, masterUid);
+  await setDoc(showRef(resolvedId), show);
+  return show;
+};
+
+export const subscribeOwnedShows = (ownerUid: string, onChange: (shows: ShowDoc[]) => void): (() => void) => {
+  const ownerQuery = query(showsCollectionRef(), where("masterUid", "==", ownerUid));
+
+  return onSnapshot(ownerQuery, (snapshot) => {
+    const shows = snapshot.docs
+      .map((item) => mapShow(item.id, item.data()))
+      .sort((a, b) => b.createdAt - a.createdAt);
+
+    onChange(shows);
+  });
 };
 
 export const subscribeShow = (showId: string, onChange: (show: ShowDoc | null) => void): (() => void) => {
@@ -279,23 +326,25 @@ export const subscribeVoterVote = (
   });
 };
 
+export const updateShowName = async (showId: string, name: string): Promise<void> => {
+  await updateDoc(showRef(showId), {
+    name,
+    updatedAt: Date.now(),
+  });
+};
+
+export const updateShowCharacters = async (showId: string, characters: CharacterCard[]): Promise<void> => {
+  await updateDoc(showRef(showId), {
+    characters,
+    updatedAt: Date.now(),
+  });
+};
+
 export const setAllowVoteChange = async (showId: string, allowVoteChange: boolean): Promise<void> => {
   await updateDoc(showRef(showId), {
     allowVoteChange,
     updatedAt: Date.now(),
   });
-};
-
-const mapModeToStatus = (mode: ScreenMode): ShowStatus => {
-  if (mode === "POLL") {
-    return "POLL_ACTIVE";
-  }
-
-  if (mode === "RESULT") {
-    return "POLL_RESULT";
-  }
-
-  return "IDLE";
 };
 
 export const setScreenMode = async (showId: string, mode: ScreenMode): Promise<void> => {
@@ -306,15 +355,8 @@ export const setScreenMode = async (showId: string, mode: ScreenMode): Promise<v
   });
 };
 
-export const updateShowName = async (showId: string, name: string): Promise<void> => {
-  await updateDoc(showRef(showId), {
-    name,
-    updatedAt: Date.now(),
-  });
-};
-
 export const startPoll = async (showId: string, payload: StartPollPayload): Promise<string> => {
-  const activePollId = await runTransaction(db, async (transaction) => {
+  const pollId = await runTransaction(db, async (transaction) => {
     const now = Date.now();
     const showSnapshot = await transaction.get(showRef(showId));
     if (!showSnapshot.exists()) {
@@ -338,12 +380,13 @@ export const startPoll = async (showId: string, payload: StartPollPayload): Prom
       }
     }
 
+    const options = toValidOptions(payload.options);
     const newPollReference = doc(pollsCollectionRef(showId));
     const poll: PollDoc = {
       id: newPollReference.id,
       showId,
       question: payload.question,
-      options: payload.options,
+      options,
       status: "ACTIVE",
       durationSec: payload.durationSec,
       startedAt: now,
@@ -362,7 +405,7 @@ export const startPoll = async (showId: string, payload: StartPollPayload): Prom
     return newPollReference.id;
   });
 
-  return activePollId;
+  return pollId;
 };
 
 export const stopPoll = async (showId: string, pollId?: string): Promise<void> => {

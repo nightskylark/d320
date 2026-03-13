@@ -1,14 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import CharacterDeck from "../components/CharacterDeck";
 import PollResults from "../components/PollResults";
 import {
   ensurePollFinished,
-  ensureShow,
   subscribePoll,
   subscribePollVotes,
   subscribeShow,
 } from "../data/showStore";
-import type { PollDoc, PollStats, ShowDoc } from "../types";
+import type { CharacterCard, PollDoc, PollStats, ShowDoc } from "../types";
 import { formatClock, secondsLeft } from "../utils/time";
 
 interface ScreenPageProps {
@@ -21,6 +19,31 @@ const EMPTY_STATS: PollStats = {
   optionPercents: [0, 0, 0],
 };
 
+const placeholderCard = (index: number): CharacterCard => ({
+  id: `placeholder-${index + 1}`,
+  name: `Персонаж ${index + 1}`,
+  imageUrl: "",
+});
+
+const ScreenCharacterCard: React.FC<{ card: CharacterCard; index: number }> = ({ card, index }) => {
+  return (
+    <article className="h-full w-fit min-h-0 rounded-2xl border border-white/15 bg-slate-900/75 p-2 shadow-2xl">
+      <div className="mb-1 w-full truncate px-1 text-center text-sm text-slate-300">{card.name || `Персонаж ${index + 1}`}</div>
+      <div className="flex h-[calc(100%-1.35rem)] items-center justify-center">
+        <div className="relative h-full aspect-[210/297] overflow-hidden rounded-xl border border-white/10 bg-slate-950/80">
+          {card.imageUrl ? (
+            <img src={card.imageUrl} alt={card.name || `Персонаж ${index + 1}`} className="h-full w-full object-contain" />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center text-center text-sm text-slate-400">
+              A4 плейсхолдер
+            </div>
+          )}
+        </div>
+      </div>
+    </article>
+  );
+};
+
 const ScreenPage: React.FC<ScreenPageProps> = ({ showId }) => {
   const [show, setShow] = useState<ShowDoc | null>(null);
   const [poll, setPoll] = useState<PollDoc | null>(null);
@@ -29,12 +52,6 @@ const ScreenPage: React.FC<ScreenPageProps> = ({ showId }) => {
   const [clockTick, setClockTick] = useState(() => Date.now());
 
   const autoFinishLock = useRef(false);
-
-  useEffect(() => {
-    ensureShow(showId).catch(() => {
-      setErrorText("Нет подключения к источнику шоу");
-    });
-  }, [showId]);
 
   useEffect(() => {
     const timer = window.setInterval(() => setClockTick(Date.now()), 1000);
@@ -85,64 +102,82 @@ const ScreenPage: React.FC<ScreenPageProps> = ({ showId }) => {
       });
   }, [poll, seconds, showId]);
 
+  const cardsSource = show?.characters ?? [];
+  const cards = Array.from({ length: 4 }, (_, index) => cardsSource[index] ?? placeholderCard(index));
+
+  const leftCards = cards.slice(0, 2);
+  const rightCards = cards.slice(2, 4);
+
   const isPollVisible = show?.screenMode === "POLL" && poll && poll.status === "ACTIVE" && seconds > 0;
-  const isResultVisible = show?.screenMode === "RESULT" || (poll && (poll.status === "FINISHED" || seconds === 0));
+  const isResultVisible = show?.screenMode === "RESULT" && poll;
+  const isIdleVisible = show?.screenMode !== "POLL" && show?.screenMode !== "RESULT";
 
   return (
-    <div className="rpg-screen min-h-screen px-4 pb-8 pt-6 text-slate-100 sm:px-8">
-      <header className="mb-6 flex flex-wrap items-end justify-between gap-2">
-        <div>
-          <p className="text-xs uppercase tracking-[0.22em] text-cyan-200/85">RPG show screen</p>
-          <h1 className="text-3xl font-semibold sm:text-5xl">{show?.name ?? "RPG Show"}</h1>
-        </div>
-        <div className="text-right text-sm text-slate-300">
-          <div>showId: {showId}</div>
-          <div>{new Date(clockTick).toLocaleTimeString()}</div>
-        </div>
-      </header>
+    <div className="rpg-screen h-screen overflow-hidden px-3 py-3 text-slate-100 sm:px-4 sm:py-4">
+      <div className="mx-auto grid h-full w-full gap-3 lg:grid-cols-[auto_minmax(0,1fr)_auto]">
+        <section className="grid min-h-0 w-fit grid-rows-2 justify-items-center gap-3">
+          {leftCards.map((card, index) => (
+            <ScreenCharacterCard key={card.id} card={card} index={index} />
+          ))}
+        </section>
 
-      <section className="mb-8">
-        <CharacterDeck characters={show?.characters ?? []} />
-      </section>
+        <section className="min-h-0 rounded-3xl border border-white/15 bg-slate-900/75 p-4 shadow-[0_18px_90px_-50px_rgba(14,165,233,0.6)] sm:p-5">
+          <div className="flex h-full min-h-0 flex-col">
+            <header className="mb-3 shrink-0 text-center">
+              <p className="text-xs uppercase tracking-[0.24em] text-cyan-200/85">RPG show screen</p>
+              <h1 className="mt-1 text-4xl font-semibold sm:text-6xl">{show?.name ?? "RPG Show"}</h1>
+              <p className="mt-1 text-sm text-slate-300">{new Date(clockTick).toLocaleTimeString()}</p>
+            </header>
 
-      <section className="rounded-3xl border border-white/15 bg-slate-950/70 p-6 shadow-[0_18px_80px_-40px_rgba(14,165,233,0.7)] sm:p-8">
-        {isPollVisible && poll ? (
-          <div>
-            <p className="mb-2 text-sm uppercase tracking-[0.2em] text-cyan-200">Опрос активен</p>
-            <h2 className="mb-4 text-2xl font-semibold sm:text-4xl">{poll.question}</h2>
-            <div className="mb-5 text-4xl font-bold text-amber-200 sm:text-6xl">{formatClock(seconds)}</div>
-            <div className="grid gap-3 sm:grid-cols-3">
-              {poll.options.map((option, index) => (
-                <article
-                  key={`${poll.id}-screen-option-${index}`}
-                  className="rounded-2xl border border-cyan-300/25 bg-slate-900/70 px-4 py-5"
-                >
-                  <p className="mb-2 text-3xl font-bold text-cyan-200">{index + 1}</p>
-                  <p className="text-lg text-slate-100">{option}</p>
-                </article>
-              ))}
+            <div className="min-h-0 flex-1">
+              {isIdleVisible ? (
+                <div className="flex h-full flex-col items-center justify-center rounded-3xl border border-cyan-300/20 bg-slate-950/60 p-6 text-center">
+                  <div className="mb-6 h-28 w-28 rounded-full border-2 border-cyan-300/30 bg-cyan-500/10" />
+                  <p className="text-lg uppercase tracking-[0.24em] text-slate-400">Режим ожидания</p>
+                </div>
+              ) : null}
+
+              {isPollVisible && poll ? (
+                <div className="flex h-full flex-col rounded-3xl border border-cyan-300/20 bg-slate-950/60 p-6 text-center">
+                  <p className="mb-2 text-lg uppercase tracking-[0.2em] text-cyan-200">Опрос активен</p>
+                  {poll.question.trim() ? <h2 className="mb-4 text-3xl font-semibold sm:text-5xl">{poll.question}</h2> : null}
+                  <div className="mb-5 text-6xl font-bold text-amber-200 sm:text-8xl">{formatClock(seconds)}</div>
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    {poll.options.map((option, index) => (
+                      <article
+                        key={`${poll.id}-screen-option-${index}`}
+                        className="rounded-2xl border border-cyan-300/25 bg-slate-900/70 px-4 py-5"
+                      >
+                        <p className="mb-1 text-5xl font-bold text-cyan-200">{index + 1}</p>
+                        {option.trim() ? <p className="text-xl text-slate-100">{option}</p> : null}
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+
+              {isResultVisible && poll ? (
+                <div className="h-full rounded-3xl border border-emerald-300/20 bg-slate-950/60 p-6">
+                  <p className="mb-3 text-center text-lg uppercase tracking-[0.2em] text-emerald-200">Результаты</p>
+                  {poll.question.trim() ? <h2 className="mb-5 text-center text-3xl font-semibold sm:text-5xl">{poll.question}</h2> : null}
+                  <PollResults poll={poll} stats={stats} variant="screen" />
+                </div>
+              ) : null}
             </div>
           </div>
-        ) : null}
+        </section>
 
-        {isResultVisible && poll ? (
-          <div>
-            <p className="mb-2 text-sm uppercase tracking-[0.2em] text-emerald-200">Результаты</p>
-            <h2 className="mb-4 text-2xl font-semibold sm:text-4xl">{poll.question}</h2>
-            <PollResults poll={poll} stats={stats} />
-          </div>
-        ) : null}
-
-        {!isPollVisible && !isResultVisible ? (
-          <div className="py-12 text-center">
-            <p className="text-sm uppercase tracking-[0.2em] text-slate-400">Режим ожидания</p>
-            <h2 className="mt-3 text-2xl font-semibold sm:text-4xl">Мастер пока не запустил активный экран</h2>
-          </div>
-        ) : null}
-      </section>
+        <section className="grid min-h-0 w-fit grid-rows-2 justify-items-center gap-3">
+          {rightCards.map((card, index) => (
+            <ScreenCharacterCard key={card.id} card={card} index={index + 2} />
+          ))}
+        </section>
+      </div>
 
       {errorText ? (
-        <p className="mt-4 rounded-xl border border-rose-300/35 bg-rose-950/35 px-4 py-2 text-sm text-rose-100">{errorText}</p>
+        <p className="mx-auto mt-2 max-w-[1900px] rounded-xl border border-rose-300/35 bg-rose-950/35 px-4 py-2 text-sm text-rose-100">
+          {errorText}
+        </p>
       ) : null}
     </div>
   );

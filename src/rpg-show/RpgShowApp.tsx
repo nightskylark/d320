@@ -1,7 +1,7 @@
 import AudiencePage from "./pages/AudiencePage";
 import MasterPage from "./pages/MasterPage";
 import ScreenPage from "./pages/ScreenPage";
-import { DEFAULT_SHOW_ID } from "./data/showStore";
+import ShowIdEntry from "./components/ShowIdEntry";
 import "./rpgShow.css";
 
 type RpgShowView = "audience" | "master" | "screen";
@@ -18,10 +18,10 @@ const detectView = (pathname: string): RpgShowView => {
   return "audience";
 };
 
-const detectShowId = (): string => {
+const detectShowId = (): string | null => {
   const params = new URLSearchParams(window.location.search);
   const raw = params.get("showId")?.trim();
-  return raw || DEFAULT_SHOW_ID;
+  return raw || null;
 };
 
 const RpgShowApp: React.FC = () => {
@@ -29,7 +29,11 @@ const RpgShowApp: React.FC = () => {
   const showId = detectShowId();
 
   if (view === "master") {
-    return <MasterPage showId={showId} />;
+    return <MasterPage showId={showId ?? "__no-show__"} />;
+  }
+
+  if (!showId) {
+    return <ShowIdEntry view={view} />;
   }
 
   if (view === "screen") {
