@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import StartPage from './StartPage';
 import GeneratorsPage from './GeneratorsPage';
+import RpgShowApp from './rpg-show/RpgShowApp';
 import { AuthProvider } from './contexts/AuthContext';
 import { TagProvider } from './contexts/TagContext';
 import reportWebVitals from './reportWebVitals';
@@ -12,7 +13,9 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 const pathname = window.location.pathname;
 let page: React.ReactElement;
-if (pathname.startsWith('/eotv-enemies')) {
+if (pathname.startsWith('/rpg-show')) {
+  page = <RpgShowApp />;
+} else if (pathname.startsWith('/eotv-enemies')) {
   page = (
     <TagProvider>
       <App />

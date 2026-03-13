@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Header, Footer } from './components/layout';
 
 const StartPage: React.FC = () => (
@@ -22,6 +21,10 @@ const StartPage: React.FC = () => (
         className="w-full sm:w-80 h-56 hover:scale-110 rounded-lg overflow-hidden shadow-lg bg-gray-200 dark:bg-gray-700 flex flex-col items-center justify-center transition-all duration-300 ease-in-out">
         <span className="text-center px-4 font-bold">Генераторы для Грани Вселенной</span>
         <span className="text-sm text-gray-500 dark:text-gray-300">🚧 В разработке 🚧</span>
+      </a>
+      <a href="/rpg-show/" className="w-full sm:w-80 h-56 hover:scale-110 rounded-lg overflow-hidden shadow-lg bg-slate-900 text-slate-100 flex flex-col items-center justify-center transition-all duration-300 ease-in-out">
+        <span className="text-center px-4 font-bold text-xl">RPG Show</span>
+        <span className="text-sm text-slate-300">Интерактивное шоу с голосованием</span>
       </a>
     </main>
     <Footer />
