@@ -224,7 +224,9 @@ const AudiencePage: React.FC<AudiencePageProps> = ({ showId }) => {
             {!isAudienceIdleMode ? <p>Мастер еще не запустил опрос.</p> : null}
             {hasAudienceIdleCta ? (
               <div className="mt-5 space-y-4 rounded-xl border border-[#8a6438]/45 bg-[#f2e4c3]/50 px-4 py-4">
-                {idleCta?.description.trim() ? <p className="text-base text-[#4a2e17]">{idleCta.description}</p> : null}
+                {idleCta?.description.trim() ? (
+                  <p className="text-base text-[#4a2e17] whitespace-pre-line">{idleCta.description}</p>
+                ) : null}
                 <a
                   href={idleCta?.url}
                   target="_blank"

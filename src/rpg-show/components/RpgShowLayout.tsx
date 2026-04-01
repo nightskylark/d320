@@ -32,7 +32,7 @@ const RpgShowLayout: React.FC<RpgShowLayoutProps> = ({
         >
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className={`text-xs uppercase tracking-[0.22em] ${isFantasy ? "text-amber-200/90" : "text-amber-300/90"}`}>d320.world / rpg-show</p>
+              <p className={`text-xs uppercase tracking-[0.22em] ${isFantasy ? "text-amber-200/90" : "text-amber-300/90"}`}>d320.world / Это провал!"</p>
               <h1 className={`mt-1 text-2xl font-semibold sm:text-3xl ${isFantasy ? "rpg-font-title text-[#fff2cf]" : ""}`}>{title}</h1>
               {subtitle ? <p className={`mt-1 text-sm ${isFantasy ? "text-amber-100/90" : "text-slate-300"}`}>{subtitle}</p> : null}
             </div>

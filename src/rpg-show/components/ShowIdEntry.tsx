@@ -23,7 +23,7 @@ const ShowIdEntry: React.FC<ShowIdEntryProps> = ({ view }) => {
       <div className="rpg-show-overlay" />
       <div className="relative mx-auto flex min-h-screen max-w-2xl items-center px-4 py-8 sm:px-6">
         <article className="w-full rounded-2xl border border-white/15 bg-slate-900/70 p-6 shadow-2xl backdrop-blur-sm sm:p-8">
-          <p className="text-xs uppercase tracking-[0.22em] text-amber-300/90">d320.world / rpg-show</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-amber-300/90">d320.world / Это провал!</p>
           <h1 className="mt-2 text-2xl font-semibold sm:text-3xl">{title}</h1>
           <p className="mt-2 text-sm text-slate-300">
             Укажите ID шоу, чтобы открыть страницу. Для новых шоу используются короткие ID вида `lucky-fox-42`.

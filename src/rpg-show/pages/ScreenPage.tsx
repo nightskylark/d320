@@ -152,7 +152,7 @@ const ScreenPage: React.FC<ScreenPageProps> = ({ showId }) => {
         <section className="rpg-stage-frame min-h-0 p-4 sm:p-5">
           <div className="flex h-full min-h-0 flex-col">
             <header className="mb-3 shrink-0 text-center">
-              <p className="rpg-font-title text-xs uppercase tracking-[0.28em] text-[#6d4b27]">RPG SHOW SCREEN</p>
+              <p className="rpg-font-title text-xs uppercase tracking-[0.28em] text-[#6d4b27]">Это провал!</p>
               <h1 className="rpg-font-title mt-1 text-4xl font-semibold text-[#2e1b0d] sm:text-6xl">{show?.name ?? "RPG Show"}</h1>
               <p className="mt-1 text-sm text-[#6b4a29]">{new Date(clockTick).toLocaleTimeString()}</p>
             </header>
