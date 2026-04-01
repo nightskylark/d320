@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import QRCode from "qrcode";
 import PollResults from "../components/PollResults";
 import {
   ensurePollFinished,
@@ -27,18 +28,15 @@ const placeholderCard = (index: number): CharacterCard => ({
 
 const ScreenCharacterCard: React.FC<{ card: CharacterCard; index: number }> = ({ card, index }) => {
   return (
-    <article className="h-full w-fit min-h-0 rounded-2xl border border-white/15 bg-slate-900/75 p-2 shadow-2xl">
-      <div className="mb-1 w-full truncate px-1 text-center text-sm text-slate-300">{card.name || `Персонаж ${index + 1}`}</div>
-      <div className="flex h-[calc(100%-1.35rem)] items-center justify-center">
-        <div className="relative h-full aspect-[210/297] overflow-hidden rounded-xl border border-white/10 bg-slate-950/80">
-          {card.imageUrl ? (
-            <img src={card.imageUrl} alt={card.name || `Персонаж ${index + 1}`} className="h-full w-full object-contain" />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center text-center text-sm text-slate-400">
-              A4 плейсхолдер
-            </div>
-          )}
-        </div>
+    <article className="flex h-full w-fit min-h-0 items-center justify-center">
+      <div className="relative h-full aspect-[210/297] overflow-hidden rounded-2xl bg-slate-950/55">
+        {card.imageUrl ? (
+          <img src={card.imageUrl} alt={card.name || `Персонаж ${index + 1}`} className="h-full w-full object-cover object-top" />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center text-center text-sm text-slate-400">
+            A4 плейсхолдер
+          </div>
+        )}
       </div>
     </article>
   );
@@ -50,6 +48,7 @@ const ScreenPage: React.FC<ScreenPageProps> = ({ showId }) => {
   const [stats, setStats] = useState<PollStats>(EMPTY_STATS);
   const [errorText, setErrorText] = useState("");
   const [clockTick, setClockTick] = useState(() => Date.now());
+  const [audienceQrDataUrl, setAudienceQrDataUrl] = useState("");
 
   const autoFinishLock = useRef(false);
 
@@ -102,6 +101,35 @@ const ScreenPage: React.FC<ScreenPageProps> = ({ showId }) => {
       });
   }, [poll, seconds, showId]);
 
+  const audienceUrl = `${window.location.origin}/rpg-show/audience?showId=${encodeURIComponent(showId)}`;
+
+  useEffect(() => {
+    let cancelled = false;
+
+    void QRCode.toDataURL(audienceUrl, {
+      width: 360,
+      margin: 1,
+      color: {
+        dark: "#e2e8f0",
+        light: "#00000000",
+      },
+    })
+      .then((dataUrl) => {
+        if (!cancelled) {
+          setAudienceQrDataUrl(dataUrl);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setAudienceQrDataUrl("");
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [audienceUrl]);
+
   const cardsSource = show?.characters ?? [];
   const cards = Array.from({ length: 4 }, (_, index) => cardsSource[index] ?? placeholderCard(index));
 
@@ -132,8 +160,16 @@ const ScreenPage: React.FC<ScreenPageProps> = ({ showId }) => {
             <div className="min-h-0 flex-1">
               {isIdleVisible ? (
                 <div className="flex h-full flex-col items-center justify-center rounded-3xl border border-cyan-300/20 bg-slate-950/60 p-6 text-center">
-                  <div className="mb-6 h-28 w-28 rounded-full border-2 border-cyan-300/30 bg-cyan-500/10" />
+                  {audienceQrDataUrl ? (
+                    <img src={audienceQrDataUrl} alt={`QR для пульта зрителя шоу ${showId}`} className="mb-5 h-56 w-56 rounded-2xl bg-slate-900/40 p-3" />
+                  ) : (
+                    <div className="mb-5 flex h-56 w-56 items-center justify-center rounded-2xl bg-slate-900/40 text-sm text-slate-400">
+                      Генерация QR...
+                    </div>
+                  )}
                   <p className="text-lg uppercase tracking-[0.24em] text-slate-400">Режим ожидания</p>
+                  <p className="mt-3 text-sm text-slate-300">Сканируйте QR, чтобы открыть зрительский пульт</p>
+                  <p className="mt-1 max-w-full truncate text-xs text-slate-400">{audienceUrl}</p>
                 </div>
               ) : null}
 
