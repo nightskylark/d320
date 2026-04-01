@@ -793,6 +793,23 @@ const MasterPage: React.FC<MasterPageProps> = ({ showId }) => {
                     ))}
                   </select>
 
+                  <section className="space-y-2 rounded-xl border border-white/10 bg-slate-950/40 p-3">
+                    <h3 className="text-sm font-semibold text-slate-200">Название шоу</h3>
+                    <div className="grid gap-2 sm:grid-cols-[1fr_auto]">
+                      <input
+                        type="text"
+                        value={showName}
+                        onChange={(event) => setShowName(event.target.value)}
+                        placeholder="Введите название шоу"
+                        className="w-full rounded-xl border border-slate-600 bg-slate-950/70 px-3 py-2 text-sm outline-none focus:border-cyan-300"
+                        disabled={!activeShow}
+                      />
+                      <button type="button" onClick={saveShowName} disabled={!activeShow || savingName || !showName.trim()} className={BTN_GHOST}>
+                        Сохранить
+                      </button>
+                    </div>
+                  </section>
+
                   <div className="grid gap-2 sm:grid-cols-[1fr_auto]">
                     <div
                       className={`truncate rounded-xl border px-3 py-2 text-sm ${
