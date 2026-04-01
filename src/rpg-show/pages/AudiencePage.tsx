@@ -136,34 +136,36 @@ const AudiencePage: React.FC<AudiencePageProps> = ({ showId }) => {
     }
   };
 
-  const title = show?.name ? `Зрительский пульт: ${show.name}` : "Зрительский пульт";
+  const title = show?.name ? `Пульт зрителя: ${show.name}` : "Пульт зрителя";
   const options = poll?.options?.length ? poll.options : DEFAULT_OPTIONS;
 
   return (
     <RpgShowLayout
+      variant="fantasy"
       showIdVisible={false}
       title={title}
-      subtitle="Выберите вариант до истечения таймера"
+      subtitle="Выберите вариант до истечения песочных часов"
       toolbar={
-        <div className="rounded-xl border border-emerald-300/25 bg-emerald-950/40 px-3 py-2 text-sm text-emerald-100">
+        <div className="rpg-show-status-chip rounded-xl px-3 py-2 text-sm">
           Статус: <span className="font-semibold">{feedback}</span>
         </div>
       }
     >
       <section className="space-y-5">
         {poll ? (
-          <article className="rounded-2xl border border-white/15 bg-slate-900/65 p-4 shadow-2xl sm:p-6">
+          <article className="rpg-parchment-panel p-4 sm:p-6">
             {pollClosed ? (
-              <div className="mb-3 rounded-xl border border-amber-300/45 bg-amber-950/40 px-3 py-2 text-center text-sm font-semibold text-amber-100">
+              <div className="mb-3 rounded-xl border border-[#8d6235]/60 bg-[#5a3a21]/20 px-3 py-2 text-center text-sm font-semibold text-[#5a2d12]">
                 Опрос завершен. Голосование сейчас недоступно.
               </div>
             ) : null}
             <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-              {poll.question.trim() ? <h2 className="text-xl font-semibold text-white">{poll.question}</h2> : <div />}
-              <div className="rounded-full bg-slate-800 px-3 py-1 text-sm font-semibold text-cyan-200">
+              {poll.question.trim() ? <h2 className="rpg-font-title text-xl font-semibold text-[#2c1b0f]">{poll.question}</h2> : <div />}
+              <div className="rpg-wood-pill px-3 py-1 text-sm font-semibold">
                 Таймер: {formatClock(seconds)}
               </div>
             </div>
+            <div className="rpg-stage-divider mb-4" />
 
             <div className="grid gap-3 sm:grid-cols-3">
               {options.map((option, index) => {
@@ -177,25 +179,27 @@ const AudiencePage: React.FC<AudiencePageProps> = ({ showId }) => {
                     type="button"
                     disabled={voteDisabled || busy}
                     onClick={() => submitAudienceVote(index)}
-                    className={`rounded-2xl border px-4 py-4 transition-transform duration-100 active:scale-[0.98] ${
-                      selected
-                        ? "border-amber-300 bg-amber-400/20 text-amber-100"
-                        : "border-slate-600 bg-slate-800/80 text-slate-100 hover:border-cyan-300"
-                    } ${voteDisabled ? "cursor-not-allowed border-slate-500 bg-slate-900/55 opacity-75 saturate-50" : "cursor-pointer"}`}
+                    className={`rpg-option-tile px-4 py-4 text-left transition-all duration-150 active:scale-[0.98] ${
+                      selected ? "rpg-option-tile-selected" : ""
+                    } ${voteDisabled ? "rpg-option-tile-disabled cursor-not-allowed" : "cursor-pointer"} ${busy ? "brightness-105" : ""}`}
                   >
                     <div
                       className={`flex h-full w-full ${
                         hasText ? "flex-col items-start text-left" : "flex-col items-center justify-center gap-2 text-center"
                       }`}
                     >
-                      <div className={`${hasText ? "mb-2 text-2xl" : "text-4xl leading-none"} font-bold`}>{index + 1}</div>
-                      {hasText ? <div className="text-sm">{option}</div> : null}
+                      <div className={`rpg-font-title ${hasText ? "mb-2 text-2xl" : "text-5xl leading-none"} font-bold`}>{index + 1}</div>
+                      {hasText ? <div className="text-base text-[#2c1a0f]">{option}</div> : null}
                       {selected ? (
-                        <div className={`rounded-full border border-amber-300/50 bg-amber-400/20 px-2 py-0.5 text-xs text-amber-100 ${hasText ? "mt-2" : ""}`}>
+                        <div
+                          className={`rpg-wood-pill rounded-full border px-2 py-0.5 text-xs text-[#f7e4bb] ${
+                            hasText ? "mt-2" : ""
+                          }`}
+                        >
                           Ваш голос
                         </div>
                       ) : null}
-                      {busy ? <div className="mt-2 text-xs text-cyan-200">Отправка...</div> : null}
+                      {busy ? <div className="mt-2 text-xs text-[#5d3415]">Отправка...</div> : null}
                     </div>
                   </button>
                 );
@@ -203,13 +207,13 @@ const AudiencePage: React.FC<AudiencePageProps> = ({ showId }) => {
             </div>
           </article>
         ) : (
-          <article className="rounded-2xl border border-white/15 bg-slate-900/65 p-6 text-center text-slate-300">
+          <article className="rpg-parchment-panel p-6 text-center text-[#3a2513]">
             Мастер еще не запустил опрос.
           </article>
         )}
 
         {errorText ? (
-          <p className="rounded-xl border border-rose-300/30 bg-rose-950/40 px-4 py-3 text-sm text-rose-200">{errorText}</p>
+          <p className="rounded-xl border border-[#8b3d2e]/45 bg-[#6c2e1e]/18 px-4 py-3 text-sm text-[#5a2014]">{errorText}</p>
         ) : null}
       </section>
     </RpgShowLayout>

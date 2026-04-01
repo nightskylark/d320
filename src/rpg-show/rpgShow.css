@@ -16,10 +16,152 @@
   z-index: -1;
 }
 
+.rpg-show-shell-fantasy {
+  background:
+    radial-gradient(circle at 18% 12%, rgba(95, 121, 64, 0.28), transparent 34%),
+    radial-gradient(circle at 82% 82%, rgba(129, 95, 54, 0.2), transparent 40%),
+    linear-gradient(150deg, #161208 0%, #23180f 52%, #15130d 100%);
+}
+
+.rpg-show-overlay-fantasy {
+  background-image:
+    radial-gradient(circle at 30% 20%, rgba(190, 150, 86, 0.11) 0, transparent 44%),
+    radial-gradient(circle at 70% 80%, rgba(109, 144, 77, 0.1) 0, transparent 45%),
+    repeating-linear-gradient(
+      45deg,
+      rgba(252, 232, 190, 0.02) 0,
+      rgba(252, 232, 190, 0.02) 2px,
+      transparent 2px,
+      transparent 8px
+    );
+  background-size: auto, auto, auto;
+  opacity: 0.95;
+}
+
+.rpg-header-fantasy {
+  border: 1px solid rgba(193, 153, 87, 0.35);
+  background:
+    radial-gradient(circle at 50% -30%, rgba(244, 205, 132, 0.16), transparent 60%),
+    linear-gradient(180deg, rgba(67, 44, 23, 0.86), rgba(36, 25, 14, 0.9));
+  box-shadow:
+    inset 0 1px 0 rgba(250, 216, 154, 0.2),
+    0 20px 55px -40px rgba(0, 0, 0, 0.8);
+}
+
+.rpg-font-title {
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, "Times New Roman", serif;
+  letter-spacing: 0.02em;
+}
+
+.rpg-font-body {
+  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+}
+
+.rpg-parchment-panel {
+  border: 1px solid rgba(130, 92, 52, 0.7);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(255, 247, 215, 0.4), transparent 45%),
+    radial-gradient(circle at 80% 70%, rgba(218, 178, 120, 0.2), transparent 43%),
+    linear-gradient(180deg, #e8d7af 0%, #d8c294 56%, #c8ac78 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 236, 193, 0.55),
+    inset 0 16px 40px rgba(255, 255, 255, 0.1),
+    0 22px 55px -38px rgba(0, 0, 0, 0.82);
+  color: #2d1d0f;
+}
+
+.rpg-wood-pill {
+  border: 1px solid rgba(181, 143, 83, 0.65);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #614123, #422a17);
+  box-shadow:
+    inset 0 1px 0 rgba(247, 210, 144, 0.38),
+    0 8px 16px rgba(0, 0, 0, 0.28);
+  color: #fae8bf;
+}
+
+.rpg-show-status-chip {
+  border: 1px solid rgba(178, 140, 81, 0.55);
+  background: linear-gradient(180deg, rgba(90, 56, 28, 0.92), rgba(53, 34, 20, 0.94));
+  color: #f4e0b2;
+}
+
+.rpg-option-tile {
+  border: 1px solid rgba(138, 98, 54, 0.68);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 25% 20%, rgba(255, 243, 207, 0.35), transparent 40%),
+    linear-gradient(180deg, #ecdcb6, #d7bf91 62%, #ccb07c);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 238, 199, 0.42),
+    0 10px 22px -14px rgba(0, 0, 0, 0.58);
+  color: #28180d;
+}
+
+.rpg-option-tile:hover {
+  border-color: rgba(173, 126, 71, 0.92);
+  transform: translateY(-1px);
+}
+
+.rpg-option-tile-selected {
+  border-color: rgba(157, 106, 23, 0.95);
+  background:
+    radial-gradient(circle at 30% 18%, rgba(255, 236, 184, 0.5), transparent 42%),
+    linear-gradient(180deg, #f0dfaf, #ddc184 56%, #cfa65f);
+}
+
+.rpg-option-tile-disabled {
+  filter: saturate(0.62);
+  opacity: 0.75;
+}
+
 .rpg-screen {
   min-height: 100vh;
   background:
-    radial-gradient(circle at 20% 15%, rgba(14, 165, 233, 0.18), transparent 45%),
-    radial-gradient(circle at 80% 85%, rgba(16, 185, 129, 0.14), transparent 50%),
-    linear-gradient(150deg, #020617 0%, #0f172a 55%, #111827 100%);
+    radial-gradient(circle at 16% 20%, rgba(95, 123, 64, 0.2), transparent 36%),
+    radial-gradient(circle at 84% 78%, rgba(102, 73, 45, 0.2), transparent 42%),
+    linear-gradient(165deg, #161108 0%, #24190f 55%, #16120c 100%);
+}
+
+.rpg-stage-frame {
+  border: 1px solid rgba(124, 89, 46, 0.75);
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at 15% 14%, rgba(255, 236, 193, 0.26), transparent 36%),
+    radial-gradient(circle at 82% 80%, rgba(184, 141, 87, 0.18), transparent 45%),
+    linear-gradient(180deg, #ddc796 0%, #d0b67f 55%, #b69361 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 239, 200, 0.48),
+    0 24px 62px -40px rgba(0, 0, 0, 0.86);
+  color: #25170d;
+}
+
+.rpg-stage-subpanel {
+  border: 1px solid rgba(122, 87, 44, 0.72);
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(248, 236, 202, 0.82), rgba(224, 198, 147, 0.9));
+  box-shadow: inset 0 0 0 1px rgba(255, 240, 205, 0.45);
+}
+
+.rpg-stage-qr {
+  background:
+    radial-gradient(circle at 25% 20%, rgba(255, 243, 212, 0.32), transparent 40%),
+    linear-gradient(180deg, #f0ddb3, #dcc18a);
+  border: 1px solid rgba(134, 97, 57, 0.8);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 238, 196, 0.52),
+    0 14px 35px -25px rgba(0, 0, 0, 0.75);
+}
+
+.rpg-stage-poll-option {
+  border: 1px solid rgba(132, 93, 48, 0.8);
+  background: linear-gradient(180deg, #f0ddae, #d9bc83 65%, #caa568);
+  box-shadow: inset 0 0 0 1px rgba(255, 236, 191, 0.45);
+  color: #2b1a0e;
+}
+
+.rpg-stage-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(133, 97, 55, 0.75) 50%, transparent 100%);
 }
