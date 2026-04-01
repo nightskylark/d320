@@ -172,9 +172,7 @@ const ScreenPage: React.FC<ScreenPageProps> = ({ showId }) => {
                       Генерация QR...
                     </div>
                   )}
-                  <p className="rpg-font-title text-xl uppercase tracking-[0.18em] text-[#5f3918]">Режим ожидания</p>
-                  <p className="mt-3 text-base text-[#5a3518]">Сканируйте QR, чтобы открыть зрительский пульт</p>
-                  <p className="mt-1 max-w-full truncate text-xs text-[#7a5633]">{audienceUrl}</p>
+                  <p className="mt-3 text-2xl text-[#5a3518]">Сканируйте QR, чтобы открыть зрительский пульт</p>
                 </div>
               ) : null}
 

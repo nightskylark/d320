@@ -14,6 +14,7 @@ import {
 import { db } from "../../firebase";
 import { generateReadableShowId, normalizeShowIdInput } from "../utils/showId";
 import type {
+  AudienceIdleCta,
   CharacterCard,
   PollDoc,
   PollStats,
@@ -93,6 +94,15 @@ const normalizePollOptions = (value: unknown): string[] => {
   return options.length > 0 ? options : ["", "", ""];
 };
 
+const normalizeAudienceIdleCta = (value: unknown): AudienceIdleCta => {
+  const data = (value as Partial<AudienceIdleCta>) ?? {};
+  return {
+    description: isString(data.description) ? data.description : "",
+    buttonLabel: isString(data.buttonLabel) ? data.buttonLabel : "",
+    url: isString(data.url) ? data.url : "",
+  };
+};
+
 const mapShow = (id: string, raw: unknown): ShowDoc => {
   const data = (raw as Partial<ShowDoc>) ?? {};
   const createdAt = isNumber(data.createdAt) ? data.createdAt : Date.now();
@@ -106,6 +116,7 @@ const mapShow = (id: string, raw: unknown): ShowDoc => {
     activePollId: isString(data.activePollId) && data.activePollId ? data.activePollId : null,
     allowVoteChange: Boolean(data.allowVoteChange),
     characters: normalizeCharacters(data.characters),
+    audienceIdleCta: normalizeAudienceIdleCta(data.audienceIdleCta),
     createdAt,
     updatedAt,
     masterUid: isString(data.masterUid) ? data.masterUid : null,
@@ -174,6 +185,11 @@ const createDefaultShow = (showId: string, name: string, masterUid: string): Sho
     activePollId: null,
     allowVoteChange: true,
     characters: DEFAULT_CHARACTERS,
+    audienceIdleCta: {
+      description: "",
+      buttonLabel: "",
+      url: "",
+    },
     createdAt: now,
     updatedAt: now,
     masterUid,
@@ -336,6 +352,17 @@ export const updateShowName = async (showId: string, name: string): Promise<void
 export const updateShowCharacters = async (showId: string, characters: CharacterCard[]): Promise<void> => {
   await updateDoc(showRef(showId), {
     characters,
+    updatedAt: Date.now(),
+  });
+};
+
+export const updateShowAudienceIdleCta = async (showId: string, audienceIdleCta: AudienceIdleCta): Promise<void> => {
+  await updateDoc(showRef(showId), {
+    audienceIdleCta: {
+      description: audienceIdleCta.description.trim(),
+      buttonLabel: audienceIdleCta.buttonLabel.trim(),
+      url: audienceIdleCta.url.trim(),
+    },
     updatedAt: Date.now(),
   });
 };

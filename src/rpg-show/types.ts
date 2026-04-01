@@ -12,6 +12,12 @@ export interface CharacterCard {
   accent?: string;
 }
 
+export interface AudienceIdleCta {
+  description: string;
+  buttonLabel: string;
+  url: string;
+}
+
 export interface ShowDoc {
   id: string;
   name: string;
@@ -20,6 +26,7 @@ export interface ShowDoc {
   activePollId: string | null;
   allowVoteChange: boolean;
   characters: CharacterCard[];
+  audienceIdleCta: AudienceIdleCta;
   createdAt: number;
   updatedAt: number;
   masterUid: string | null;

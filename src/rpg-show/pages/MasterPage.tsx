@@ -17,10 +17,11 @@ import {
   subscribePollVotes,
   subscribeRecentPolls,
   subscribeShow,
+  updateShowAudienceIdleCta,
   updateShowCharacters,
   updateShowName,
 } from "../data/showStore";
-import type { CharacterCard, PollDoc, PollStats, ScreenMode, ShowDoc, StartPollPayload } from "../types";
+import type { AudienceIdleCta, CharacterCard, PollDoc, PollStats, ScreenMode, ShowDoc, StartPollPayload } from "../types";
 import { formatClock, secondsLeft } from "../utils/time";
 import { uploadCharacterImage } from "../utils/uploadCharacterImage";
 
@@ -74,11 +75,15 @@ const MasterPage: React.FC<MasterPageProps> = ({ showId }) => {
   const [question, setQuestion] = useState("");
   const [pollOptions, setPollOptions] = useState<string[]>(DEFAULT_POLL_OPTIONS);
   const [durationSec, setDurationSec] = useState(30);
+  const [audienceIdleDescription, setAudienceIdleDescription] = useState("");
+  const [audienceIdleButtonLabel, setAudienceIdleButtonLabel] = useState("");
+  const [audienceIdleUrl, setAudienceIdleUrl] = useState("");
 
   const [charactersDraft, setCharactersDraft] = useState<CharacterCard[]>(ensureMinimumCharacters([], 4));
   const [uploadProgress, setUploadProgress] = useState<Record<string, number>>({});
 
   const [savingName, setSavingName] = useState(false);
+  const [savingAudienceIdleCta, setSavingAudienceIdleCta] = useState(false);
   const [busyAction, setBusyAction] = useState<string>("");
   const [flash, setFlash] = useState<string>("");
   const [errorText, setErrorText] = useState<string>("");
@@ -116,6 +121,12 @@ const MasterPage: React.FC<MasterPageProps> = ({ showId }) => {
           setCharactersDraft(normalized);
           lastCharactersKeyRef.current = key;
         }
+      }
+
+      if (ownsShow && nextShow?.audienceIdleCta) {
+        setAudienceIdleDescription(nextShow.audienceIdleCta.description);
+        setAudienceIdleButtonLabel(nextShow.audienceIdleCta.buttonLabel);
+        setAudienceIdleUrl(nextShow.audienceIdleCta.url);
       }
     });
   }, [showId, user?.uid]);
@@ -245,6 +256,30 @@ const MasterPage: React.FC<MasterPageProps> = ({ showId }) => {
       setErrorText("Не удалось обновить название шоу");
     } finally {
       setSavingName(false);
+    }
+  };
+
+  const saveAudienceIdleCta = async () => {
+    if (!activeShow) {
+      return;
+    }
+
+    setSavingAudienceIdleCta(true);
+    setErrorText("");
+
+    const payload: AudienceIdleCta = {
+      description: audienceIdleDescription,
+      buttonLabel: audienceIdleButtonLabel,
+      url: audienceIdleUrl,
+    };
+
+    try {
+      await updateShowAudienceIdleCta(activeShow.id, payload);
+      setFlash("Блок ожидания для зрителей сохранен");
+    } catch {
+      setErrorText("Не удалось сохранить блок ожидания");
+    } finally {
+      setSavingAudienceIdleCta(false);
     }
   };
 
@@ -823,6 +858,59 @@ const MasterPage: React.FC<MasterPageProps> = ({ showId }) => {
                   >
                     {screenUrl}
                   </a>
+
+                  <section className="space-y-2 rounded-xl border border-white/10 bg-slate-950/40 p-3">
+                    <h3 className="text-sm font-semibold text-slate-200">Блок ожидания для пульта зрителя</h3>
+                    <p className="text-xs text-slate-400">
+                      В режиме ожидания на пульте зрителя будут показаны описание и кнопка перехода.
+                    </p>
+                    <textarea
+                      rows={3}
+                      value={audienceIdleDescription}
+                      onChange={(event) => setAudienceIdleDescription(event.target.value)}
+                      placeholder="Текстовое описание (опционально)"
+                      className="w-full rounded-xl border border-slate-600 bg-slate-950/70 px-3 py-2 text-sm outline-none focus:border-cyan-300"
+                      disabled={!activeShow}
+                    />
+                    <input
+                      type="text"
+                      value={audienceIdleButtonLabel}
+                      onChange={(event) => setAudienceIdleButtonLabel(event.target.value)}
+                      placeholder="Название кнопки (например: Открыть правила)"
+                      className="w-full rounded-xl border border-slate-600 bg-slate-950/70 px-3 py-2 text-sm outline-none focus:border-cyan-300"
+                      disabled={!activeShow}
+                    />
+                    <input
+                      type="url"
+                      value={audienceIdleUrl}
+                      onChange={(event) => setAudienceIdleUrl(event.target.value)}
+                      placeholder="Ссылка для кнопки (https://...)"
+                      className="w-full rounded-xl border border-slate-600 bg-slate-950/70 px-3 py-2 text-sm outline-none focus:border-cyan-300"
+                      disabled={!activeShow}
+                    />
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={saveAudienceIdleCta}
+                        disabled={!activeShow || savingAudienceIdleCta}
+                        className={BTN_GREEN}
+                      >
+                        Сохранить блок
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setAudienceIdleDescription("");
+                          setAudienceIdleButtonLabel("");
+                          setAudienceIdleUrl("");
+                        }}
+                        disabled={!activeShow || savingAudienceIdleCta}
+                        className={BTN_GHOST}
+                      >
+                        Очистить поля
+                      </button>
+                    </div>
+                  </section>
                 </div>
               ) : activeShow ? (
                 <p className="mt-3 text-sm text-slate-300">

@@ -85,7 +85,17 @@ const AudiencePage: React.FC<AudiencePageProps> = ({ showId }) => {
   }, [poll, seconds, showId]);
 
   useEffect(() => {
-    if (!show || !poll) {
+    if (!show) {
+      setFeedback("Ожидание активного опроса");
+      return;
+    }
+
+    if (show.screenMode === "IDLE") {
+      setFeedback("Режим ожидания");
+      return;
+    }
+
+    if (!poll) {
       setFeedback("Ожидание активного опроса");
       return;
     }
@@ -103,7 +113,7 @@ const AudiencePage: React.FC<AudiencePageProps> = ({ showId }) => {
     setFeedback("Опрос активен");
   }, [show, poll, currentVote, seconds, clockTick]);
 
-  const voteDisabled = !poll || poll.status !== "ACTIVE" || seconds === 0;
+  const voteDisabled = !poll || poll.status !== "ACTIVE" || seconds === 0 || show?.screenMode !== "POLL";
   const pollClosed = !!poll && (poll.status === "FINISHED" || seconds === 0);
   const selectedOption = optimisticVoteIndex ?? currentVote?.optionIndex ?? null;
 
@@ -138,13 +148,16 @@ const AudiencePage: React.FC<AudiencePageProps> = ({ showId }) => {
 
   const title = show?.name ? `Пульт зрителя: ${show.name}` : "Пульт зрителя";
   const options = poll?.options?.length ? poll.options : DEFAULT_OPTIONS;
+  const idleCta = show?.audienceIdleCta;
+  const isAudienceIdleMode = show?.screenMode === "IDLE";
+  const hasAudienceIdleCta = Boolean(idleCta?.buttonLabel.trim() && idleCta?.url.trim());
+  const shouldRenderPollCard = !isAudienceIdleMode && !!poll;
 
   return (
     <RpgShowLayout
       variant="fantasy"
       showIdVisible={false}
       title={title}
-      subtitle="Выберите вариант до истечения песочных часов"
       toolbar={
         <div className="rpg-show-status-chip rounded-xl px-3 py-2 text-sm">
           Статус: <span className="font-semibold">{feedback}</span>
@@ -152,7 +165,7 @@ const AudiencePage: React.FC<AudiencePageProps> = ({ showId }) => {
       }
     >
       <section className="space-y-5">
-        {poll ? (
+        {shouldRenderPollCard && poll ? (
           <article className="rpg-parchment-panel p-4 sm:p-6">
             {pollClosed ? (
               <div className="mb-3 rounded-xl border border-[#8d6235]/60 bg-[#5a3a21]/20 px-3 py-2 text-center text-sm font-semibold text-[#5a2d12]">
@@ -208,7 +221,20 @@ const AudiencePage: React.FC<AudiencePageProps> = ({ showId }) => {
           </article>
         ) : (
           <article className="rpg-parchment-panel p-6 text-center text-[#3a2513]">
-            Мастер еще не запустил опрос.
+            {!isAudienceIdleMode ? <p>Мастер еще не запустил опрос.</p> : null}
+            {hasAudienceIdleCta ? (
+              <div className="mt-5 space-y-4 rounded-xl border border-[#8a6438]/45 bg-[#f2e4c3]/50 px-4 py-4">
+                {idleCta?.description.trim() ? <p className="text-base text-[#4a2e17]">{idleCta.description}</p> : null}
+                <a
+                  href={idleCta?.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rpg-wood-pill inline-flex min-h-11 items-center justify-center px-5 py-2 text-sm font-semibold"
+                >
+                  {idleCta?.buttonLabel}
+                </a>
+              </div>
+            ) : null}
           </article>
         )}
 
